@@ -1,0 +1,16 @@
+{% extends "grader/base.html" %}
+
+
+{% block title %}{{course.code}} - Add Assignment{% endblock %}
+
+{% block content %}
+
+    <h1>{{course.code}} - Add Assignment</h1>
+    
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit" />
+    </form>
+
+{% endblock %}
