@@ -30,6 +30,9 @@ The home page should only show courses which the user is enrolled in, is a TA fo
 ##Integrate users with LDAP##
 Need to sync Django authentication system with current CS users.
 
+##Add in auto-grader##
+Need to communicate with auto-grader
+
 ##Way to create courses##
 Make a way to create courses. Maybe make it easier than filling out web form? Like upload an excel file of all courses?
 
