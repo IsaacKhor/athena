@@ -1,5 +1,4 @@
-{% extends "grader/base.html" %}
-
+{% extends "../templates/base.html" %}
 
 {% block title %}{{sub.student}} - {{sub.assignent}}{% endblock %}
 
@@ -7,7 +6,7 @@
     <h1>Submission {{sub.assignment}}</h1>
     <b>Student: </b> {{sub.student.first_name}} {{sub.student.last_name}}<br/>
     <b>Submit time: </b> {{sub.sub_date}}<br/>
-    
+
     {% for g in sub.grade_set.all %}
         <br/>
         <b>Grade: </b> {{g.grade}}/{{sub.assignment.max_grade}}<br/>

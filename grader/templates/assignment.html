@@ -1,4 +1,5 @@
-{% extends "grader/base.html" %}
+{% extends "../templates/base.html" %}
+
 
 
 {% block title %}{{assgn.course.code}} {{assgn.code}} - {{assgn.title}}{% endblock %}
@@ -15,7 +16,7 @@
         {{ form.as_p }}
         <input type="submit" value="Submit" />
     </form>
-    
+
     <h2>Submissions</h2>
     {% for s in subs %}
         {% if s.status == s.CH_GRADED %}

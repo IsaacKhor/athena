@@ -1,4 +1,4 @@
-{% extends "grader/base.html" %}
+{% extends "../templates/base.html" %}
 
 
 {% block title %}{{sub.student}} - {{sub.assignent}}{% endblock %}
@@ -7,8 +7,8 @@
     <h1>Grade {{sub.student.first_name}} {{sub.student.last_name}}</h1>
     <b>Student: </b> {{sub.student}}<br/>
     <b>Submit time: </b> {{sub.sub_date}}<br/>
-    
-    
+
+
     <br/>
     <a href=''>Download zip</a> (you can't really do this yet) <br/>
 
