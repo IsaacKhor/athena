@@ -18,11 +18,13 @@
 
   <br/>
   <a href=''>Download zip</a> (you can't really do this yet) <br/>
-
+<div style='width:600px'>
   <form method="POST">
     {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Submit" />
+    <table class="table">
+      {{ form.as_table }}
+    </table>
+    <input type="submit" class="btn btn-info" value="Submit" />
   </form>
-
+<div style='width:600px'>
 {% endblock %}

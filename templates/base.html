@@ -1,8 +1,10 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <title>{% block title %} {% endblock %}</title>
 
+    <link href="{% static 'css/template.css' %}" rel="stylesheet" media="screen">
     {% load bootstrap3 %}
 
     {# Load CSS and JavaScript #}
@@ -17,22 +19,23 @@
     <nav class="navbar navbar-default">
       <div class="container-fluid">
         <div class="navbar-header">
-          <a class="navbar-brand" href="#">
-            {% block header %} This is default header. {% endblock %}
+          <a class="navbar-brand" href={% url 'grader:home' %}>
+            Clark CS HomeWork Grader
           </a>
         </div>
       </div>
+      <ol class="breadcrumb">
+        {% block breadcrumbs %}{% endblock %}
+        ::
+        {% block header %} This is default header. {% endblock %}
+      </ol>
     </nav>
     <div class="container">
 
-      <ol class="breadcrumb">
-        {% block breadcrumbs %}
-        <li class='active'>Home</li>
-        {% endblock %}
-      </ol>
-
       {% block content %} This is default block. {% endblock %}
 
+      <hr/>
+      {% block footer %} This is default footer. {% endblock %}
     </div>
   </body>
 </html>

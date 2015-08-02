@@ -10,11 +10,13 @@
 {% endblock %}
 
 {% block content %}
-
+  <div style='width:600px'>
   <form method="post">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <input type="submit" value="Submit" />
+    {% csrf_token %}
+    <table class="table">
+      {{ form.as_table }}
+    </table>
+    <input type="submit" class="btn btn-info" value="Submit" />
   </form>
-
+</div>
 {% endblock %}

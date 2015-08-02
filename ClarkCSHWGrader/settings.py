@@ -86,6 +86,10 @@ USE_L10N = True
 
 USE_TZ = True
 
+STATICFILES_DIRS = (
+    "static/",
+)
+
 STATIC_URL = '/static/'
 
 # to add bootstrap to django

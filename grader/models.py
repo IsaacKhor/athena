@@ -51,12 +51,18 @@ class Submission(models.Model):
     #Choices for status of submission
     #SUBMITTED means waiting to be auto graded
     #PASSED and FAILED is based on auto grader
-    #GRADED means manually graded (should have Grade entry), assumes it passed auto grader
+    #GRADED means manually graded (should have Grade entry),
+    #assumes it passed auto grader
     CH_SUBMITTED = 0
     CH_PASSED = 1
     CH_FAILED = 2
     CH_GRADED = 3
-    STATUS_CHOICES = ( (CH_SUBMITTED, 'Submitted'), (CH_PASSED, 'Passed'), (CH_FAILED, 'Failed'), (CH_GRADED, 'Graded') )
+    STATUS_CHOICES = (
+        (CH_SUBMITTED, 'Submitted'),
+        (CH_PASSED, 'Passed'),
+        (CH_FAILED, 'Failed'),
+        (CH_GRADED, 'Graded')
+    )
 
     assignment = models.ForeignKey('Assignment')
     student = models.ForeignKey(User)
