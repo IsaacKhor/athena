@@ -21,8 +21,11 @@ ALLOWED_HOSTS = []
 
 # Application definition
 INSTALLED_APPS = (
-    # django apps
+    # third party packages
+    'autocomplete_light',
     'bootstrap3',
+
+    #django apps
     'django_admin_bootstrapped',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -30,6 +33,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     # custom apps
     'grader',
 )

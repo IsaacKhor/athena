@@ -7,6 +7,8 @@ sudo pip3 install django-bootstrap3
 
 sudo pip3 install django_admin_bootstrapped
 
+sudo pip3 install django-autocomplete-light
+
 
 http://django-bootstrap3.readthedocs.org/en/latest/index.html
 # What has been done #

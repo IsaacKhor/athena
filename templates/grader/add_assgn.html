@@ -4,6 +4,11 @@
 
 {% block header %} {{course.code}} - Add Assignment {% endblock %}
 
+{% block breadcrumbs %}
+<li><a href={% url 'grader:home' %}>Home</a></li>
+<li class='active'>Add Assignment</li>
+{% endblock %}
+
 {% block content %}
 
   <form method="post">

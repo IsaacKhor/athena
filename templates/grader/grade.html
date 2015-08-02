@@ -7,6 +7,11 @@
   Grade {{sub.student.first_name}} {{sub.student.last_name}}
 {% endblock %}
 
+{% block breadcrumbs %}
+<li><a href={% url 'grader:home' %}>Home</a></li>
+<li class='active'>Grade</li>
+{% endblock %}
+
 {% block content %}
   <b>Student: </b> {{sub.student}}<br/>
   <b>Submit time: </b> {{sub.sub_date}}<br/>

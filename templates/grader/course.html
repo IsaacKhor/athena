@@ -6,6 +6,11 @@
   {{course.code}} - {{course.title}} (Section {{course.section}})
 {% endblock %}
 
+{% block breadcrumbs %}
+<li><a href={% url 'grader:home' %}>Home</a></li>
+<li class='active'>Course</li>
+{% endblock %}
+
 {% block content %}
 
   <h2>Description</h2>
@@ -13,12 +18,12 @@
 
   <h2>Assignments</h2>
   {% for a in course.assignment_set.all %}
-      <a href={% url 'assignment' a.id %}>{{ a.code }}: {{a.title}}</a> <br/>
+      <a href={% url 'grader:assignment' a.id %}>{{ a.code }}: {{a.title}}</a> <br/>
   {% endfor %}
 
   <br/>
 
-  <a href={% url 'add_assgn' course.id %}>Add assignement</a>
+  <a href={% url 'grader:add_assgn' course.id %}>Add assignement</a>
 
   <h3>Intsructor{% if course.instructors.all|length > 1 %}s{% endif %}</h3>
   {% for i in course.instructors.all %}

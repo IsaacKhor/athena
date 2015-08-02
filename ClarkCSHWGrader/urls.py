@@ -3,6 +3,6 @@ from django.contrib import admin
 admin.autodiscover()  ## what???
 
 urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^', include('grader.urls')),
+    url(r'^admin/', include(admin.site.urls,)),
+    url(r'^', include('grader.urls', namespace="grader")),
 ]

@@ -14,16 +14,22 @@
 
   </head>
   <body>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">
+            {% block header %} This is default header. {% endblock %}
+          </a>
+        </div>
+      </div>
+    </nav>
     <div class="container">
 
-      <div>
-        <h2>{% block header %} This is default header. {% endblock %}</h2>
-      </div>
-      <ul class="nav nav-tabs">
-        <li role="presentation" class="active"><a href="#">Courses</a></li>
-        <li role="presentation"><a href="#">Assignments</a></li>
-        <li role="presentation"><a href="#">Grades</a></li>
-      </ul>
+      <ol class="breadcrumb">
+        {% block breadcrumbs %}
+        <li class='active'>Home</li>
+        {% endblock %}
+      </ol>
 
       {% block content %} This is default block. {% endblock %}
 

@@ -68,7 +68,7 @@ class Grade(models.Model):
     Stores a manual grade for a submission
     """
 
-    submission = models.ForeignKey('Submission', primary_key=True)
+    submission = models.OneToOneField('Submission')
     grader = models.ForeignKey(User)
     grade = models.FloatField()
     date = models.DateTimeField(auto_now=True)
