@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}{{course.code}} - {{course.title}}{% endblock %}
+
+{% block header %}
+  {{course.code}} - {{course.title}} (Section {{course.section}})
+{% endblock %}
+
+{% block content %}
+
+  <h2>Description</h2>
+  {{course.desc}}
+
+  <h2>Assignments</h2>
+  {% for a in course.assignment_set.all %}
+      <a href={% url 'assignment' a.id %}>{{ a.code }}: {{a.title}}</a> <br/>
+  {% endfor %}
+
+  <br/>
+
+  <a href={% url 'add_assgn' course.id %}>Add assignement</a>
+
+  <h3>Intsructor{% if course.instructors.all|length > 1 %}s{% endif %}</h3>
+  {% for i in course.instructors.all %}
+      {{i.first_name}} {{i.last_name}}<br/>
+  {% endfor %}
+
+  <h3>Student{% if course.students.all|length > 1 %}s{% endif %}</h3>
+  {% for s in course.students.all %}
+      {{s.first_name}} {{s.last_name}}<br/>
+  {% endfor %}
+
+  <h3>TA{% if course.tas.all|length > 1 %}s{% endif %}</h3>
+  {% for t in course.tas.all %}
+      {{t.first_name}} {{t.last_name}}<br/>
+  {% endfor %}
+
+{% endblock %}

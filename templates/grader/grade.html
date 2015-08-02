@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+
+{% block title %}{{sub.student}} - {{sub.assignent}}{% endblock %}
+
+{% block header %}
+  Grade {{sub.student.first_name}} {{sub.student.last_name}}
+{% endblock %}
+
+{% block content %}
+  <b>Student: </b> {{sub.student}}<br/>
+  <b>Submit time: </b> {{sub.sub_date}}<br/>
+
+  <br/>
+  <a href=''>Download zip</a> (you can't really do this yet) <br/>
+
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit" />
+  </form>
+
+{% endblock %}

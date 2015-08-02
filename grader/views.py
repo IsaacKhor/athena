@@ -14,7 +14,7 @@ def home(request):
 
     #Get all the courses and render the template
     courses = Course.objects.all()
-    return render(request, 'home.html', {'course_list': courses})
+    return render(request, 'grader/home.html', {'course_list': courses})
 
 
 def course(request, courseid):
@@ -25,7 +25,7 @@ def course(request, courseid):
 
     #Get the course and render the template
     course = Course.objects.filter(id=courseid)[0]
-    return render(request, 'course.html', {'course': course})
+    return render(request, 'grader/course.html', {'course': course})
 
 
 def assignment(request, assgnid):
@@ -66,7 +66,7 @@ def assignment(request, assgnid):
     submissions = assgn.submission_set.all()
 
     #Render the page
-    return render(request, 'assignment.html', {'assgn': assgn, 'form': form, 'subs': submissions})
+    return render(request, 'grader/assignment.html', {'assgn': assgn, 'form': form, 'subs': submissions})
 
 
 def grade(request, subid):
@@ -96,7 +96,7 @@ def grade(request, subid):
     #Get the form and render the page
     else:
         form = GradeForm(sub)
-    return render(request, 'grade.html', {'sub': sub, 'form': form})
+    return render(request, 'grader/grade.html', {'sub': sub, 'form': form})
 
 
 def submission(request, subid):
@@ -108,7 +108,7 @@ def submission(request, subid):
 
     #Get the submission and render the page
     sub = Submission.objects.filter(id=subid)[0]
-    return render(request, 'submission.html', {'sub': sub})
+    return render(request, 'grader/submission.html', {'sub': sub})
 
 
 def add_assgn(request, courseid):
@@ -134,4 +134,4 @@ def add_assgn(request, courseid):
     #Create a new form and render the page
     else:
         form = AssgnForm()
-    return render(request, 'add_assgn.html', {'course': course, 'form': form})
+    return render(request, 'grader/add_assgn.html', {'course': course, 'form': form})

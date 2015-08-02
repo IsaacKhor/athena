@@ -1,3 +1,10 @@
+# TODOs when cloned #
+upgrade python to 3.4
+upgrade django to 1.8
+sudo pip3 install django-bootstrap3
+sudo pip3 install django_admin_bootstrapped
+
+http://django-bootstrap3.readthedocs.org/en/latest/index.html
 # What has been done #
 All of this uses Django. This is a good Django tutorial: [https://docs.djangoproject.com/en/1.6/intro/tutorial01/](https://docs.djangoproject.com/en/1.6/intro/tutorial01/)
 
