@@ -70,6 +70,9 @@ class Assignment(models.Model):
         return "%s %s" % (self.course.code, self.code)
         
     def get_directory(self):
+        """
+        Builds the path to the directory where all the submissions are stored
+        """
         path = os.path.join(settings.SUBMISSION_DIR, 
                             str(self.course.semester), 
                             str(self.course.code), 
@@ -105,9 +108,18 @@ class Submission(models.Model):
     sub_date = models.DateTimeField(auto_now_add=True)
     
     def get_directory(self):
+        """
+        Builds the path to the directory where this submission is stored
+        """
         path = os.path.join(self.assignment.get_directory(), self.student.username, str(self.sub_date))
         path = path.replace(" ", "_")
         return path
+        
+    def get_filename(self):
+        """
+        Returns the filename of the submission. Use get_directory() to get the path to this file.
+        """
+        return os.listdir(self.get_directory())[0]
         
 
 class Grade(models.Model):

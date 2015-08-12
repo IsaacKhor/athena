@@ -19,6 +19,6 @@
     <b>Comments: </b> {{g.comments}}<br/>
   {% endfor %}
   <br/>
-  <a href=''>Download zip</a> (you can't really do this yet) <br/>
+  <a href={% url 'grader:submission_download' sub.id %}>Download Submission</a><br/>
 
 {% endblock %}

@@ -1,11 +1,12 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, StreamingHttpResponse
 from django.core.urlresolvers import reverse
-
+from django.core.servers.basehttp import FileWrapper
 from grader.models import *
 from grader.forms import *
 
 import os
+import mimetypes
 
 def home(request):
     """
@@ -118,6 +119,25 @@ def submission(request, subid):
     #Get the submission and render the page
     sub = Submission.objects.filter(id=subid)[0]
     return render(request, 'grader/submission.html', {'sub': sub})
+    
+def submission_download(request, subid):
+    """
+    Returns a download response for the requested submission
+    """
+    
+    #Get the filename and path
+    sub = Submission.objects.filter(id=subid)[0]
+    path = sub.get_directory()
+    filename = sub.get_filename()
+    full_file = os.path.join(path, filename)
+    
+    #Return a streaming response
+    chunk_size = 8192
+    response = StreamingHttpResponse(FileWrapper(open(full_file, 'rb'), chunk_size),
+                           content_type=mimetypes.guess_type(full_file)[0])
+    response['Content-Length'] = os.path.getsize(full_file)    
+    response['Content-Disposition'] = "attachment; filename=%s" % filename
+    return response
 
 
 def add_assgn(request, courseid):

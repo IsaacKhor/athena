@@ -9,4 +9,5 @@ urlpatterns = patterns('',
     url(r'^assignment/(?P<assgnid>[0-9]+)$', views.assignment, name='assignment'),
     url(r'^grade/(?P<subid>[0-9]+)$', views.grade, name='grade'),
     url(r'^submission/(?P<subid>[0-9]+)$', views.submission, name='submission'),
+    url(r'^submission/(?P<subid>[0-9]+)/download$', views.submission_download, name='submission_download'),
 )

@@ -17,7 +17,7 @@
   <b>Submit time: </b> {{sub.sub_date}}<br/>
 
   <br/>
-  <a href=''>Download zip</a> (you can't really do this yet) <br/>
+  <a href={% url 'grader:submission_download' sub.id %}>Download Submission</a> <br/>
 <div style='width:600px'>
   <form method="POST">
     {% csrf_token %}
