@@ -75,7 +75,6 @@ DATABASES = {
     }
 }
 
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'EST'
@@ -91,6 +90,9 @@ STATICFILES_DIRS = (
 )
 
 STATIC_URL = '/static/'
+
+#Directory to store assignment submissions
+SUBMISSION_DIR = os.path.join(BASE_DIR, 'submissions')
 
 # to add bootstrap to django
 DAB_FIELD_RENDERER = 'django_admin_bootstrapped.renderers.BootstrapFieldRenderer'

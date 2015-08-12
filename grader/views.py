@@ -1,8 +1,11 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
+from django.core.urlresolvers import reverse
+
 from grader.models import *
 from grader.forms import *
-from django.core.urlresolvers import reverse
+
+import os
 
 def home(request):
     """
@@ -11,7 +14,7 @@ def home(request):
 
     In the future it should show user's enrolled courses or courses they teach, depending on roll
     """
-
+    
     #Get all the courses and render the template
     courses = Course.objects.all()
     return render(request, 'grader/home.html', {'course_list': courses})
@@ -46,17 +49,23 @@ def assignment(request, assgnid):
 
         if form.is_valid():
 
-            #For now just print the contents of the file
-            #it should really save the file on the disk!
-            print (form.cleaned_data['sub_file'].read())
-
             #Create a new submission from the form data
             student = User.objects.filter(id=form.cleaned_data['student'])[0]
             new_sub = Submission(assignment=assgn, student=student)
             new_sub.save()
-
+            
+            #Make submission directory
+            if not os.path.exists(new_sub.get_directory()):
+                os.makedirs(new_sub.get_directory())
+            
+            #Save submission
+            filename = os.path.join(new_sub.get_directory(), form.cleaned_data['sub_file'].name)
+            with open(filename, 'wb+') as f:
+                for chunk in form.cleaned_data['sub_file'].chunks():
+                    f.write(chunk)
+            
             #Redirect back to the assignment page
-            return HttpResponseRedirect(reverse('assignment', args=(assgnid,)))
+            return HttpResponseRedirect(reverse('grader:assignment', args=(assgnid,)))
 
     #Create a new form
     else:
@@ -91,7 +100,7 @@ def grade(request, subid):
             sub.save()
 
             #Redirect back to the assignment page
-            return HttpResponseRedirect(reverse('assignment', args=(sub.assignment.id,)))
+            return HttpResponseRedirect(reverse('grader:assignment', args=(sub.assignment.id,)))
 
     #Get the form and render the page
     else:
@@ -129,7 +138,7 @@ def add_assgn(request, courseid):
         #Save the assignemnt
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse('course', args=(courseid,)))
+            return HttpResponseRedirect(reverse('grader:course', args=(courseid,)))
 
     #Create a new form and render the page
     else:

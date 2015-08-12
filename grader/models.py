@@ -1,12 +1,39 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import datetime
+from django.conf import settings
+import os
+
+class Semester(models.Model):
+    """
+    Stores a semester of the school year
+    """
+    
+    #Months the semesters start
+    SPRING_MONTH = 1
+    SUMMER_MONTH = 5
+    FALL_MONTH = 8
+    
+    #Names of semesters
+    TERM_CHOICES = [(FALL_MONTH, 'Fall'), (SPRING_MONTH, 'Spring'), (SUMMER_MONTH, 'Summer')]
+    
+    year = models.IntegerField()
+    term = models.IntegerField(choices=TERM_CHOICES)
+    
+    def __str__(self):
+        return "%s %d" % (dict(self.TERM_CHOICES)[self.term], self.year)
+        
+    def get_start_date(self):
+        return "%d%02d" % (self.year, self.term)
+    
+    
 
 class Course(models.Model):
     """
     Stores a section of a course for a specific semester
     """
 
-    semester = models.IntegerField()
+    semester = models.ForeignKey('Semester', blank=True, null=True)
     code = models.CharField(max_length=10) #ie CSCI160, CSCI120
     section = models.IntegerField()
     title = models.CharField(max_length=128)
@@ -41,6 +68,14 @@ class Assignment(models.Model):
 
     def __str__(self):
         return "%s %s" % (self.course.code, self.code)
+        
+    def get_directory(self):
+        path = os.path.join(settings.SUBMISSION_DIR, 
+                            str(self.course.semester), 
+                            str(self.course.code), 
+                            "Sec.%d" % self.course.section,
+                            self.code)
+        return path.replace(" ", "_")
 
 class Submission(models.Model):
     """
@@ -68,6 +103,12 @@ class Submission(models.Model):
     student = models.ForeignKey(User)
     status = models.IntegerField(choices=STATUS_CHOICES, default=0)
     sub_date = models.DateTimeField(auto_now_add=True)
+    
+    def get_directory(self):
+        path = os.path.join(self.assignment.get_directory(), self.student.username, str(self.sub_date))
+        path = path.replace(" ", "_")
+        return path
+        
 
 class Grade(models.Model):
     """
