@@ -46,7 +46,7 @@ class Course(models.Model):
         unique_together = ('semester', 'code', 'section')
 
     def __str__(self):
-        return "%s, %02d, %d" % (self.code, self.section, self.semester)
+        return "%s, %02d, %s" % (self.code, self.section, self.semester)
 
 class Assignment(models.Model):
     """

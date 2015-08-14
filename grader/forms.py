@@ -1,5 +1,5 @@
 from django.forms import ModelForm, Form, FileField, ChoiceField
-from grader.models import Assignment, Grade
+from grader.models import Assignment, Grade, Course
 
 class AssgnForm(ModelForm):
     """
@@ -14,6 +14,18 @@ class AssgnForm(ModelForm):
         super(AssgnForm, self).__init__(*args, **kwargs)
         bootstrapFormControls(self)
 
+class CourseForm(ModelForm):
+    """
+    Form for creating a new course
+    """
+    class Meta:
+        model = Course
+        fields = ['semester', 'code', 'section', 'title', 'desc', 'instructors']
+
+    def __init__(self, *args, **kwargs):
+        super(CourseForm, self).__init__(*args, **kwargs)
+        bootstrapFormControls(self)
+        
 class SubmitForm(Form):
     """
     Form for submitting an assignment

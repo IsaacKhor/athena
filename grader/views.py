@@ -164,3 +164,25 @@ def add_assgn(request, courseid):
     else:
         form = AssgnForm()
     return render(request, 'grader/add_assgn.html', {'course': course, 'form': form})
+
+
+def add_course(request):
+    """
+    Renders a page for adding a course
+
+    In the future should only be visible to instructors
+    """
+
+    #If the form is submitted, get the data
+    if request.method == 'POST':
+        form = CourseForm(request.POST)
+
+        #Save the assignemnt
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('grader:course', args=(form.instance.id,)))
+
+    #Create a new form and render the page
+    else:
+        form = CourseForm()
+    return render(request, 'grader/add_course.html', {'form': form})
