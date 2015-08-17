@@ -167,7 +167,7 @@ def add_assgn(request, courseid):
         form = AssgnForm()
     return render(request, 'grader/add_assgn.html', {'course': course, 'form': form})
 
-DELIM_RE = re.compile(", *|\n")
+DELIM_RE = re.compile(r", *|[\n\r]*")
 
 def edit_course(request, courseid=None):
     """
@@ -195,9 +195,12 @@ def edit_course(request, courseid=None):
         if form.is_valid():
             
             #Parse users from form
+            print(DELIM_RE.split(form.cleaned_data['student_field']))
             instructors = User.objects.filter(username__in=DELIM_RE.split(form.cleaned_data['instructor_field']))
             students = User.objects.filter(username__in=DELIM_RE.split(form.cleaned_data['student_field']))
             tas = User.objects.filter(username__in=DELIM_RE.split(form.cleaned_data['ta_field']))
+            
+            print(students)
             
             #Need to save course before adding users
             if not courseid:
