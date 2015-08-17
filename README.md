@@ -1,16 +1,16 @@
-# TODOs when cloned #
-upgrade python to 3.4
+# Requirements to Run #
+Python 3.4
 
-upgrade django to 1.8
+[https://www.djangoproject.com/download/](Django 1.8)
 
+[http://django-bootstrap3.readthedocs.org/en/latest/index.html](Django Bootstrap3)
+
+```
 sudo pip3 install django-bootstrap3
-
 sudo pip3 install django_admin_bootstrapped
-
 sudo pip3 install django-autocomplete-light
+```
 
-
-http://django-bootstrap3.readthedocs.org/en/latest/index.html
 # What has been done #
 All of this uses Django. This is a good Django tutorial: [https://docs.djangoproject.com/en/1.8/intro/tutorial01/](https://docs.djangoproject.com/en/1.8/intro/tutorial01/)
 
@@ -18,6 +18,7 @@ All of this uses Django. This is a good Django tutorial: [https://docs.djangopro
 The project has four models
 
 * **Course** - Stores a single section for a course in a single semester. Can have any number of students, TAs, and instructors.
+* **Semester** - Stores a year and season (ie fall, spring, summer) of a semester, and some constants to display the semesters.
 * **Assignment** - Stores an assignment, associated with a course.
 * **Submission** - Stores a reference to a submission of an assignment. The actual submitted assignment will be stored on the filesystem.
 * **Grade** - Stores a grade for a submission.
@@ -29,10 +30,10 @@ Additionally, I use the built in **User** model in Django to store students, TAs
 ## Pages ##
 All the pages are put together in *views.py*. The templates for each page have the same name as the methods in *views.py*. The pages are all pretty self descriptive, and the comments in *views.py* give more description.
 
-# What needs to be done #
+## Submission Storage ###
+Submissions are stored in the directory specified by *SUBMISSION_DIR* in *settings.py*. The submitted file for a specific assignment is in *<SUBMISSION_DIR>/<semester>/<course>/Sec.<section>/<assignment code>/<username>/<timestamp>/*
 
-##Store submissions on filesystem##
-Right now we have access to submitted files, but they're not saved. They should be saved on the filesystem in some human readable directory. The directory structure should be something like */semester/course/section/assignment/user/submission.zip*
+# What needs to be done #
 
 ##Make login page##
 Right now I have dropdown menus to choose user for submitting/grading assignments. There should be a login page which saves a cookie with the user ID, like a normal website.
@@ -44,9 +45,14 @@ The home page should only show courses which the user is enrolled in, is a TA fo
 Need to sync Django authentication system with current CS users.
 
 ##Add in auto-grader##
-Need to communicate with auto-grader
+Need to communicate with auto-grader. For each submission, a record is currently stored in the database and the submitted file is put into the filesystem. Need a way to detect a submission being added to the database and the location of the file to be sent to the auto grader.
 
-##Way to create courses##
-Make a way to create courses. Maybe make it easier than filling out web form? Like upload an excel file of all courses?
+##More options for assignments##
+* Enforce deadline or not
+* Ability to change deadline
+* When to release autograder results (immediately, after deadline, or manually by instructor/admin)
 
-Related - make easy page for submitting grades, easy page for downloading assignments.
+##Allow uploading files to assignment, grading, and course pages##
+Instructors may want to add PDFs, images, text files, etc. to instructions for assignments, their grade, or for the course itself.
+
+
