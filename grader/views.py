@@ -2,11 +2,13 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect, StreamingHttpResponse
 from django.core.urlresolvers import reverse
 from django.core.servers.basehttp import FileWrapper
+from django.contrib.auth.models import User
 from grader.models import *
 from grader.forms import *
 
 import os
 import mimetypes
+import re
 
 def home(request):
     """
@@ -165,24 +167,56 @@ def add_assgn(request, courseid):
         form = AssgnForm()
     return render(request, 'grader/add_assgn.html', {'course': course, 'form': form})
 
+DELIM_RE = re.compile(", *|\n")
 
-def add_course(request):
+def edit_course(request, courseid=None):
     """
     Renders a page for adding a course
 
     In the future should only be visible to instructors
     """
-
+    
+    #Load course data
+    if courseid:
+        course = Course.objects.filter(id=courseid)[0]
+        instructor_names = "\n".join(map(lambda u: u.username, course.instructors.all()))
+        student_names = "\n".join(map(lambda u: u.username, course.students.all()))
+        ta_names = "\n".join(map(lambda u: u.username, course.tas.all()))
+        form_data = {'instructor_field': instructor_names, 'student_field': student_names, 'ta_field': ta_names}
+    else:
+        course = None
+        form_data = dict()
+    
     #If the form is submitted, get the data
     if request.method == 'POST':
-        form = CourseForm(request.POST)
+        form = CourseForm(request.POST, instance=course, initial=form_data)
 
         #Save the assignemnt
         if form.is_valid():
+            
+            #Parse users from form
+            instructors = User.objects.filter(username__in=DELIM_RE.split(form.cleaned_data['instructor_field']))
+            students = User.objects.filter(username__in=DELIM_RE.split(form.cleaned_data['student_field']))
+            tas = User.objects.filter(username__in=DELIM_RE.split(form.cleaned_data['ta_field']))
+            
+            #Need to save course before adding users
+            if not courseid:
+                form.save()
+            
+            #Add users to course
+            form.instance.instructors = instructors
+            form.instance.students = students
+            form.instance.tas = tas
             form.save()
+            
             return HttpResponseRedirect(reverse('grader:course', args=(form.instance.id,)))
-
+        
     #Create a new form and render the page
     else:
-        form = CourseForm()
-    return render(request, 'grader/add_course.html', {'form': form})
+        form = CourseForm(instance=course, initial=form_data)
+        
+    return render(request, 'grader/edit_course.html', {'form': form})
+
+
+
+

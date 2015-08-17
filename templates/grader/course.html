@@ -13,6 +13,9 @@
 
 {% block content %}
 
+    
+  <a href={% url 'grader:edit_course' course.id %}>Edit course</a>
+
   <h2>Description</h2>
   {{course.desc}}
 

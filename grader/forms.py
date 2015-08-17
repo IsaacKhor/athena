@@ -1,4 +1,4 @@
-from django.forms import ModelForm, Form, FileField, ChoiceField
+from django.forms import ModelForm, Form, FileField, ChoiceField, CharField, Textarea
 from grader.models import Assignment, Grade, Course
 
 class AssgnForm(ModelForm):
@@ -8,7 +8,7 @@ class AssgnForm(ModelForm):
     class Meta:
         model = Assignment
         fields = ['title', 'code', 'desc', 'due_date',
-            'max_grade', 'weight', 'max_subs']
+                'max_grade', 'weight', 'max_subs']
 
     def __init__(self, *args, **kwargs):
         super(AssgnForm, self).__init__(*args, **kwargs)
@@ -20,8 +20,14 @@ class CourseForm(ModelForm):
     """
     class Meta:
         model = Course
-        fields = ['semester', 'code', 'section', 'title', 'desc', 'instructors']
-
+        fields = ['semester', 'code', 'section', 'title', 'desc']
+    
+    USER_TEXTAREA = Textarea(attrs={'rows': '3'})
+    
+    instructor_field = CharField(label='Instructors', widget=USER_TEXTAREA)
+    student_field = CharField(label='Students', widget=USER_TEXTAREA)
+    ta_field = CharField(label='TAs', widget=USER_TEXTAREA)
+    
     def __init__(self, *args, **kwargs):
         super(CourseForm, self).__init__(*args, **kwargs)
         bootstrapFormControls(self)
