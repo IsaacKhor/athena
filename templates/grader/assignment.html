@@ -14,7 +14,7 @@
 {% endblock %}
 
 {% block content %}
-
+  <h1>{{assgn.code}}: {{assgn.title}}</h1>
   {{assgn.desc}}
 
   <h2>Submit</h2>
@@ -26,6 +26,8 @@
     </table>
     <input type="submit" class="btn btn-info" value="Submit" />
   </form>
+</div>
+  
 <div style='width:600px'>
   <h2>Submissions</h2>
   {% for s in subs %}
@@ -35,5 +37,6 @@
       <a href={% url 'grader:grade' s.id %}>{{s.student.first_name}} {{s.student.last_name}} - {{s.sub_date}} - submitted</a><br/>
       {% endif %}
   {% endfor %}
+</div>
 
 {% endblock %}

@@ -2,13 +2,56 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect, StreamingHttpResponse
 from django.core.urlresolvers import reverse
 from django.core.servers.basehttp import FileWrapper
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
+import django.contrib.auth as auth
 from grader.models import *
 from grader.forms import *
 
 import os
 import mimetypes
 import re
+
+def login(request):
+    """
+    Provides user with the login page
+    """
+    
+    #Get username and password from POST data
+    if request.method == 'POST':
+        form = LoginForm(data=request.POST)
+        
+        #Authenticate username and password
+        if form.is_valid():
+            username = request.POST['username']
+            password = request.POST['password']
+            user = auth.authenticate(username=username, password=password)
+            
+            #User successfully logged in
+            if user is not None and user.is_active:
+                auth.login(request, user)
+                return HttpResponseRedirect(reverse('grader:home'))
+    
+    #Create new login form
+    else:
+        form = LoginForm()
+            
+    return render(request, 'grader/login.html', {'form': form})
+    
+    
+def logout(request):
+    """
+    Logs the user out and redirects to the login page
+    """
+    auth.logout(request)
+    return login_redirect(request)
+    
+
+def login_redirect(request):
+    """
+    Returns a redirect response to the login page
+    """
+    return HttpResponseRedirect(reverse('grader:login'))
+
 
 def home(request):
     """
@@ -18,9 +61,24 @@ def home(request):
     In the future it should show user's enrolled courses or courses they teach, depending on roll
     """
     
+    #Make sure user is logged in
+    if not load_user_groups(request.user):
+        return login_redirect(request)
+    
+    params = {'semester': Semester.get_current()}
+    
+    
+    if request.user.is_student:
+        params['student_courses'] = request.user.students.filter(semester=params['semester'])
+        params['ta_courses'] = request.user.tas.filter(semester=params['semester'])
+    
+    if request.user.is_faculty:
+        params['instructor_courses'] = request.user.instructors.filter(semester=params['semester'])
+        
+    
     #Get all the courses and render the template
     courses = Course.objects.all()
-    return render(request, 'grader/home.html', {'course_list': courses})
+    return render(request, 'grader/home.html', params)
 
 
 def course(request, courseid):
@@ -28,9 +86,18 @@ def course(request, courseid):
     Renders course page
     Shows course description, assignments, students, instructors, and TA
     """
+    
+    #Make sure user is logged in
+    if not request.user.is_authenticated():
+        return login_redirect(request)
 
-    #Get the course and render the template
+    #Get the course
     course = Course.objects.filter(id=courseid)[0]
+    
+    #Make sure user should be able to see this course
+    if not course.has_user(request.user):
+        return render(request, 'grader/access_denied.html', {'course': course})
+    
     return render(request, 'grader/course.html', {'course': course})
 
 
@@ -42,9 +109,17 @@ def assignment(request, assgnid):
     In the future it should only show submit form for students,
     only show submissions so far for instructors/TAs.
     """
+    
+    #Make sure user is logged in
+    if not request.user.is_authenticated():
+        return login_redirect(request)
 
     #Get the assigment
     assgn = Assignment.objects.filter(id=assgnid)[0]
+    
+    #Make sure user should be able to see this assignment
+    if not assgn.course.has_user(request.user):
+        return render(request, 'grader/access_denied.html', {'course': assgn.course})
 
     #If the form has been submitted, get the data
     if request.method == 'POST':
@@ -87,9 +162,18 @@ def grade(request, subid):
 
     In the future should only be visible to instructors, not only for un-graded assignments
     """
+    
+    #Make sure user is logged in
+    if not request.user.is_authenticated():
+        return login_redirect(request)
 
     #Get the submission
     sub = Submission.objects.filter(id=subid)[0]
+    
+    #Make sure user should be able to see this submission
+    course = sub.assignment.course
+    if not (course.has_instructor(request.user) or course.has_ta(request.user)):
+        return render(request, 'grader/access_denied.html', {'course': course})
 
     #If the form is submitted, get the data
     if request.method == 'POST':
@@ -117,9 +201,19 @@ def submission(request, subid):
 
     In the future should only be visible to the student who submitted it
     """
+    
+    #Make sure user is logged in
+    if not request.user.is_authenticated():
+        return login_redirect(request)
 
-    #Get the submission and render the page
+    #Get the submission
     sub = Submission.objects.filter(id=subid)[0]
+        
+    #Make sure user should be able to see this submission
+    course = sub.assignment.course
+    if not (sub.student == request.user or course.has_instructor(request.user) or course.has_ta(request.user)):
+        return render(request, 'grader/access_denied.html', {'course': course})
+        
     return render(request, 'grader/submission.html', {'sub': sub})
     
 def submission_download(request, subid):
@@ -127,8 +221,19 @@ def submission_download(request, subid):
     Returns a download response for the requested submission
     """
     
-    #Get the filename and path
+    #Make sure user is logged in
+    if not request.user.is_authenticated():
+        return login_redirect(request)
+    
+    #Get the submission
     sub = Submission.objects.filter(id=subid)[0]
+    
+    #Make sure user should be able to see this submission
+    course = sub.assignment.course
+    if not (sub.student == request.user or course.has_instructor(request.user) or course.has_ta(request.user)):
+        return render(request, 'grader/access_denied.html', {'course': course})
+    
+    #Get the path to save the file
     path = sub.get_directory()
     filename = sub.get_filename()
     full_file = os.path.join(path, filename)
@@ -148,9 +253,17 @@ def add_assgn(request, courseid):
 
     In the future should only be visible to instructors
     """
+    
+    #Make sure user is logged in
+    if not request.user.is_authenticated():
+        return login_redirect(request)
 
     #Get the course to add the assignment to
     course = Course.objects.filter(id=courseid)[0]
+    
+    #Make sure user should be able to create assignments
+    if not (course.has_instructor(request.user) or course.has_ta(request.user)):
+        return render(request, 'grader/access_denied.html', {'course': course})
 
     #If the form is submitted, get the data
     if request.method == 'POST':
@@ -176,6 +289,10 @@ def edit_course(request, courseid=None):
     In the future should only be visible to instructors
     """
     
+    #Make sure user is logged in
+    if not request.user.is_authenticated():
+        return login_redirect(request)
+    
     #Load course data
     if courseid:
         course = Course.objects.filter(id=courseid)[0]
@@ -186,6 +303,12 @@ def edit_course(request, courseid=None):
     else:
         course = None
         form_data = dict()
+        
+        
+    #Make sure user should be able to edit this course (or the course is just being created)
+    #Todo: only certain users should be able to create courses in the first place
+    if not course or not (course.has_instructor(request.user) or course.has_ta(request.user)):
+        return render(request, 'grader/access_denied.html', {'course': course})
     
     #If the form is submitted, get the data
     if request.method == 'POST':
@@ -195,12 +318,10 @@ def edit_course(request, courseid=None):
         if form.is_valid():
             
             #Parse users from form
-            print(DELIM_RE.split(form.cleaned_data['student_field']))
             instructors = User.objects.filter(username__in=DELIM_RE.split(form.cleaned_data['instructor_field']))
             students = User.objects.filter(username__in=DELIM_RE.split(form.cleaned_data['student_field']))
             tas = User.objects.filter(username__in=DELIM_RE.split(form.cleaned_data['ta_field']))
             
-            print(students)
             
             #Need to save course before adding users
             if not courseid:

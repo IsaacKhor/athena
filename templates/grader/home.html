@@ -7,11 +7,44 @@
 {% endblock %}
 
 {% block content %}
-  <h2>All Courses</h2>
-  {% for c in course_list %}
-    <a href={% url 'grader:course' c.id %}>{{c.code}}: {{c.title}}</a><br/>
-  {% endfor %}
+
+  <h1>{{semester}}</h1>
+  {% if user.is_student %}
+  
+      <h3>Enrolled Courses</h3>
+      {% if student_courses|length > 0 %}
+          {% for c in student_courses %}
+            <li><a href={% url 'grader:course' c.id %}>{{c.code}}: {{c.title}}</a></li>
+          {% endfor %}
+      {% else %}
+            You are not currently enrolled in any courses registered with this site for the {{semester}} semester.<br/>
+      {% endif %}
+      
+      
+      {% if ta_courses|length > 0 %}
+      <h3>TA Courses</h3>
+      {% for c in ta_courses %}
+        <li><a href={% url 'grader:course' c.id %}>{{c.code}}: {{c.title}}</a></li>
+      {% endfor %}
+      {% endif %}
+  
+  {% endif %}
+  
+  
+  {% if user.is_faculty %}
+  
+      <h3>Courses Taught</h3>
+      {% if instructor_courses|length > 0 %}
+          {% for c in instructor_courses %}
+            <li><a href={% url 'grader:course' c.id %}>{{c.code}}: {{c.title}}</a></li>
+          {% endfor %}
+      {% else %}
+            You are not currently teaching any courses registered with this site for the {{semester}} semester.<br/>
+      {% endif %}
+  
   <br/>
   <a href={% url 'grader:add_course' %}>Create new course</a><br/>
+  {% endif %}
+  
 
 {% endblock %}

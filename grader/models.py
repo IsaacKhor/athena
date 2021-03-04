@@ -19,6 +19,8 @@ class Semester(models.Model):
     
     year = models.IntegerField()
     term = models.IntegerField(choices=TERM_CHOICES)
+    start_date = models.DateField()
+    end_date = models.DateField()
     
     def __str__(self):
         return "%s %d" % (dict(self.TERM_CHOICES)[self.term], self.year)
@@ -26,7 +28,10 @@ class Semester(models.Model):
     def get_start_date(self):
         return "%d%02d" % (self.year, self.term)
     
-    
+    @staticmethod
+    def get_current():
+        return Semester.objects.filter(start_date__lte=datetime.now()).order_by('start_date')[0]
+        
 
 class Course(models.Model):
     """
@@ -44,7 +49,19 @@ class Course(models.Model):
 
     class Meta:
         unique_together = ('semester', 'code', 'section')
-
+    
+    def has_student(self, user, allow_superusers=True):
+        return (user.is_superuser and allow_superusers) or len(self.students.filter(id=user.id)) > 0
+        
+    def has_instructor(self, user, allow_superusers=True):
+        return (user.is_superuser and allow_superusers) or len(self.instructors.filter(id=user.id)) > 0
+        
+    def has_ta(self, user, allow_superusers=True):
+        return (user.is_superuser and allow_superusers) or len(self.tas.filter(id=user.id)) > 0
+        
+    def has_user(self, user, allow_superusers=True):
+        return self.has_student(user, allow_superusers) or self.has_ta(user, False) or self.has_instructor(user, False)
+    
     def __str__(self):
         return "%s, %02d, %s" % (self.code, self.section, self.semester)
 
@@ -132,3 +149,16 @@ class Grade(models.Model):
     grade = models.FloatField()
     date = models.DateTimeField(auto_now=True)
     comments = models.TextField(blank=True)
+    
+
+def load_user_groups(user):
+    if not user.is_authenticated():
+        return False
+        
+    user.is_student = len(user.groups.filter(name='students')) > 0
+    user.is_faculty = len(user.groups.filter(name='faculty')) > 0
+    
+    return True
+
+
+

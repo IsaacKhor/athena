@@ -1,5 +1,6 @@
 from django.forms import ModelForm, Form, FileField, ChoiceField, CharField, Textarea
 from grader.models import Assignment, Grade, Course
+from  django.contrib.auth.forms import AuthenticationForm
 
 class AssgnForm(ModelForm):
     """
@@ -67,7 +68,7 @@ class GradeForm(ModelForm):
         Grader field is temporary for testing
         """
 
-        super(ModelForm, self).__init__(*args, **kw)
+        super().__init__(*args, **kw)
 
         self.fields['grader'].choices = map(
             lambda u: (u.id, "%s %s" % (u.first_name, u.last_name)),
@@ -75,6 +76,15 @@ class GradeForm(ModelForm):
         )
         self.fields['grade'].max_value = sub.assignment.max_grade
         bootstrapFormControls(self)
+        
+class LoginForm(AuthenticationForm):
+    """
+    Login form with bootstrap controls
+    """
+    def __init__(self, *args, **kw):
+        super().__init__(*args, **kw)
+        bootstrapFormControls(self)
+        
 
 def bootstrapFormControls(self):
     #bootstrapping form controls

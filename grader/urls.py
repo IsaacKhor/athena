@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-
+from django.contrib.auth import views as auth_views
 from grader import views
 
 urlpatterns = patterns('',
@@ -12,4 +12,8 @@ urlpatterns = patterns('',
     url(r'^grade/(?P<subid>[0-9]+)$', views.grade, name='grade'),
     url(r'^submission/(?P<subid>[0-9]+)$', views.submission, name='submission'),
     url(r'^submission/(?P<subid>[0-9]+)/download$', views.submission_download, name='submission_download'),
+    
+    url(r'^login/$', views.login, name='login'),
+    url(r'^logout/$', views.logout, name='logout'),
+    
 )

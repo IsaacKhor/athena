@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %} Access Denied {% endblock %}
+
+{% block header %} Access Denied {% endblock %}
+
+{% block breadcrumbs %}
+<li><a href={% url 'grader:home' %}>Home</a></li>
+<li class='active'>Access Denied</li>
+{% endblock %}
+
+{% block content %}
+
+<h1>Access denined</h1>
+<p>
+You do not have permission to view this resource related to <b>{{ course.code }}: {{course.title}} ({{ course.semester }}, section {{course.section}})</b> 
+</p><p>
+If you believe this is an error please contact one of the course instructors listed below:<br>
+</p>
+
+{% for i in course.instructors.all %}
+<li>{{ i.first_name }} {{ i.last_name }} ({{ i.email }})</li>
+{% endfor %}
+
+{% endblock %}

@@ -1,9 +1,9 @@
 # Requirements to Run #
 Python 3.4
 
-[https://www.djangoproject.com/download/](Django 1.8)
+[Django 1.8](https://www.djangoproject.com/download/)
 
-[http://django-bootstrap3.readthedocs.org/en/latest/index.html](Django Bootstrap3)
+[Django Bootstrap3](http://django-bootstrap3.readthedocs.org/en/latest/index.html)
 
 ```
 sudo pip3 install django-bootstrap3
@@ -35,9 +35,6 @@ Submissions are stored in the directory specified by *SUBMISSION_DIR* in *settin
 
 # What needs to be done #
 
-##Make login page##
-Right now I have dropdown menus to choose user for submitting/grading assignments. There should be a login page which saves a cookie with the user ID, like a normal website.
-
 ##Different views for different users##
 The home page should only show courses which the user is enrolled in, is a TA for, or is an instructor for. Some users shouldn't be allowed to view certain pages. Students, instructors, and TAs should also have different options on the course page (ie grade or submit assignments). Django can have different user groups, so maybe make instructor and student groups.
 
@@ -54,5 +51,3 @@ Need to communicate with auto-grader. For each submission, a record is currently
 
 ##Allow uploading files to assignment, grading, and course pages##
 Instructors may want to add PDFs, images, text files, etc. to instructions for assignments, their grade, or for the course itself.
-
-
