@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}{{recent.assignment.code}} - {{recent.student}}{% endblock %}
+{% block header %}{{recent.assignment.code}} Submission{% endblock %}
+
+{% block breadcrumbs %}
+<li><a href={% url 'grader:home' %}>Home</a></li>
+<li class='active'>{{recent.assignment.code}}</li>
+{% endblock %}
+
+{% block content %}
+  <h1>{{recent.assignment.course.code}} {{recent.assignment.code}} Submission</h1>
+  <b>Student: </b> {{recent.student.first_name}} {{recent.student.last_name}}<br/>
+  <b>Last Submission: </b> {{recent.sub_date}}<br/>
+  {% if recent.status == recent.CH_SUBMITTED %} <b>Status: </b> Submitted {% endif %}
+  <br/>
+  <a href={% url 'grader:submission_download' recent.id %}>Download Submission</a><br/>
+
+  {% if recent.status == recent.CH_GRADED %} Graded {%endif%}
+  
+  {% for g in recent.grade_set.all %}
+    <br/>
+    <b>Grade: </b> {{g.grade}}/{{sub.assignment.max_grade}}<br/>
+    <b>Grader: </b> {{g.grader.first_name}} {{g.grader.last_name}}<br/>
+    <b>Comments: </b> {{g.comments}}<br/>
+  {% endfor %}
+  <br/>
+
+{% endblock %}

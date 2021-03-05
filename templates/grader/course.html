@@ -13,34 +13,62 @@
 
 {% block content %}
 
-    
-  <a href={% url 'grader:edit_course' course.id %}>Edit course</a>
+  <h1>{{course.code}} - {{course.title}} (Section {{course.section}})</h1>
+  
+  {% if instructor_view %}
+  <a class='btn btn-default btn-sm' href={% url 'grader:edit_course' course.id %}>
+      <span class="glyphicon glyphicon-pencil"></span> Edit Course
+  </a>
+  {% endif %}
 
   <h2>Description</h2>
   {{course.desc}}
 
   <h2>Assignments</h2>
-  {% for a in course.assignment_set.all %}
-      <a href={% url 'grader:assignment' a.id %}>{{ a.code }}: {{a.title}}</a> <br/>
+
+  {% if instructor_view %}
+  <a class='btn btn-default btn-sm' href={% url 'grader:add_assgn' course.id %}>
+      <span class="glyphicon glyphicon-plus"></span> Add Assignement
+  </a>
+  {% endif %}
+  
+  {% if futr_assgns|length == 0 and past_assgns|length == 0 %}
+  There are no assignments listed for this course.
+  {% endif %}
+  
+  {% if futr_assgns|length > 0 %}
+  <h4>Open</h4>
+  {% for a in futr_assgns %}
+      <a href={% url 'grader:assignment' a.id %}>{{ a.code }}: {{a.title}}</a> ({{a.due_date}}) <br/>
   {% endfor %}
-
-  <br/>
-
-  <a href={% url 'grader:add_assgn' course.id %}>Add assignement</a>
-
-  <h3>Intsructor{% if course.instructors.all|length > 1 %}s{% endif %}</h3>
-  {% for i in course.instructors.all %}
-      {{i.first_name}} {{i.last_name}}<br/>
+  {% endif %}
+  
+  {% if past_assgns|length > 0 %}
+  <h4>Previous</h4>
+  {% for a in past_assgns %}
+      <a href={% url 'grader:assignment' a.id %}>{{ a.code }}: {{a.title}}</a> ({{a.due_date}}) <br/>
   {% endfor %}
+  {% endif %}
+  
 
-  <h3>Student{% if course.students.all|length > 1 %}s{% endif %}</h3>
+  {% if instructor_view or ta_view %}
+  <h2>Student{% if course.students.all|length > 1 %}s{% endif %}</h2>
   {% for s in course.students.all %}
-      {{s.first_name}} {{s.last_name}}<br/>
+      <li><a href='mailto:{{s.email}}'>{{s.first_name}} {{s.last_name}} &lt{{s.email}}&gt</a><br/></li>
+  {% endfor %}
+  {% endif %}
+  
+  
+  <h2>Contacts</h2>
+  
+  <h4>Intsructor{% if course.instructors.all|length > 1 %}s{% endif %}</h4>
+  {% for i in course.instructors.all %}
+      <li><a href='mailto:{{i.email}}'>{{i.first_name}} {{i.last_name}} &lt{{i.email}}&gt</a><br/></li>
   {% endfor %}
 
-  <h3>TA{% if course.tas.all|length > 1 %}s{% endif %}</h3>
+  <h4>Teaching Assistant{% if course.tas.all|length > 1 %}s{% endif %}</h4>
   {% for t in course.tas.all %}
-      {{t.first_name}} {{t.last_name}}<br/>
+      <li><a href='mailto:{{t.email}}'>{{t.first_name}} {{t.last_name}} &lt{{t.email}}&gt</a><br/></li>
   {% endfor %}
 
 {% endblock %}

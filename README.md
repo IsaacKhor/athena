@@ -1,3 +1,8 @@
+# TODOs before pusing to production #
+set debug=False
+make sure read/write permission in server
+make sure www-data as owner
+
 # Requirements to Run #
 Python 3.4
 

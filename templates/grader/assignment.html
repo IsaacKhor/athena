@@ -15,10 +15,13 @@
 
 {% block content %}
   <h1>{{assgn.code}}: {{assgn.title}}</h1>
+  <b>Due at: </b> {{assgn.due_date}} <br/>
+  <h3>Description</h3>
   {{assgn.desc}}
 
+  {% if student_view %}
+  <div style='width:600px'>
   <h2>Submit</h2>
-<div style='width:600px'>
   <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     <table class="table">
@@ -26,17 +29,44 @@
     </table>
     <input type="submit" class="btn btn-info" value="Submit" />
   </form>
-</div>
   
-<div style='width:600px'>
-  <h2>Submissions</h2>
-  {% for s in subs %}
-      {% if s.status == s.CH_GRADED %}
-      <a href={% url 'grader:submission' s.id %}>{{s.student.first_name}} {{s.student.last_name}} - {{s.sub_date}} - graded</a><br/>
-      {% elif s.status == s.CH_SUBMITTED%}
-      <a href={% url 'grader:grade' s.id %}>{{s.student.first_name}} {{s.student.last_name}} - {{s.sub_date}} - submitted</a><br/>
-      {% endif %}
+  {% if prev_submissions|length > 0 %}
+  <h3>Previous Submissions</h3>
+  {% for s in prev_submissions %}
+  {{s.sub_date}}
   {% endfor %}
-</div>
+  {% else %}
+  <br/>
+  You have not submitted anything for this assignment yet
+  {% endif %}
+  
+  </div>
+  {% endif %}
+  
+  {% if ta_view or instructor_view %}
+  <div style='width:600px'>
+  <h2>Submissions</h2>
+  <table class="table table-striped">
+      <th>Student</th><th>Last Submission</th><th>Status</th><th align='center'>Download</th><th align='center'>Grade</th><th align='center'>Details</th>
+      
+  {% for s in recent_subs %}
+      <tr valign='center'>
+          <td>{{s.student__first_name}} {{s.student__last_name}}</td>
+          <td>{{s.recent}}</td>
+          <td>{% if s.recent == s.CH_GRADED%}Graded{%else%}Submitted{%endif%}</td>
+          <td align='center'><a class="btn btn-primary" href={% url 'grader:submissions' assgn.id s.student %}>
+            <span class="glyphicon glyphicon-arrow-down"></span>
+          </a></td>
+          <td align='center'><a class="btn btn-primary" href={% url 'grader:submissions' assgn.id s.student %}>
+            <span class="glyphicon glyphicon-ok"></span>
+          </a></td>
+          <td align='center'><a class="btn btn-primary" href={% url 'grader:submissions' assgn.id s.student %}>
+            <span class="glyphicon glyphicon-info-sign"></span>
+          </td>
+      </tr>
+  {% endfor %}
+  </table>
+  </div>
+  {% endif %}
 
 {% endblock %}

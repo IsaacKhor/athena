@@ -6,6 +6,8 @@ from django.contrib.auth.models import User, Group
 import django.contrib.auth as auth
 from grader.models import *
 from grader.forms import *
+from datetime import datetime
+from django.db.models import Max
 
 import os
 import mimetypes
@@ -74,6 +76,9 @@ def home(request):
     
     if request.user.is_faculty:
         params['instructor_courses'] = request.user.instructors.filter(semester=params['semester'])
+    
+    if request.user.is_superuser:
+        params['all_courses'] = Course.objects.all()
         
     
     #Get all the courses and render the template
@@ -94,11 +99,23 @@ def course(request, courseid):
     #Get the course
     course = Course.objects.filter(id=courseid)[0]
     
-    #Make sure user should be able to see this course
-    if not course.has_user(request.user):
-        return render(request, 'grader/access_denied.html', {'course': course})
+    assignments = course.assignment_set.order_by('due_date')
     
-    return render(request, 'grader/course.html', {'course': course})
+    params = {'course': course, 
+              'past_assgns': assignments.filter(due_date__lte=datetime.now()), 
+              'futr_assgns': assignments.filter(due_date__gt=datetime.now())}
+    
+    #Determine what type of user is viewing the page
+    if course.has_instructor(request.user):
+        params['instructor_view'] = True
+    elif course.has_ta(request.user):
+        params['ta_view'] = True
+    elif course.has_student(request.user):
+        params['student_view'] = True
+    else:
+        return render(request, 'grader/access_denied.html', params)
+    
+    return render(request, 'grader/course.html', params)
 
 
 def assignment(request, assgnid):
@@ -116,10 +133,30 @@ def assignment(request, assgnid):
 
     #Get the assigment
     assgn = Assignment.objects.filter(id=assgnid)[0]
+    course = assgn.course
+    submissions = assgn.submission_set.all()
     
-    #Make sure user should be able to see this assignment
-    if not assgn.course.has_user(request.user):
-        return render(request, 'grader/access_denied.html', {'course': assgn.course})
+    params = {'assgn': assgn}
+    
+    #Determine what type of user is viewing the page
+    if course.has_instructor(request.user):
+        params['instructor_view'] = True
+    elif course.has_ta(request.user):
+        params['ta_view'] = True
+        
+    elif course.has_student(request.user):
+        params['student_view'] = True
+        params['prev_submissions'] = assgn.submission_set.filter(student=request.user).order_by('sub_date').reverse()
+        
+    else:
+        return render(request, 'grader/access_denied.html', params)
+        
+    if params.get('student_view', False):
+        params['prev_submissions'] = assgn.submission_set.filter(student=request.user).order_by('sub_date').reverse()
+    else:
+        params['recent_subs'] = assgn.submission_set.values('student', 'student__first_name', 'student__last_name').distinct().annotate(recent=Max('sub_date'))
+        
+        print(params['recent_subs'])
 
     #If the form has been submitted, get the data
     if request.method == 'POST':
@@ -148,12 +185,11 @@ def assignment(request, assgnid):
     #Create a new form
     else:
         form = SubmitForm(assgn)
-
-    #Get list of submissions
-    submissions = assgn.submission_set.all()
+    
+    params['form'] = form
 
     #Render the page
-    return render(request, 'grader/assignment.html', {'assgn': assgn, 'form': form, 'subs': submissions})
+    return render(request, 'grader/assignment.html', params)
 
 
 def grade(request, subid):
@@ -195,7 +231,7 @@ def grade(request, subid):
     return render(request, 'grader/grade.html', {'sub': sub, 'form': form})
 
 
-def submission(request, subid):
+def submissions(request, assgnid, userid):
     """
     Renders a page for a student to view their submission
 
@@ -207,14 +243,18 @@ def submission(request, subid):
         return login_redirect(request)
 
     #Get the submission
-    sub = Submission.objects.filter(id=subid)[0]
-        
+    student = User.objects.get(id=userid)
+    assgn = Assignment.objects.get(id=assgnid)
+    subs = Submission.objects.filter(assignment=assgn, student=student).order_by('sub_date').reverse()
+    
     #Make sure user should be able to see this submission
-    course = sub.assignment.course
-    if not (sub.student == request.user or course.has_instructor(request.user) or course.has_ta(request.user)):
-        return render(request, 'grader/access_denied.html', {'course': course})
+    if len(subs) == 0 or not (request.user == student or assgn.course.has_instructor(request.user) or assgn.course.has_ta(request.user)):
+        return render(request, 'grader/access_denied.html', {'course': assgn.course})
         
-    return render(request, 'grader/submission.html', {'sub': sub})
+    params = {'recent': subs[0], 
+              'prev': subs[1:]}
+    
+    return render(request, 'grader/submissions.html', params)
     
 def submission_download(request, subid):
     """

@@ -38,23 +38,14 @@ class SubmitForm(Form):
     Form for submitting an assignment
     """
 
-    sub_file = FileField(allow_empty_file=False)
-
-    student = ChoiceField()#Testing Only: should be based on login
+    sub_file = FileField(label='File', allow_empty_file=False)
 
     def __init__(self, assignment, *args, **kw):
         """
         Associate the form with an assignment
         """
-
         super(Form, self).__init__(*args, **kw)
-
-        self.fields['student'].choices = map(
-            lambda s: (s.id, "%s %s" % (s.first_name, s.last_name)),
-            assignment.course.students.all()
-        )
         self.assignment = assignment
-
         bootstrapFormControls(self)
 
 class GradeForm(ModelForm):
