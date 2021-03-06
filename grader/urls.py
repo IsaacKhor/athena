@@ -10,8 +10,6 @@ urlpatterns = patterns('',
     url(r'^edit_course/(?P<courseid>[0-9]+)$', views.edit_course, name='edit_course'),
     url(r'^assignment/(?P<assgnid>[0-9]+)$', views.assignment, name='assignment'),
     url(r'^assignment/(?P<assgnid>[0-9]+)/(?P<userid>[0-9]+)$', views.submissions, name='submissions'),
-    #url(r'^grade/(?P<subid>[0-9]+)$', views.grade, name='grade'),
-    #url(r'^submission/(?P<subid>[0-9]+)$', views.submission, name='submission'),
     url(r'^download_sub/(?P<subid>[0-9]+)$', views.submission_download, name='submission_download'),
     
     url(r'^login/$', views.login, name='login'),

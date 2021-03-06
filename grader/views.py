@@ -99,11 +99,7 @@ def course(request, courseid):
     #Get the course
     course = Course.objects.filter(id=courseid)[0]
     
-    assignments = course.assignment_set.order_by('due_date')
-    
-    params = {'course': course, 
-              'past_assgns': assignments.filter(due_date__lte=datetime.now()), 
-              'futr_assgns': assignments.filter(due_date__gt=datetime.now())}
+    params = {'course': course}
     
     #Determine what type of user is viewing the page
     if course.has_instructor(request.user):
@@ -114,6 +110,24 @@ def course(request, courseid):
         params['student_view'] = True
     else:
         return render(request, 'grader/access_denied.html', params)
+    
+    
+    assignments = course.assignment_set.order_by('due_date').reverse().prefetch_related('submission_set')
+    
+    if params.get('student_view'):
+        for a in assignments:
+            subs = a.submission_set.filter(student=request.user).order_by('sub_date').reverse()
+            if subs.count() > 0:
+                a.recent = subs[0]
+                a.status = Submission.STATUS_CHOICES[subs[0].status][1]
+            else:
+                a.recent = None
+    else:
+        for a in assignments:
+            a.sub_count = a.submission_set.values('student').distinct().count()
+    
+    params['assignments'] = assignments
+        
     
     return render(request, 'grader/course.html', params)
 
@@ -192,45 +206,6 @@ def assignment(request, assgnid):
 
     #Render the page
     return render(request, 'grader/assignment.html', params)
-
-
-def grade(request, subid):
-    """
-    Renders a page for the instructor to grade a submission
-
-    In the future should only be visible to instructors, not only for un-graded assignments
-    """
-    
-    #Make sure user is logged in
-    if not request.user.is_authenticated():
-        return login_redirect(request)
-
-    #Get the submission
-    sub = Submission.objects.filter(id=subid)[0]
-    
-    #Make sure user should be able to see this submission
-    course = sub.assignment.course
-    if not (course.has_instructor(request.user) or course.has_ta(request.user)):
-        return render(request, 'grader/access_denied.html', {'course': course})
-
-    #If the form is submitted, get the data
-    if request.method == 'POST':
-        form = GradeForm(sub, request.POST)
-        form.instance.submission = sub
-
-        #Save the grade
-        if form.is_valid():
-            form.save()
-            sub.status = Submission.CH_GRADED
-            sub.save()
-
-            #Redirect back to the assignment page
-            return HttpResponseRedirect(reverse('grader:assignment', args=(sub.assignment.id,)))
-
-    #Get the form and render the page
-    else:
-        form = GradeForm(sub)
-    return render(request, 'grader/grade.html', {'sub': sub, 'form': form})
 
 
 def submissions(request, assgnid, userid):

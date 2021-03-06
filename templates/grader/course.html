@@ -16,7 +16,7 @@
   <h1>{{course.code}} - {{course.title}} (Section {{course.section}})</h1>
   
   {% if instructor_view %}
-  <a class='btn btn-default btn-sm' href={% url 'grader:edit_course' course.id %}>
+  <a class='btn btn-default' href={% url 'grader:edit_course' course.id %}>
       <span class="glyphicon glyphicon-pencil"></span> Edit Course
   </a>
   {% endif %}
@@ -25,30 +25,44 @@
   {{course.desc}}
 
   <h2>Assignments</h2>
+  
+  {% if assignments|length == 0 %}
+  There are no assignments listed for this course.
+  {% endif %}
+  <div style='width:600px'>
+  <table class="table table-striped">
+    <th>Name</th><th>Due Date</th><th>Status</th>    
+  {% for a in assignments %}
+  <tr>
+    <td><a href={% url 'grader:assignment' a.id %}>{{a.code}}: {{a.title}}</a></td>
+    <td>{{a.due_date}}</td>
+    <td>
+        {% if student_view %}
+        {% if a.recent %}
+        <a href={% url 'grader:submissions' a.id user.id %}>
+        {{a.status}}
+        {% if a.recent.grade %}
+        <b>({{a.recent.grade.grade}}/{{a.max_grade}})</b>
+        {% endif %}
+        </a>
+        {% else %}
+        Not Submitted
+        {% endif %}
+        
+        {% else %}
+        {{a.sub_count}}/{{course.students.count}} submitted
+        {% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+  </table>
 
   {% if instructor_view %}
-  <a class='btn btn-default btn-sm' href={% url 'grader:add_assgn' course.id %}>
+  <a class='btn btn-default' href={% url 'grader:add_assgn' course.id %}>
       <span class="glyphicon glyphicon-plus"></span> Add Assignement
   </a>
   {% endif %}
-  
-  {% if futr_assgns|length == 0 and past_assgns|length == 0 %}
-  There are no assignments listed for this course.
-  {% endif %}
-  
-  {% if futr_assgns|length > 0 %}
-  <h4>Open</h4>
-  {% for a in futr_assgns %}
-      <a href={% url 'grader:assignment' a.id %}>{{ a.code }}: {{a.title}}</a> ({{a.due_date}}) <br/>
-  {% endfor %}
-  {% endif %}
-  
-  {% if past_assgns|length > 0 %}
-  <h4>Previous</h4>
-  {% for a in past_assgns %}
-      <a href={% url 'grader:assignment' a.id %}>{{ a.code }}: {{a.title}}</a> ({{a.due_date}}) <br/>
-  {% endfor %}
-  {% endif %}
+  </div>
   
 
   {% if instructor_view or ta_view %}
