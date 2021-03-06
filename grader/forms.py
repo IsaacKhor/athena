@@ -51,21 +51,15 @@ class SubmitForm(Form):
 class GradeForm(ModelForm):
     class Meta:
         model = Grade
-        fields = ['grader', 'grade', 'comments']
+        fields = ['grade', 'comments']
 
     def __init__(self, sub, *args, **kw):
         """
         Associate the form with a submission
-        Grader field is temporary for testing
         """
-
         super().__init__(*args, **kw)
-
-        self.fields['grader'].choices = map(
-            lambda u: (u.id, "%s %s" % (u.first_name, u.last_name)),
-            sub.assignment.course.instructors.all()
-        )
         self.fields['grade'].max_value = sub.assignment.max_grade
+        self.instance.submission = sub
         bootstrapFormControls(self)
         
 class LoginForm(AuthenticationForm):

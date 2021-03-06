@@ -138,6 +138,9 @@ class Submission(models.Model):
         """
         return os.listdir(self.get_directory())[0]
         
+    def __str__(self):
+        return "%s %s %s %s" % (self.assignment.course.code, self.assignment.code, self.student.username, self.sub_date)
+        
 
 class Grade(models.Model):
     """
@@ -149,6 +152,9 @@ class Grade(models.Model):
     grade = models.FloatField()
     date = models.DateTimeField(auto_now=True)
     comments = models.TextField(blank=True)
+        
+    def __str__(self):
+        return str(self.submission)
     
 
 def load_user_groups(user):

@@ -143,50 +143,52 @@ def assignment(request, assgnid):
         params['instructor_view'] = True
     elif course.has_ta(request.user):
         params['ta_view'] = True
-        
     elif course.has_student(request.user):
-        params['student_view'] = True
-        params['prev_submissions'] = assgn.submission_set.filter(student=request.user).order_by('sub_date').reverse()
-        
+        params['student_view'] = True        
     else:
         return render(request, 'grader/access_denied.html', params)
-        
+    
+    #Load submissions into parameters
     if params.get('student_view', False):
         params['prev_submissions'] = assgn.submission_set.filter(student=request.user).order_by('sub_date').reverse()
-    else:
-        params['recent_subs'] = assgn.submission_set.values('student', 'student__first_name', 'student__last_name').distinct().annotate(recent=Max('sub_date'))
+
+        #Get data from a submission
+        if request.method == 'POST':
+            form = SubmitForm(assgn, request.POST, request.FILES)
+
+            if form.is_valid():
+
+                #Create a new submission from the form data
+                new_sub = Submission(assignment=assgn, student=request.user)
+                new_sub.save()
+                
+                #Make submission directory
+                if not os.path.exists(new_sub.get_directory()):
+                    os.makedirs(new_sub.get_directory())
+                
+                #Save submission
+                filename = os.path.join(new_sub.get_directory(), form.cleaned_data['sub_file'].name)
+                with open(filename, 'wb+') as f:
+                    for chunk in form.cleaned_data['sub_file'].chunks():
+                        f.write(chunk)
+                
+                #Redirect back to the assignment page
+                return HttpResponseRedirect(reverse('grader:submissions', args=(assgnid,request.user.id)))
+
+        #Create a new submission form
+        else:
+            form = SubmitForm(assgn)
         
-        print(params['recent_subs'])
-
-    #If the form has been submitted, get the data
-    if request.method == 'POST':
-        form = SubmitForm(assgn, request.POST, request.FILES)
-
-        if form.is_valid():
-
-            #Create a new submission from the form data
-            student = User.objects.filter(id=form.cleaned_data['student'])[0]
-            new_sub = Submission(assignment=assgn, student=student)
-            new_sub.save()
-            
-            #Make submission directory
-            if not os.path.exists(new_sub.get_directory()):
-                os.makedirs(new_sub.get_directory())
-            
-            #Save submission
-            filename = os.path.join(new_sub.get_directory(), form.cleaned_data['sub_file'].name)
-            with open(filename, 'wb+') as f:
-                for chunk in form.cleaned_data['sub_file'].chunks():
-                    f.write(chunk)
-            
-            #Redirect back to the assignment page
-            return HttpResponseRedirect(reverse('grader:assignment', args=(assgnid,)))
-
-    #Create a new form
-    else:
-        form = SubmitForm(assgn)
+        params['form'] = form
     
-    params['form'] = form
+    
+    else:
+        all_subs = assgn.submission_set.order_by('sub_date').reverse()
+        params['recent_subs'] = dict()
+        for s in all_subs:
+            if not s.student in params['recent_subs']:
+                params['recent_subs'][s.student] = s
+        params['recent_subs'] = params['recent_subs'].items()
 
     #Render the page
     return render(request, 'grader/assignment.html', params)
@@ -234,8 +236,6 @@ def grade(request, subid):
 def submissions(request, assgnid, userid):
     """
     Renders a page for a student to view their submission
-
-    In the future should only be visible to the student who submitted it
     """
     
     #Make sure user is logged in
@@ -247,13 +247,44 @@ def submissions(request, assgnid, userid):
     assgn = Assignment.objects.get(id=assgnid)
     subs = Submission.objects.filter(assignment=assgn, student=student).order_by('sub_date').reverse()
     
-    #Make sure user should be able to see this submission
-    if len(subs) == 0 or not (request.user == student or assgn.course.has_instructor(request.user) or assgn.course.has_ta(request.user)):
+    params = dict()
+    
+    #Determine what type of user is viewing the page
+    if assgn.course.has_instructor(request.user):
+        params['instructor_view'] = True
+    elif assgn.course.has_ta(request.user):
+        params['ta_view'] = True
+    elif assgn.course.has_student(request.user) and request.user == student:
+        params['student_view'] = True        
+    else:
         return render(request, 'grader/access_denied.html', {'course': assgn.course})
         
-    params = {'recent': subs[0], 
-              'prev': subs[1:]}
+    params['recent'] = subs[0]
+    params['prev'] = subs[1:]
+    params['status'] = Submission.STATUS_CHOICES[subs[0].status][1]
     
+    if params.get('instructor_view') or params.get('ta_view'):
+        
+        #Get data from previous grading form
+        if request.method == 'POST':
+            form = GradeForm(subs[0], request.POST)
+            form.instance.grader = request.user
+
+            #Save the grade
+            if form.is_valid():
+                form.instance.submission.status = Submission.CH_GRADED
+                form.instance.submission.save()
+                form.save()
+
+                #Redirect back to the submission
+                return HttpResponseRedirect(reverse('grader:submissions', args=(assgn.id, student.id)))
+
+        #Generate a new grading form
+        else:
+            form = GradeForm(subs[0])
+        
+        params['form'] = form
+        
     return render(request, 'grader/submissions.html', params)
     
 def submission_download(request, subid):

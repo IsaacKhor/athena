@@ -10,20 +10,46 @@
 
 {% block content %}
   <h1>{{recent.assignment.course.code}} {{recent.assignment.code}} Submission</h1>
-  <b>Student: </b> {{recent.student.first_name}} {{recent.student.last_name}}<br/>
-  <b>Last Submission: </b> {{recent.sub_date}}<br/>
-  {% if recent.status == recent.CH_SUBMITTED %} <b>Status: </b> Submitted {% endif %}
-  <br/>
-  <a href={% url 'grader:submission_download' recent.id %}>Download Submission</a><br/>
-
-  {% if recent.status == recent.CH_GRADED %} Graded {%endif%}
   
-  {% for g in recent.grade_set.all %}
-    <br/>
-    <b>Grade: </b> {{g.grade}}/{{sub.assignment.max_grade}}<br/>
-    <b>Grader: </b> {{g.grader.first_name}} {{g.grader.last_name}}<br/>
-    <b>Comments: </b> {{g.comments}}<br/>
-  {% endfor %}
-  <br/>
+  <div style='width:400px'>
+   <table class='table'>
+    <tr>
+     <td><b>Student</b></td><td>{{recent.student.first_name}} {{recent.student.last_name}}</td>
+    </tr><tr>
+     <td><b>Last Submission</b></td><td>{{recent.sub_date}}</td>
+    </tr><tr>
+     <td><b>Status</b></td><td>{{status}}</td>
+    </tr>
+    
+    {% if recent.status == recent.CH_GRADED %}
+    <tr><td><b>Grade</b></td><td>{{recent.grade.grade}}/{{recent.assignment.max_grade}}</td></tr>
+    {% if recent.grade.comments|length > 0 %}
+    <tr><td><b>Comments</b></td><td>{{recent.grade.comments}}</td></tr>
+    {% endif %}
+    {% endif %}
+    
+   </table>
+  <a class="btn btn-primary" href={% url 'grader:submission_download' recent.id %}>
+      <span class="glyphicon glyphicon-arrow-down"></span> Download
+  </a><br/>
+  </div>
+  
+  {% if recent.status != recent.CH_GRADED %} 
+  
+  {% if instructor_view or ta_view %}
+  
+  <div style='width:600px'>
+  <h2>Grade</h2>
+  <form method="POST">
+    {% csrf_token %}
+    <table class="table">
+      {{ form.as_table }}
+    </table>
+    <input type="submit" class="btn btn-info" value="Submit" />
+  </form>
+  </div>
+  {% endif %}
+  
+  {% endif %}
 
 {% endblock %}
