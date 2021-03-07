@@ -195,14 +195,23 @@ def assignment(request, assgnid):
         
         params['form'] = form
     
-    
+    #Load each student's most recent submission
     else:
+        
+        if request.method == 'POST' and len(request.POST.get('submissions', [])) > 0:
+            print(request.POST.getlist('submissions'))
+            if 'download_many' in request.POST.get('action', []):
+                zipfile = assgn.make_submissions_zip(request.POST.getlist('submissions'))
+                return get_download(zipfile)
+        
+        
         all_subs = assgn.submission_set.order_by('sub_date').reverse()
-        params['recent_subs'] = dict()
+        params['recent_subs'] = list()
+        students_added = set()
         for s in all_subs:
-            if not s.student in params['recent_subs']:
-                params['recent_subs'][s.student] = s
-        params['recent_subs'] = params['recent_subs'].items()
+            if not s.student in students_added:
+                params['recent_subs'].append(s)
+                students_added.add(s.student)
 
     #Render the page
     return render(request, 'grader/assignment.html', params)
@@ -279,17 +288,16 @@ def submission_download(request, subid):
     if not (sub.student == request.user or course.has_instructor(request.user) or course.has_ta(request.user)):
         return render(request, 'grader/access_denied.html', {'course': course})
     
-    #Get the path to save the file
-    path = sub.get_directory()
-    filename = sub.get_filename()
-    full_file = os.path.join(path, filename)
+    return get_download(os.path.join(sub.get_directory(), sub.get_filename()))
     
-    #Return a streaming response
+    
+def get_download(filename):
+    basename = os.path.basename(filename)
     chunk_size = 8192
-    response = StreamingHttpResponse(FileWrapper(open(full_file, 'rb'), chunk_size),
-                           content_type=mimetypes.guess_type(full_file)[0])
-    response['Content-Length'] = os.path.getsize(full_file)    
-    response['Content-Disposition'] = "attachment; filename=%s" % filename
+    response = StreamingHttpResponse(FileWrapper(open(filename, 'rb'), chunk_size),
+                           content_type=mimetypes.guess_type(filename)[0])
+    response['Content-Length'] = os.path.getsize(filename)    
+    response['Content-Disposition'] = "attachment; filename=%s" % basename
     return response
 
 

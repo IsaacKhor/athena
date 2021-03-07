@@ -93,6 +93,7 @@ STATIC_URL = '/static/'
 
 #Directory to store assignment submissions
 SUBMISSION_DIR = os.path.join(BASE_DIR, 'submissions')
+TEMP_DIR = os.path.join(BASE_DIR, 'tmp')
 
 # to add bootstrap to django
 DAB_FIELD_RENDERER = 'django_admin_bootstrapped.renderers.BootstrapFieldRenderer'

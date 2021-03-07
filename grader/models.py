@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from datetime import datetime
 from django.conf import settings
 import os
+from zipfile import ZipFile
 
 class Semester(models.Model):
     """
@@ -96,6 +97,38 @@ class Assignment(models.Model):
                             "Sec.%d" % self.course.section,
                             self.code)
         return path.replace(" ", "_")
+    
+    def make_submissions_zip(self, subids=None):
+        
+        #Initial filename
+        zip_path = os.path.join(settings.TEMP_DIR, "%s_%s_subs.zip" % (self.course.code, self.code))
+        
+        #Find new tmp filename
+        i = 1
+        while os.path.exists(zip_path):
+            zip_path = os.path.join(settings.TEMP_DIR, "%s_%s_subs_%d.zip" % (self.course.code, self.code, i))
+            i += 1
+        
+        #Open file
+        zfile = ZipFile(zip_path, "w")
+        
+        #Load submissions to put into zipfile
+        if subids:
+            submissions = self.submission_set.filter(id__in=subids)
+        else:
+            submissions = self.submission_set.all()
+        
+        print(subids)
+        print(submissions)
+        
+        #Write all submissions to the zip file
+        for sub in submissions:
+            sub_path = sub.get_directory()
+            sub_name = sub.get_filename()
+            zfile.write(os.path.join(sub_path, sub_name), os.path.join(sub.student.username, sub_name))
+        zfile.close()
+        
+        return zip_path
 
 class Submission(models.Model):
     """

@@ -5,11 +5,16 @@
     <title>{% block title %} {% endblock %}</title>
 
     <link href="{% static 'css/template.css' %}" rel="stylesheet" media="screen">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    
     {% load bootstrap3 %}
 
     {# Load CSS and JavaScript #}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
+    
+    {% block scripts %}
+    {% endblock %}
 
     {# Display django.contrib.messages as Bootstrap alerts #}
     {% bootstrap_messages %}

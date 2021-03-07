@@ -1,6 +1,7 @@
-from django.forms import ModelForm, Form, FileField, ChoiceField, CharField, Textarea
+from django.forms import ModelForm, Form, FileField, ChoiceField, CharField, Textarea, BooleanField, MultipleChoiceField, CheckboxSelectMultiple
 from grader.models import Assignment, Grade, Course
 from  django.contrib.auth.forms import AuthenticationForm
+
 
 class AssgnForm(ModelForm):
     """
@@ -14,6 +15,7 @@ class AssgnForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(AssgnForm, self).__init__(*args, **kwargs)
         bootstrapFormControls(self)
+
 
 class CourseForm(ModelForm):
     """
@@ -32,6 +34,7 @@ class CourseForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(CourseForm, self).__init__(*args, **kwargs)
         bootstrapFormControls(self)
+     
         
 class SubmitForm(Form):
     """
@@ -48,6 +51,7 @@ class SubmitForm(Form):
         self.assignment = assignment
         bootstrapFormControls(self)
 
+
 class GradeForm(ModelForm):
     class Meta:
         model = Grade
@@ -61,6 +65,8 @@ class GradeForm(ModelForm):
         self.fields['grade'].max_value = sub.assignment.max_grade
         self.instance.submission = sub
         bootstrapFormControls(self)
+        
+    
         
 class LoginForm(AuthenticationForm):
     """
