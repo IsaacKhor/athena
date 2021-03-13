@@ -136,17 +136,6 @@ class Assignment(models.Model):
             return markdown.markdown(self.desc, safe_mode='escape') 
         elif self.desc_format == TEXT_FORMAT:
             return html.escape(self.desc)
-    
-    def get_directory(self):
-        """
-        Builds the path to the directory where all the submissions are stored
-        """
-        path = os.path.join(settings.SUBMISSION_DIR, 
-                            str(self.course.semester), 
-                            str(self.course.code), 
-                            "Sec.%d" % self.course.section,
-                            self.code)
-        return path.replace(" ", "_")
         
     def get_assignment_path(self):
         """
@@ -171,6 +160,17 @@ class Assignment(models.Model):
             
         return files
     
+    def get_directory(self):
+        """
+        Builds the path to the directory where all the submissions are stored
+        """
+        path = os.path.join(settings.SUBMISSION_DIR, 
+                            str(self.course.semester), 
+                            str(self.course.code), 
+                            "Sec.%d" % self.course.section,
+                            self.code)
+        return path.replace(" ", "_")
+    
     def make_submissions_zip(self, subids=None):
         
         #Initial filename
@@ -190,9 +190,6 @@ class Assignment(models.Model):
             submissions = self.submission_set.filter(id__in=subids)
         else:
             submissions = self.submission_set.all()
-        
-        print(subids)
-        print(submissions)
         
         #Write all submissions to the zip file
         for sub in submissions:
@@ -230,12 +227,30 @@ class Submission(models.Model):
     status = models.IntegerField(choices=STATUS_CHOICES, default=0)
     sub_date = models.DateTimeField(auto_now_add=True)
     
-    def get_directory(self):
+    
+    
+    def get_directory_old(self):
         """
         Builds the path to the directory where this submission is stored
         """
         path = os.path.join(self.assignment.get_directory(), self.student.username, str(self.sub_date))
         path = path.replace(" ", "_")
+        return path
+    
+        
+    def get_filename_old(self):
+        """
+        Returns the filename of the submission. Use get_directory() to get the path to this file.
+        """
+        return os.listdir(self.get_directory_old())[0]
+        
+    def get_directory(self):
+        """
+        Builds the path to the directory where this submission is stored
+        """
+        #path = os.path.join(self.assignment.get_directory(), self.student.username, str(self.sub_date))
+        #path = path.replace(" ", "_")
+        path = os.path.join(settings.SUBMISSION_DIR, str(self.id))
         return path
         
     def get_filename(self):
