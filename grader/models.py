@@ -212,14 +212,14 @@ class Submission(models.Model):
     #GRADED means manually graded (should have Grade entry),
     #assumes it passed auto grader
     CH_SUBMITTED = 0
-    CH_PASSED = 1
-    CH_FAILED = 2
+    CH_AUTOGRADED = 1
     CH_GRADED = 3
+    CH_PREVIOUS = 4
     STATUS_CHOICES = (
         (CH_SUBMITTED, 'Submitted'),
-        (CH_PASSED, 'Passed'),
-        (CH_FAILED, 'Failed'),
-        (CH_GRADED, 'Graded')
+        (CH_AUTOGRADED, 'Submitted'),#Should later be labeled something else - hidden for now
+        (CH_GRADED, 'Instructor Graded'),
+        (CH_PREVIOUS, 'Past')
     )
 
     assignment = models.ForeignKey('Assignment')
@@ -227,7 +227,14 @@ class Submission(models.Model):
     status = models.IntegerField(choices=STATUS_CHOICES, default=0)
     sub_date = models.DateTimeField(auto_now_add=True)
     
-    
+    def set_recent(self):
+        """
+        Marks all other submissions from this assignment and student as previous
+        """
+        for sub in Submission.objects.filter(assignment=self.assignment, student=self.student).exclude(status=self.CH_PREVIOUS):
+            if sub != self:
+                sub.status = self.CH_PREVIOUS
+                sub.save()
     
     def get_directory_old(self):
         """
@@ -273,6 +280,29 @@ class Grade(models.Model):
     grade = models.FloatField()
     date = models.DateTimeField(auto_now=True)
     comments = models.TextField(blank=True)
+        
+    def __str__(self):
+        return str(self.submission)
+        
+
+class AutograderResult(models.Model):
+    """
+    Stores a result from the auto grader
+    """
+    PASS = 0
+    FAIL = 1
+    TIMEOUT = 2
+    
+    RESULT_CHOICES = (
+        (PASS, 'Passed'),
+        (FAIL, 'Failed'),
+        (TIMEOUT, 'Timed Out')
+    )
+
+    submission = models.OneToOneField('Submission')
+    date = models.DateTimeField(auto_now=True)
+    info_file = models.TextField()
+    result = models.IntegerField(choices=RESULT_CHOICES)
         
     def __str__(self):
         return str(self.submission)
