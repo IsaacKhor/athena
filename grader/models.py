@@ -237,9 +237,10 @@ def load_user_groups(user):
     if not user.is_authenticated():
         return False
         
-    user.is_student = len(user.groups.filter(name='students')) > 0
     user.is_faculty = len(user.groups.filter(name='faculty')) > 0
-    
+    #user.is_student = len(user.groups.filter(name='students')) > 0
+    user.is_student = not user.is_faculty
+
     return True
 
 

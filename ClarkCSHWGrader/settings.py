@@ -33,10 +33,52 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    'django_python3_ldap',
     # custom apps
     'grader',
 )
+
+import django_python3_ldap.utils
+
+#LDAP authentication options
+AUTHENTICATION_BACKENDS = (
+    'django_python3_ldap.auth.LDAPBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+# The URL of the LDAP server.
+LDAP_AUTH_URL = "ldap://140.232.229.7:389"
+
+# Initiate TLS on connection.
+LDAP_AUTH_USE_TLS = False
+
+# The LDAP search base for looking up users.
+LDAP_AUTH_SEARCH_BASE = "dc=cslab"
+
+# The LDAP class that represents a user.
+LDAP_AUTH_OBJECT_CLASS = "inetOrgPerson"
+
+# The LDAP Username and password of a user so ldap_sync_users can be run
+# Set to None if you allow anonymous queries
+LDAP_AUTH_CONNECTION_USERNAME = None
+LDAP_AUTH_CONNECTION_PASSWORD = None
+
+# User model fields mapped to the LDAP
+# attributes that represent them.
+LDAP_AUTH_USER_FIELDS = {
+    "username": "uid",
+    "first_name": "cn",
+}
+
+# A tuple of fields used to uniquely identify a user.
+LDAP_AUTH_USER_LOOKUP_FIELDS = ("username",)
+
+# Callable that transforms the user data loaded from
+# LDAP into a form suitable for creating a user.
+# Override this to set custom field formatting for your
+# user model.
+LDAP_AUTH_CLEAN_USER_DATA = django_python3_ldap.utils.clean_user_data
+
+
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -54,7 +96,7 @@ ROOT_URLCONF = 'ClarkCSHWGrader.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -69,11 +111,24 @@ TEMPLATES = [
 WSGI_APPLICATION = 'ClarkCSHWGrader.wsgi.application'
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    'default' : {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME' : 'grader',
+        'USER': 'django',
+        'PASSWORD': '26|^26t=t?',
+        'HOST': 'localhost',
+        'PORT': '', #empty is default
     }
 }
+
+
+## sqlite database ##
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#    }
+#}
 
 LANGUAGE_CODE = 'en-us'
 
