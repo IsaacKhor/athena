@@ -60,6 +60,7 @@ class SubmitForm(Form):
     def save_submission(self):
         #Create a new submission from the form data
         new_sub = Submission(assignment=self.assignment, student=self.user)
+        new_sub.set_recent()
         new_sub.save()
         
         #Make submission directory

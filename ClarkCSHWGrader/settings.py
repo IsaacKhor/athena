@@ -156,6 +156,9 @@ SUBMISSION_DIR = os.path.join(BASE_DIR, 'submissions')
 COURSE_DIR = os.path.join(BASE_DIR, 'course_files')
 TEMP_DIR = os.path.join(BASE_DIR, 'tmp')
 
+#Email host to use for usernames
+DEFAULT_EMAIL_HOST = "clarku.edu"
+
 # to add bootstrap to django
 DAB_FIELD_RENDERER = 'django_admin_bootstrapped.renderers.BootstrapFieldRenderer'
 from django.contrib import messages

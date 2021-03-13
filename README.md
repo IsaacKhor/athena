@@ -65,16 +65,12 @@ Submissions are stored in the directory specified by *SUBMISSION_DIR* in *settin
 
 # What needs to be done #
 
-##Change submissions to less complex path##
-Should just be stored in directory with submission ID as name
-
-##Automatically create email addresses##
-Should set user's email to "username@clarku.edu"
-
 ##Allow file uploading when grading##
 
 ##Error handling##
 Currently any errors (ie courses which don't exist, etc) will return "Internal server error".
+
+##Give option for users to input their name##
 
 ##Add in auto-grader##
 Need to communicate with auto-grader. For each submission, a record is currently stored in the database and the submitted file is put into the filesystem. Need a way to detect a submission being added to the database and the location of the file to be sent to the auto grader (database listener)

@@ -30,6 +30,10 @@ def login(request):
             
             #User successfully logged in
             if user is not None and user.is_active:
+                
+                if not user.email:
+                    create_user_email(user)
+                    
                 auth.login(request, user)
                 return HttpResponseRedirect(reverse('grader:home'))
     

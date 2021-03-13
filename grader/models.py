@@ -317,5 +317,17 @@ def load_user_groups(user):
     user.is_student = not user.is_faculty
 
     return True
+    
+def create_user_email(user):
+    if not user.is_authenticated():
+        return False
+    
+    user.email = "%s@%s" % (user.username, settings.DEFAULT_EMAIL_HOST)
+    user.save()
+    
+    return user.email
+    
+    
+    
 
 
