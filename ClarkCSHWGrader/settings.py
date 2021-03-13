@@ -85,14 +85,13 @@ USE_L10N = True
 
 USE_TZ = True
 
-STATICFILES_DIRS = (
-    "static/",
-)
+STATIC_ROOT = 'static'
 
 STATIC_URL = '/static/'
 
-#Directory to store assignment submissions
+#Directories to store user files
 SUBMISSION_DIR = os.path.join(BASE_DIR, 'submissions')
+COURSE_DIR = os.path.join(BASE_DIR, 'course_files')
 TEMP_DIR = os.path.join(BASE_DIR, 'tmp')
 
 # to add bootstrap to django

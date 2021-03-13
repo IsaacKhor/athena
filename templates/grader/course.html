@@ -64,6 +64,42 @@
   {% endif %}
   </div>
   
+  
+  {% if files|length > 0 or instructor_view %}
+  
+  <div style='width:600px'>
+  <h2>Course Files</h2>
+  {% if files|length > 0 %}
+  
+  <table class='table table-striped'>
+      <th>Filename</th><th>Date Created</th><th>Size (bytes)</th>{% if instructor_view %}<th>Delete</th>{% endif %}
+  {% for filename, size, create_date in files %}
+  <tr>
+      <td><a href={% url 'grader:coursefile_download' course.id filename%}>{{ filename }}</a></td>
+      <td>{{ create_date }}</td>
+      <td>{{ size }}</td>
+      {% if instructor_view %}
+      <td><a class='btn btn-default' href={% url 'grader:coursefile_delete' course.id filename %}>
+      <span class="glyphicon glyphicon-trash"></span>
+  </a></td>
+      {% endif %}
+  </tr>
+  {% endfor %}
+  </table>
+  {% endif %}
+  
+  {% if instructor_view %}
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+      {{ file_form }}
+      <br/>
+    <input type="submit" class="btn btn-info" value="Add" />
+  </form>
+  {% endif %}
+
+  </div>
+  
+  {% endif %}
 
   {% if instructor_view or ta_view %}
   <h2>Student{% if course.students.all|length > 1 %}s{% endif %}</h2>

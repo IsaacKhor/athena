@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect, StreamingHttpResponse
+from django.http import HttpResponse, HttpResponseRedirect, StreamingHttpResponse, HttpResponseNotFound
 from django.core.urlresolvers import reverse
 from django.core.servers.basehttp import FileWrapper
 from django.contrib.auth.models import User, Group
@@ -125,8 +125,17 @@ def course(request, courseid):
     else:
         for a in assignments:
             a.sub_count = a.submission_set.values('student').distinct().count()
+        
+        if request.method == 'POST':
+            params['file_form'] = FileUploadForm(course.get_course_path(), request.POST, request.FILES)
+            if params['file_form'].is_valid():
+                params['file_form'].save_file()
+                return HttpResponseRedirect(reverse('grader:course', args=(course.id,)))
+        else:
+            params['file_form'] = FileUploadForm(course.get_course_path())
     
     params['assignments'] = assignments
+    params['files'] = course.get_course_files()
         
     
     return render(request, 'grader/course.html', params)
@@ -168,42 +177,41 @@ def assignment(request, assgnid):
 
         #Get data from a submission
         if request.method == 'POST':
-            form = SubmitForm(assgn, request.POST, request.FILES)
+            form = SubmitForm(assgn, request.user, request.POST, request.FILES)
 
             if form.is_valid():
 
-                #Create a new submission from the form data
-                new_sub = Submission(assignment=assgn, student=request.user)
-                new_sub.save()
-                
-                #Make submission directory
-                if not os.path.exists(new_sub.get_directory()):
-                    os.makedirs(new_sub.get_directory())
-                
-                #Save submission
-                filename = os.path.join(new_sub.get_directory(), form.cleaned_data['sub_file'].name)
-                with open(filename, 'wb+') as f:
-                    for chunk in form.cleaned_data['sub_file'].chunks():
-                        f.write(chunk)
+                new_sub = form.save_submission()
                 
                 #Redirect back to the assignment page
                 return HttpResponseRedirect(reverse('grader:submissions', args=(assgnid,request.user.id)))
 
         #Create a new submission form
         else:
-            form = SubmitForm(assgn)
+            form = SubmitForm(assgn, request.user)
         
         params['form'] = form
     
     #Load each student's most recent submission
     else:
         
-        if request.method == 'POST' and len(request.POST.get('submissions', [])) > 0:
-            print(request.POST.getlist('submissions'))
-            if 'download_many' in request.POST.get('action', []):
-                zipfile = assgn.make_submissions_zip(request.POST.getlist('submissions'))
-                return get_download(zipfile)
+        if request.method == 'POST':
+            if len(request.POST.get('submissions', [])) > 0:
+                print(request.POST.getlist('submissions'))
+                if 'download_many' in request.POST.get('action', []):
+                    zipfile = assgn.make_submissions_zip(request.POST.getlist('submissions'))
+                    return get_download(zipfile)
+                    
+            elif not 'action' in request.POST:
+                params['file_form'] = FileUploadForm(assgn.get_assignment_path(), request.POST, request.FILES)
+                if params['file_form'].is_valid():
+                    params['file_form'].save_file()
+                    return HttpResponseRedirect(reverse('grader:assignment', args=(assgnid,)))
+                    
+        else:
+            params['file_form'] = FileUploadForm(assgn.get_assignment_path())
         
+        params['files'] = assgn.get_assignment_files()
         
         all_subs = assgn.submission_set.order_by('sub_date').reverse()
         params['recent_subs'] = list()
@@ -290,6 +298,69 @@ def submission_download(request, subid):
     
     return get_download(os.path.join(sub.get_directory(), sub.get_filename()))
     
+def coursefile_download(request, courseid, filename):
+    
+    #Make sure user is logged in
+    if not request.user.is_authenticated():
+        return login_redirect(request)
+    
+    #Get the course
+    course = Course.objects.get(id=courseid)
+    
+    #Make sure user should be able to see this submission
+    if not (course.has_user(request.user)):
+        return render(request, 'grader/access_denied.html', {'course': course})
+        
+    return get_download(os.path.join(course.get_course_path(), filename))
+    
+def coursefile_delete(request, courseid, filename):
+    
+    #Make sure user is logged in
+    if not request.user.is_authenticated():
+        return login_redirect(request)
+    
+    #Get the course
+    course = Course.objects.get(id=courseid)
+    
+    #Make sure user should be able to delete this file
+    if not (course.has_instructor(request.user)):
+        return render(request, 'grader/access_denied.html', {'course': course})
+        
+    os.remove(os.path.join(course.get_course_path(), filename))
+        
+    return HttpResponseRedirect(reverse('grader:course', args=(course.id,)))
+    
+def assgnfile_download(request, assgnid, filename):
+    
+    #Make sure user is logged in
+    if not request.user.is_authenticated():
+        return login_redirect(request)
+    
+    #Get the course
+    assgn = Assignments.objects.get(id=assgnid)
+    
+    #Make sure user should be able to see this submission
+    if not (assgn.course.has_user(request.user)):
+        return render(request, 'grader/access_denied.html', {'course': assgn.course})
+        
+    return get_download(os.path.join(assgn.get_assignment_path(), filename))
+    
+def assgnfile_delete(request, assgnid, filename):
+    
+    #Make sure user is logged in
+    if not request.user.is_authenticated():
+        return login_redirect(request)
+    
+    #Get the course
+    assgn = Assignment.objects.get(id=assgnid)
+    
+    #Make sure user should be able to delete this file
+    if not (assgn.course.has_instructor(request.user)):
+        return render(request, 'grader/access_denied.html', {'course': assgn.course})
+        
+    os.remove(os.path.join(assgn.get_assignment_path(), filename))
+        
+    return HttpResponseRedirect(reverse('grader:assignment', args=(assgn.id,)))
     
 def get_download(filename):
     basename = os.path.basename(filename)

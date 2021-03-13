@@ -30,6 +30,41 @@ function toggle_selected(source, name) {
   <b>Due at: </b> {{assgn.due_date}} <br/>
   <h3>Description</h3>
   {{assgn.desc}}
+  
+  {% if files|length > 0 or instructor_view %}
+  
+  <div style='width:600px'>
+  <h3>Assignment Files</h3>
+  {% if files|length > 0 %}
+  
+  <table class='table table-striped'>
+      <th>Filename</th><th>Date Created</th><th>Size (bytes)</th>{% if instructor_view %}<th>Delete</th>{% endif %}
+  {% for filename, size, create_date in files %}
+  <tr>
+      <td><a href={% url 'grader:assgnfile_download' assgn.id filename%}>{{ filename }}</a></td>
+      <td>{{ create_date }}</td>
+      <td>{{ size }}</td>
+      {% if instructor_view %}
+      <td><a class='btn btn-default' href={% url 'grader:assgnfile_delete' assgn.id filename %}>
+      <span class="glyphicon glyphicon-trash"></span>
+  </a></td>
+      {% endif %}
+  </tr>
+  {% endfor %}
+  </table>
+  {% endif %}
+  
+  {% if instructor_view %}
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+      {{ file_form }}
+      <br/>
+    <input type="submit" class="btn btn-info" value="Add" />
+  </form>
+  {% endif %}
+
+  </div>
+  {% endif %}
 
   {% if student_view %}
   

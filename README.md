@@ -41,9 +41,6 @@ Submissions are stored in the directory specified by *SUBMISSION_DIR* in *settin
 
 # What needs to be done #
 
-##Different views for different users##
-The home page should only show courses which the user is enrolled in, is a TA for, or is an instructor for. Some users shouldn't be allowed to view certain pages. Students, instructors, and TAs should also have different options on the course page (ie grade or submit assignments). Django can have different user groups, so maybe make instructor and student groups.
-
 ##Integrate users with LDAP##
 Need to sync Django authentication system with current CS users.
 
@@ -52,8 +49,6 @@ Need to communicate with auto-grader. For each submission, a record is currently
 
 ##More options for assignments##
 * Enforce deadline or not
-* Ability to change deadline
+* Ability to change deadline (edit assignment)
+* Add option to write description in markdown
 * When to release autograder results (immediately, after deadline, or manually by instructor/admin)
-
-##Allow uploading files to assignment, grading, and course pages##
-Instructors may want to add PDFs, images, text files, etc. to instructions for assignments, their grade, or for the course itself.

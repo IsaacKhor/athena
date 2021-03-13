@@ -62,6 +62,26 @@ class Course(models.Model):
         
     def has_user(self, user, allow_superusers=True):
         return self.has_student(user, allow_superusers) or self.has_ta(user, False) or self.has_instructor(user, False)
+        
+    def get_course_path(self):
+        return os.path.join(settings.COURSE_DIR, str(self.id))
+        
+    def get_course_files(self):
+        """
+        Returns list of info about the course files in the form (filename, size, date created)
+        """
+        files = list()
+        
+        #Make sure course file directory exists
+        if not os.path.exists(self.get_course_path()):
+            return files
+            
+        for f in os.listdir(self.get_course_path()):
+            if os.path.isfile(os.path.join(self.get_course_path(), f)):
+                info = os.stat(os.path.join(self.get_course_path(), f))
+                files.append((f, int(info[6]), datetime.fromtimestamp(info[9])))
+            
+        return files
     
     def __str__(self):
         return "%s, %02d, %s" % (self.code, self.section, self.semester)
@@ -97,6 +117,29 @@ class Assignment(models.Model):
                             "Sec.%d" % self.course.section,
                             self.code)
         return path.replace(" ", "_")
+        
+    def get_assignment_path(self):
+        """
+        Builds path to the directory where files about the assignment are
+        """
+        return os.path.join(self.course.get_course_path(), str(self.id))
+        
+    def get_assignment_files(self):
+        """
+        Returns list of info about the assignment files in the form (filename, size, date created)
+        """
+        files = list()
+        
+        #Make sure assignment file directory exists
+        if not os.path.exists(self.get_assignment_path()):
+            return files
+            
+        for f in os.listdir(self.get_assignment_path()):
+            if os.path.isfile(os.path.join(self.get_assignment_path(), f)):
+                info = os.stat(os.path.join(self.get_assignment_path(), f))
+                files.append((f, int(info[6]), datetime.fromtimestamp(info[9])))
+            
+        return files
     
     def make_submissions_zip(self, subids=None):
         

@@ -1,5 +1,5 @@
 from django.forms import ModelForm, Form, FileField, ChoiceField, CharField, Textarea, BooleanField, MultipleChoiceField, CheckboxSelectMultiple
-from grader.models import Assignment, Grade, Course
+from grader.models import *
 from  django.contrib.auth.forms import AuthenticationForm
 
 
@@ -43,13 +43,57 @@ class SubmitForm(Form):
 
     sub_file = FileField(label='File', allow_empty_file=False)
 
-    def __init__(self, assignment, *args, **kw):
+    def __init__(self, assignment, user, *args, **kw):
         """
         Associate the form with an assignment
         """
         super(Form, self).__init__(*args, **kw)
         self.assignment = assignment
+        self.user = user
         bootstrapFormControls(self)
+    
+    def save_submission(self):
+        #Create a new submission from the form data
+        new_sub = Submission(assignment=self.assignment, student=self.user)
+        new_sub.save()
+        
+        #Make submission directory
+        if not os.path.exists(new_sub.get_directory()):
+            os.makedirs(new_sub.get_directory())
+        
+        #Save submission
+        filename = os.path.join(new_sub.get_directory(), self.cleaned_data['sub_file'].name)
+        with open(filename, 'wb+') as f:
+            for chunk in self.cleaned_data['sub_file'].chunks():
+                f.write(chunk)
+        
+        return new_sub
+      
+        
+class FileUploadForm(Form):
+    """
+    Form for uploading a file
+    """
+    
+    file_field = FileField(label='Add File', allow_empty_file=False)
+    
+    def __init__(self, upload_dir, *args, **kw):
+        super(Form, self).__init__(*args, **kw)
+        self.upload_dir = upload_dir
+        #bootstrapFormControls(self)
+        
+    def save_file(self):
+        
+        #Make directory
+        if not os.path.exists(self.upload_dir):
+            os.makedirs(self.upload_dir)
+        
+        #Save submission
+        filename = os.path.join(self.upload_dir, self.cleaned_data['file_field'].name)
+        with open(filename, 'wb+') as f:
+            for chunk in self.cleaned_data['file_field'].chunks():
+                f.write(chunk)
+        
 
 
 class GradeForm(ModelForm):
