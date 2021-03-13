@@ -22,7 +22,7 @@
   {% endif %}
 
   <h2>Description</h2>
-  {{course.desc}}
+  {{course.get_description|safe}}
 
   <h2>Assignments</h2>
   
@@ -33,6 +33,7 @@
   <table class="table table-striped">
     <th>Name</th><th>Due Date</th><th>Status</th>    
   {% for a in assignments %}
+  {% if a.is_visible or not student_view %}
   <tr>
     <td><a href={% url 'grader:assignment' a.id %}>{{a.code}}: {{a.title}}</a></td>
     <td>{{a.due_date}}</td>
@@ -50,10 +51,15 @@
         {% endif %}
         
         {% else %}
+        {% if not a.is_visible %}
+        Not Visible
+        {% else %}
         {{a.sub_count}}/{{course.students.count}} submitted
+        {% endif %}
         {% endif %}
     </td>
   </tr>
+  {% endif %}
   {% endfor %}
   </table>
 
@@ -75,11 +81,11 @@
       <th>Filename</th><th>Date Created</th><th>Size (bytes)</th>{% if instructor_view %}<th>Delete</th>{% endif %}
   {% for filename, size, create_date in files %}
   <tr>
-      <td><a href={% url 'grader:coursefile_download' course.id filename%}>{{ filename }}</a></td>
+      <td><a href={% url 'grader:course_file_download' course.id filename%}>{{ filename }}</a></td>
       <td>{{ create_date }}</td>
       <td>{{ size }}</td>
       {% if instructor_view %}
-      <td><a class='btn btn-default' href={% url 'grader:coursefile_delete' course.id filename %}>
+      <td><a class='btn btn-default' href={% url 'grader:course_file_delete' course.id filename %}>
       <span class="glyphicon glyphicon-trash"></span>
   </a></td>
       {% endif %}
@@ -93,7 +99,7 @@
     {% csrf_token %}
       {{ file_form }}
       <br/>
-    <input type="submit" class="btn btn-info" value="Add" />
+    <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span> Add File</button>
   </form>
   {% endif %}
 

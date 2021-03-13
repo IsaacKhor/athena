@@ -97,7 +97,7 @@ def course(request, courseid):
         return login_redirect(request)
 
     #Get the course
-    course = Course.objects.filter(id=courseid)[0]
+    course = Course.objects.get(id=courseid)
     
     params = {'course': course}
     
@@ -123,6 +123,9 @@ def course(request, courseid):
             else:
                 a.recent = None
     else:
+        
+        params['time_now'] = datetime.now()
+        
         for a in assignments:
             a.sub_count = a.submission_set.values('student').distinct().count()
         
@@ -155,7 +158,7 @@ def assignment(request, assgnid):
         return login_redirect(request)
 
     #Get the assigment
-    assgn = Assignment.objects.filter(id=assgnid)[0]
+    assgn = Assignment.objects.get(id=assgnid)
     course = assgn.course
     submissions = assgn.submission_set.all()
     
@@ -166,7 +169,7 @@ def assignment(request, assgnid):
         params['instructor_view'] = True
     elif course.has_ta(request.user):
         params['ta_view'] = True
-    elif course.has_student(request.user):
+    elif course.has_student(request.user) and assgn.is_visible():
         params['student_view'] = True        
     else:
         return render(request, 'grader/access_denied.html', params)
@@ -175,22 +178,29 @@ def assignment(request, assgnid):
     if params.get('student_view', False):
         params['prev_submissions'] = assgn.submission_set.filter(student=request.user).order_by('sub_date').reverse()
 
-        #Get data from a submission
-        if request.method == 'POST':
-            form = SubmitForm(assgn, request.user, request.POST, request.FILES)
-
-            if form.is_valid():
-
-                new_sub = form.save_submission()
-                
-                #Redirect back to the assignment page
-                return HttpResponseRedirect(reverse('grader:submissions', args=(assgnid,request.user.id)))
-
-        #Create a new submission form
+        #Make sure user should be able to submit
+        if (assgn.is_past_due() and assgn.enforce_deadline):
+            params['past_due'] = True
+        elif (assgn.max_subs and len(params['prev_submissions']) >= assgn.max_subs):
+            params['max_subs'] = True
+            
         else:
-            form = SubmitForm(assgn, request.user)
-        
-        params['form'] = form
+            #Get data from a submission
+            if request.method == 'POST':
+                form = SubmitForm(assgn, request.user, request.POST, request.FILES)
+
+                if form.is_valid():
+
+                    new_sub = form.save_submission()
+                    
+                    #Redirect back to the assignment page
+                    return HttpResponseRedirect(reverse('grader:submissions', args=(assgnid,request.user.id)))
+
+            #Create a new submission form
+            else:
+                form = SubmitForm(assgn, request.user)
+            
+            params['form'] = form
     
     #Load each student's most recent submission
     else:
@@ -246,7 +256,7 @@ def submissions(request, assgnid, userid):
         params['instructor_view'] = True
     elif assgn.course.has_ta(request.user):
         params['ta_view'] = True
-    elif assgn.course.has_student(request.user) and request.user == student:
+    elif assgn.course.has_student(request.user) and request.user == student and assgn.is_visible():
         params['student_view'] = True        
     else:
         return render(request, 'grader/access_denied.html', {'course': assgn.course})
@@ -298,7 +308,7 @@ def submission_download(request, subid):
     
     return get_download(os.path.join(sub.get_directory(), sub.get_filename()))
     
-def coursefile_download(request, courseid, filename):
+def course_file_download(request, courseid, filename):
     
     #Make sure user is logged in
     if not request.user.is_authenticated():
@@ -313,7 +323,7 @@ def coursefile_download(request, courseid, filename):
         
     return get_download(os.path.join(course.get_course_path(), filename))
     
-def coursefile_delete(request, courseid, filename):
+def course_file_delete(request, courseid, filename):
     
     #Make sure user is logged in
     if not request.user.is_authenticated():
@@ -330,14 +340,14 @@ def coursefile_delete(request, courseid, filename):
         
     return HttpResponseRedirect(reverse('grader:course', args=(course.id,)))
     
-def assgnfile_download(request, assgnid, filename):
+def assgn_file_download(request, assgnid, filename):
     
     #Make sure user is logged in
     if not request.user.is_authenticated():
         return login_redirect(request)
     
     #Get the course
-    assgn = Assignments.objects.get(id=assgnid)
+    assgn = Assignment.objects.get(id=assgnid)
     
     #Make sure user should be able to see this submission
     if not (assgn.course.has_user(request.user)):
@@ -345,7 +355,7 @@ def assgnfile_download(request, assgnid, filename):
         
     return get_download(os.path.join(assgn.get_assignment_path(), filename))
     
-def assgnfile_delete(request, assgnid, filename):
+def assgn_file_delete(request, assgnid, filename):
     
     #Make sure user is logged in
     if not request.user.is_authenticated():
@@ -372,7 +382,7 @@ def get_download(filename):
     return response
 
 
-def add_assgn(request, courseid):
+def edit_assgn(request, courseid, assgnid=None):
     """
     Renders a page for adding an assignment to a course
 
@@ -384,26 +394,34 @@ def add_assgn(request, courseid):
         return login_redirect(request)
 
     #Get the course to add the assignment to
-    course = Course.objects.filter(id=courseid)[0]
+    course = Course.objects.get(id=courseid)
     
     #Make sure user should be able to create assignments
     if not (course.has_instructor(request.user) or course.has_ta(request.user)):
         return render(request, 'grader/access_denied.html', {'course': course})
+        
+    #Get the assignment if provided
+    if assgnid:
+        assgn = Assignment.objects.get(id=assgnid)
+    else:
+        assgn = None
+    
 
     #If the form is submitted, get the data
     if request.method == 'POST':
-        form = AssgnForm(request.POST)
+        form = AssgnForm(request.POST, instance=assgn)
         form.instance.course = course
 
         #Save the assignemnt
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse('grader:course', args=(courseid,)))
+            return HttpResponseRedirect(reverse('grader:assignment', args=(form.instance.id,)))
 
     #Create a new form and render the page
     else:
-        form = AssgnForm()
-    return render(request, 'grader/add_assgn.html', {'course': course, 'form': form})
+        form = AssgnForm(instance=assgn)
+        
+    return render(request, 'grader/edit_assgn.html', {'course': course, 'form': form})
 
 DELIM_RE = re.compile(r", *|[\n\r]*")
 
@@ -415,7 +433,7 @@ def edit_course(request, courseid=None):
     """
     
     #Make sure user is logged in
-    if not request.user.is_authenticated():
+    if not load_user_groups(request.user):
         return login_redirect(request)
     
     #Load course data
@@ -432,7 +450,8 @@ def edit_course(request, courseid=None):
         
     #Make sure user should be able to edit this course (or the course is just being created)
     #Todo: only certain users should be able to create courses in the first place
-    if not course or not (course.has_instructor(request.user) or course.has_ta(request.user)):
+    #if (not course and not request.user.is_faculty) or not (course and (course.has_instructor(request.user) or course.has_ta(request.user))):
+    if not (request.user.is_superuser or (course and (course.has_instructor(request.user) or course.has_ta(request.user))) or (not course and request.user.is_faculty)):
         return render(request, 'grader/access_denied.html', {'course': course})
     
     #If the form is submitted, get the data

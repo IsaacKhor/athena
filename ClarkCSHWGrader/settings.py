@@ -9,21 +9,25 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import os
+import os, sys
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+#Add base path
+sys.path.append(BASE_DIR)
 
 SECRET_KEY = 'yge7&9=pn(g*(c-5o3di42+hz&d_c16+g)oea7gdshhu_n!3+3'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["140.232.229.10"]
 
 # Application definition
 INSTALLED_APPS = (
     # third party packages
     'autocomplete_light',
     'bootstrap3',
+    'datetimewidget',
 
     #django apps
     'django_admin_bootstrapped',
@@ -79,7 +83,6 @@ LDAP_AUTH_USER_LOOKUP_FIELDS = ("username",)
 LDAP_AUTH_CLEAN_USER_DATA = django_python3_ldap.utils.clean_user_data
 
 
-
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -89,6 +92,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
 )
 
 ROOT_URLCONF = 'ClarkCSHWGrader.urls'
@@ -115,7 +119,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME' : 'grader',
         'USER': 'django',
-        'PASSWORD': '26|^26t=t?',
+        'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': '', #empty is default
     }
@@ -129,10 +133,13 @@ DATABASES = {
 #        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #    }
 #}
+#Import databse configuration
+import db_conf
+DATABASES = db_conf.DATABASES
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'EST'
+TIME_ZONE = 'US/Eastern'
 
 USE_I18N = True
 
@@ -140,7 +147,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-STATIC_ROOT = 'static'
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 STATIC_URL = '/static/'
 

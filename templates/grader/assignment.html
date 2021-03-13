@@ -17,19 +17,42 @@ function toggle_selected(source, name) {
 {% endblock %}
 
 {% block header %}
-  {{assgn.course.code}} {{assgn.code}} - {{assgn.title}}
+  {{assgn.code}} - {{assgn.title}}
 {% endblock %}
 
 {% block breadcrumbs %}
 <li><a href={% url 'grader:home' %}>Home</a></li>
+<li><a href={% url 'grader:course' assgn.course.id %}>{{assgn.course.code}}</a></li>
 <li class='active'>Assignment</li>
 {% endblock %}
 
 {% block content %}
   <h1>{{assgn.code}}: {{assgn.title}}</h1>
-  <b>Due at: </b> {{assgn.due_date}} <br/>
+  
+  {% if instructor_view %}
+  <a class='btn btn-default' href={% url 'grader:edit_assgn' assgn.course.id assgn.id %}>
+      <span class="glyphicon glyphicon-pencil"></span> Edit Assignment
+  </a><br/>
+  {% endif %}
+  
   <h3>Description</h3>
-  {{assgn.desc}}
+  {{assgn.get_description|safe}}
+  <br/>
+  <b>Deadline: </b> {{assgn.due_date}} 
+  {% if past_due %}
+  ({{assgn.due_date|timesince}} ago) <br/>
+  {% else %}
+  ({{assgn.due_date|timeuntil}} left) 
+  {% endif %}
+  <br/>
+  
+  {% if instructor_view %}
+  {% if assgn.is_visible %}
+  This assignment <b>is visible</b> to students.
+  {% else %}
+  <b>Visible: </b> {{ assgn.visible_date }} (not currently visible to students)
+  {% endif %}
+  {% endif %}
   
   {% if files|length > 0 or instructor_view %}
   
@@ -41,11 +64,11 @@ function toggle_selected(source, name) {
       <th>Filename</th><th>Date Created</th><th>Size (bytes)</th>{% if instructor_view %}<th>Delete</th>{% endif %}
   {% for filename, size, create_date in files %}
   <tr>
-      <td><a href={% url 'grader:assgnfile_download' assgn.id filename%}>{{ filename }}</a></td>
+      <td><a href={% url 'grader:assgn_file_download' assgn.id filename%}>{{ filename }}</a></td>
       <td>{{ create_date }}</td>
       <td>{{ size }}</td>
       {% if instructor_view %}
-      <td><a class='btn btn-default' href={% url 'grader:assgnfile_delete' assgn.id filename %}>
+      <td><a class='btn btn-default' href={% url 'grader:assgn_file_delete' assgn.id filename %}>
       <span class="glyphicon glyphicon-trash"></span>
   </a></td>
       {% endif %}
@@ -59,7 +82,7 @@ function toggle_selected(source, name) {
     {% csrf_token %}
       {{ file_form }}
       <br/>
-    <input type="submit" class="btn btn-info" value="Add" />
+    <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span> Add File</button>
   </form>
   {% endif %}
 
@@ -70,13 +93,21 @@ function toggle_selected(source, name) {
   
   <div style='width:600px'>
   <h3>Submit</h3>
+  
+  {% if form %}
   <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     <table class="table">
       {{ form.as_table }}
     </table>
-    <input type="submit" class="btn btn-info" value="Submit" />
+    <input type="submit" class="btn btn-default" value="Submit" />
   </form>
+  {% elif past_due %}
+  Submissions for this assignment are closed.
+  {% elif max_subs %}
+  You have submitted the maximum number of times
+  {% endif %}
+  
   </div>
   
   {% if prev_submissions|length > 0 %}
@@ -89,7 +120,7 @@ function toggle_selected(source, name) {
     <td><a href={% url 'grader:submissions' assgn.id user.id %}>{{s.sub_date}}</a></td>
     <td>{% if s.status == s.CH_GRADED %}Graded{% elif s.status == s.CH_SUBMITTED %}Submitted{% endif %}</td>
     <!--Download option-->
-    <td><a class="btn btn-primary btn-sm" href={% url 'grader:submission_download' s.id %}>
+    <td><a class="btn btn-default btn-sm" href={% url 'grader:submission_download' s.id %}>
       <span class="glyphicon glyphicon-arrow-down"></span>
     </a></td>
   </tr>
@@ -115,7 +146,7 @@ function toggle_selected(source, name) {
       </button>
       -->
        
-      <button type='submit' class='btn btn-primary' name='action' value="download_many">
+      <button type='submit' class='btn btn-default' name='action' value="download_many">
       <span class="glyphicon glyphicon-arrow-down"></span> Download Selected
       </button>
       <br/>
@@ -133,12 +164,12 @@ function toggle_selected(source, name) {
                   <td>{% if recent.status == recent.CH_GRADED %}Graded{%else%}Submitted{%endif%}</td>
                   
                   <!--Details option-->
-                  <td><a class="btn btn-primary" href={% url 'grader:submissions' assgn.id recent.student.id %}>
+                  <td><a class="btn btn-default" href={% url 'grader:submissions' assgn.id recent.student.id %}>
                     <span class="glyphicon glyphicon-info-sign"></span>
                   </td>
                   
                   <!--Download option-->
-                  <td><a class="btn btn-primary" href={% url 'grader:submission_download' recent.id %}>
+                  <td><a class="btn btn-default" href={% url 'grader:submission_download' recent.id %}>
                     <span class="glyphicon glyphicon-arrow-down"></span>
                   </a></td>
               </tr>

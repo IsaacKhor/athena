@@ -4,6 +4,8 @@
 
 {% block header %} {{course.code}} - Add Assignment {% endblock %}
 
+{% block scripts %} {{ form.media }} {% endblock %}
+
 {% block breadcrumbs %}
 <li><a href={% url 'grader:home' %}>Home</a></li>
 <li class='active'>Add Assignment</li>
@@ -16,7 +18,7 @@
     <table class="table">
       {{ form.as_table }}
     </table>
-    <input type="submit" class="btn btn-info" value="Submit" />
+    <input type="submit" class="btn btn-default" value="Submit" />
   </form>
 </div>
 {% endblock %}

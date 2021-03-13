@@ -5,6 +5,7 @@
 
 {% block breadcrumbs %}
 <li><a href={% url 'grader:home' %}>Home</a></li>
+<li><a href={% url 'grader:course' sub.assignment.course.id %}>{{sub.assignment.course.code}}</a></li>
 <li class='active'>Submission</li>
 {% endblock %}
 

@@ -1,8 +1,13 @@
 # TODOs before pusing to production #
 set debug=False
+
 make sure read/write permission in server
+
 make sure www-data as owner
+
 run python manage.py collectstatic
+
+run python manage.py ldap_sync_users (optional)
 
 # Requirements to Run #
 Python 3.4
@@ -11,11 +16,30 @@ Python 3.4
 
 [Django Bootstrap3](http://django-bootstrap3.readthedocs.org/en/latest/index.html)
 
+[Django datetime widget](https://github.com/asaglimbeni/django-datetime-widget)
+
+[Python markdown](https://pypi.python.org/pypi/Markdown)
+
 ```
 sudo pip3 install django-bootstrap3
 sudo pip3 install django_admin_bootstrapped
 sudo pip3 install django-autocomplete-light
+pip install django-datetime-widget
+sudo pip3 install markdown
+pip install django-python3-ldap
 ```
+Need to have "db_config.py" file in root directory. For development, this can have the following code:
+
+```
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'db.sqlite3',
+    }
+}
+```
+
+In production, this file has the info for connecting to the postgres database.
 
 # What has been done #
 All of this uses Django. This is a good Django tutorial: [https://docs.djangoproject.com/en/1.8/intro/tutorial01/](https://docs.djangoproject.com/en/1.8/intro/tutorial01/)
@@ -41,14 +65,16 @@ Submissions are stored in the directory specified by *SUBMISSION_DIR* in *settin
 
 # What needs to be done #
 
-##Integrate users with LDAP##
-Need to sync Django authentication system with current CS users.
+##Change submissions to less complex path##
+Should just be stored in directory with submission ID as name
+
+##Automatically create email addresses##
+Should set user's email to "username@clarku.edu"
+
+##Allow file uploading when grading##
+
+##Error handling##
+Currently any errors (ie courses which don't exist, etc) will return "Internal server error".
 
 ##Add in auto-grader##
-Need to communicate with auto-grader. For each submission, a record is currently stored in the database and the submitted file is put into the filesystem. Need a way to detect a submission being added to the database and the location of the file to be sent to the auto grader.
-
-##More options for assignments##
-* Enforce deadline or not
-* Ability to change deadline (edit assignment)
-* Add option to write description in markdown
-* When to release autograder results (immediately, after deadline, or manually by instructor/admin)
+Need to communicate with auto-grader. For each submission, a record is currently stored in the database and the submitted file is put into the filesystem. Need a way to detect a submission being added to the database and the location of the file to be sent to the auto grader (database listener)

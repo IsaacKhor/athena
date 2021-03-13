@@ -1,4 +1,5 @@
-from django.forms import ModelForm, Form, FileField, ChoiceField, CharField, Textarea, BooleanField, MultipleChoiceField, CheckboxSelectMultiple
+from django.forms import ModelForm, Form, FileField, ChoiceField, CharField, Textarea, BooleanField, MultipleChoiceField, CheckboxSelectMultiple, CheckboxInput
+from datetimewidget.widgets import DateTimeWidget
 from grader.models import *
 from  django.contrib.auth.forms import AuthenticationForm
 
@@ -9,8 +10,12 @@ class AssgnForm(ModelForm):
     """
     class Meta:
         model = Assignment
-        fields = ['title', 'code', 'desc', 'due_date',
-                'max_grade', 'weight', 'max_subs']
+        fields = ['title', 'code', 'desc', 'desc_format', 'due_date', 'enforce_deadline', 'max_grade', 'max_subs', 'visible_date',]
+        
+        widgets = {
+            'due_date': DateTimeWidget(attrs={'id':"due_date"}, usel10n = True, bootstrap_version=3),
+            'visible_date': DateTimeWidget(attrs={'id':"visible_date"}, usel10n = True, bootstrap_version=3)
+        }
 
     def __init__(self, *args, **kwargs):
         super(AssgnForm, self).__init__(*args, **kwargs)
@@ -23,7 +28,7 @@ class CourseForm(ModelForm):
     """
     class Meta:
         model = Course
-        fields = ['semester', 'code', 'section', 'title', 'desc']
+        fields = ['semester', 'code', 'section', 'title', 'desc', 'desc_format']
     
     USER_TEXTAREA = Textarea(attrs={'rows': '3'})
     
@@ -94,8 +99,6 @@ class FileUploadForm(Form):
             for chunk in self.cleaned_data['file_field'].chunks():
                 f.write(chunk)
         
-
-
 class GradeForm(ModelForm):
     class Meta:
         model = Grade
@@ -124,4 +127,9 @@ class LoginForm(AuthenticationForm):
 def bootstrapFormControls(self):
     #bootstrapping form controls
     for field in self.fields:
-        self.fields[field].widget.attrs['class'] = 'form-control'
+        if type(self.fields[field].widget) != CheckboxInput:
+            self.fields[field].widget.attrs['class'] = 'form-control'
+            
+            
+            
+            

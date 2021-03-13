@@ -2,8 +2,16 @@ from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime
 from django.conf import settings
-import os
 from zipfile import ZipFile
+from django.utils import timezone
+import os
+import markdown
+import html
+
+
+TEXT_FORMAT = 0
+MARKDOWN_FORMAT = 1
+FORMAT_CHOICES = ((TEXT_FORMAT, 'Plain Text'), (MARKDOWN_FORMAT, 'Markdown'))
 
 class Semester(models.Model):
     """
@@ -22,7 +30,7 @@ class Semester(models.Model):
     term = models.IntegerField(choices=TERM_CHOICES)
     start_date = models.DateField()
     end_date = models.DateField()
-    
+     
     def __str__(self):
         return "%s %d" % (dict(self.TERM_CHOICES)[self.term], self.year)
         
@@ -31,7 +39,7 @@ class Semester(models.Model):
     
     @staticmethod
     def get_current():
-        return Semester.objects.filter(start_date__lte=datetime.now()).order_by('start_date')[0]
+        return Semester.objects.filter(start_date__lte=timezone.now()).order_by('start_date')[0]
         
 
 class Course(models.Model):
@@ -44,10 +52,11 @@ class Course(models.Model):
     section = models.IntegerField()
     title = models.CharField(max_length=128)
     desc = models.TextField(blank=True)
+    desc_format = models.IntegerField(choices=FORMAT_CHOICES, default=TEXT_FORMAT, verbose_name='description format')
     students = models.ManyToManyField(User, blank=True, related_name='students')
     instructors = models.ManyToManyField(User, related_name='instructors')
     tas = models.ManyToManyField(User, blank=True, related_name='tas')
-
+    
     class Meta:
         unique_together = ('semester', 'code', 'section')
     
@@ -83,6 +92,12 @@ class Course(models.Model):
             
         return files
     
+    def get_description(self):
+        if self.desc_format == MARKDOWN_FORMAT:
+            return markdown.markdown(self.desc, safe_mode='escape') 
+        elif self.desc_format == TEXT_FORMAT:
+            return html.escape(self.desc)
+    
     def __str__(self):
         return "%s, %02d, %s" % (self.code, self.section, self.semester)
 
@@ -91,22 +106,37 @@ class Assignment(models.Model):
     Stores an assignment for a course
     Details of assignment should be stored on filesystem
     """
-
+    
     code = models.CharField(max_length=20) #ie HW1, Project2, Midterm, Final
     course = models.ForeignKey('Course')
     title = models.CharField(max_length=128, blank=True, null=True)
     desc = models.TextField(blank=True, verbose_name='description')
     due_date = models.DateTimeField()
     max_grade = models.FloatField(default=100)
-    weight = models.FloatField(blank=True, null=True)
     max_subs = models.IntegerField(blank=True, null=True, verbose_name='submission limit')
+    enforce_deadline = models.BooleanField(default=True)
+    visible_date = models.DateTimeField(default=timezone.now)
+    desc_format = models.IntegerField(choices=FORMAT_CHOICES, default=TEXT_FORMAT, verbose_name='description format')
+
 
     class Meta:
         unique_together = ('code', 'course')
 
     def __str__(self):
         return "%s %s" % (self.course.code, self.code)
-        
+    
+    def is_visible(self):
+        return self.visible_date < timezone.now()
+    
+    def is_past_due(self):
+        return self.due_date < timezone.now()
+    
+    def get_description(self):
+        if self.desc_format == MARKDOWN_FORMAT:
+            return markdown.markdown(self.desc, safe_mode='escape') 
+        elif self.desc_format == TEXT_FORMAT:
+            return html.escape(self.desc)
+    
     def get_directory(self):
         """
         Builds the path to the directory where all the submissions are stored
@@ -242,6 +272,5 @@ def load_user_groups(user):
     user.is_student = not user.is_faculty
 
     return True
-
 
 
