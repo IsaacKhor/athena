@@ -154,7 +154,7 @@ function toggle_selected(source, name) {
       
       <table class="table table-striped">
           <th><input type='checkbox' onClick='toggle_selected(this, "submissions")'></th>
-          <th>Student</th><th>Last Submission</th><th>Status</th><th>Details</th><th>Download</th>
+          <th>Student</th><th>Last Submission</th><th>Status</th><th>Grade</th><th>Download</th>
           
           {% for recent in recent_subs %}
               <tr valign='center'>
@@ -165,7 +165,7 @@ function toggle_selected(source, name) {
                   
                   <!--Details option-->
                   <td><a class="btn btn-default" href={% url 'grader:submissions' assgn.id recent.student.id %}>
-                    <span class="glyphicon glyphicon-info-sign"></span>
+                    <span class="glyphicon glyphicon-ok"></span>
                   </td>
                   
                   <!--Download option-->

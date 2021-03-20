@@ -33,25 +33,68 @@
    </table>
   <a class="btn btn-default" href={% url 'grader:submission_download' recent.id %}>
       <span class="glyphicon glyphicon-arrow-down"></span> Download Submission
-  </a><br/>
+  </a> 
+  
+  {% if instructor_view and recent.status == recent.CH_GRADED %}
+  <a class="btn btn-default" href={% url 'grader:remove_grade' recent.grade.id %}>
+      <span class="glyphicon glyphicon-remove"></span> Remove Grade
+  </a>
+  {% endif %}
+  <br/>
   </div>
   
+  
+  <div style='width:600px'>
   {% if recent.status != recent.CH_GRADED %} 
+  
   
   {% if instructor_view or ta_view %}
   
-  <div style='width:600px'>
   <h2>Grade</h2>
-  <form method="POST">
+  <form method="POST" id='grade_form'>
     {% csrf_token %}
     <table class="table">
       {{ form.as_table }}
     </table>
-    <input type="submit" class="btn btn-default" value="Submit" />
+    <button type="submit" class="btn btn-default" name="action" value="grade">Submit</button>
   </form>
-  </div>
   {% endif %}
   
   {% endif %}
+  
+  {% if instructor_view or ta_view or suplement_files|length > 0 %}
+  <h2>Suplementary Files</h2>
+  
+  {% if suplement_files|length > 0 %}
+  
+  <table class='table table-striped'>
+      <th>Filename</th><th>Date Created</th><th>Size (bytes)</th>{% if instructor_view %}<th>Delete</th>{% endif %}
+  {% for filename, size, create_date in suplement_files %}
+  <tr>
+      <td><a href={% url 'grader:submission_download_suplement' recent.id filename %}>{{ filename }}</a></td>
+      <td>{{ create_date }}</td>
+      <td>{{ size }}</td>
+      {% if instructor_view %}
+      <td><a class='btn btn-default' href={% url 'grader:submission_delete' recent.id filename %}>
+      <span class="glyphicon glyphicon-trash"></span>
+  </a></td>
+      {% endif %}
+  </tr>
+  {% endfor %}
+  </table>
+  {% endif %}
+  
+  {% endif %}
+  
+  {% if instructor_view or ta_view %}
+  <form method="POST" id='file_form' enctype="multipart/form-data">
+    {% csrf_token %}
+    <table class="table">
+      {{ file_form.as_table }}
+    </table>
+    <button type="submit" class="btn btn-default" name="action" value="add_file">Add</button>
+  </form>
+  {% endif %}
+  </div>
 
 {% endblock %}

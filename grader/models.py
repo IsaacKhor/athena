@@ -213,8 +213,8 @@ class Submission(models.Model):
     #assumes it passed auto grader
     CH_SUBMITTED = 0
     CH_AUTOGRADED = 1
-    CH_GRADED = 3
-    CH_PREVIOUS = 4
+    CH_GRADED = 2
+    CH_PREVIOUS = 3
     STATUS_CHOICES = (
         (CH_SUBMITTED, 'Submitted'),
         (CH_AUTOGRADED, 'Submitted'),#Should later be labeled something else - hidden for now
@@ -235,36 +235,58 @@ class Submission(models.Model):
             if sub != self:
                 sub.status = self.CH_PREVIOUS
                 sub.save()
-    
-    def get_directory_old(self):
+        
+    def get_directory(self, suplement=False):
         """
         Builds the path to the directory where this submission is stored
         """
-        path = os.path.join(self.assignment.get_directory(), self.student.username, str(self.sub_date))
-        path = path.replace(" ", "_")
-        return path
-    
-        
-    def get_filename_old(self):
-        """
-        Returns the filename of the submission. Use get_directory() to get the path to this file.
-        """
-        return os.listdir(self.get_directory_old())[0]
-        
-    def get_directory(self):
-        """
-        Builds the path to the directory where this submission is stored
-        """
-        #path = os.path.join(self.assignment.get_directory(), self.student.username, str(self.sub_date))
-        #path = path.replace(" ", "_")
         path = os.path.join(settings.SUBMISSION_DIR, str(self.id))
+        
+        if suplement:
+            path = os.path.join(path, "suplements")
+            
         return path
         
     def get_filename(self):
         """
         Returns the filename of the submission. Use get_directory() to get the path to this file.
         """
-        return os.listdir(self.get_directory())[0]
+                    
+        for f in os.listdir(self.get_directory()):
+            if os.path.isfile(os.path.join(self.get_directory(), f)):
+                return f
+            
+        return None
+        
+    def get_suplement_files(self):
+        files = list()
+        
+        if not os.path.exists(self.get_directory(suplement=True)):
+            return files
+        
+        for f in os.listdir(self.get_directory(suplement=True)):
+            if os.path.isfile(os.path.join(self.get_directory(suplement=True), f)):
+                info = os.stat(os.path.join(self.get_directory(suplement=True), f))
+                files.append((f, int(info[6]), datetime.fromtimestamp(info[9])))
+        
+        return files
+        
+    def get_assignment_files(self):
+        """
+        Returns list of info about the assignment files in the form (filename, size, date created)
+        """
+        files = list()
+        
+        #Make sure assignment file directory exists
+        if not os.path.exists(self.get_assignment_path()):
+            return files
+            
+        for f in os.listdir(self.get_assignment_path()):
+            if os.path.isfile(os.path.join(self.get_assignment_path(), f)):
+                info = os.stat(os.path.join(self.get_assignment_path(), f))
+                files.append((f, int(info[6]), datetime.fromtimestamp(info[9])))
+            
+        return files
         
     def __str__(self):
         return "%s %s %s %s" % (self.assignment.course.code, self.assignment.code, self.student.username, self.sub_date)

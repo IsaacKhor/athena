@@ -268,11 +268,22 @@ def submissions(request, assgnid, userid):
     params['recent'] = subs[0]
     params['prev'] = subs[1:]
     params['status'] = Submission.STATUS_CHOICES[subs[0].status][1]
+    params['suplement_files'] = subs[0].get_suplement_files()
     
     if params.get('instructor_view') or params.get('ta_view'):
         
         #Get data from previous grading form
-        if request.method == 'POST':
+        if request.method == 'POST' and request.POST.get('action', None) == 'add_file':
+            params['file_form'] = FileUploadForm(subs[0].get_directory(suplement=True), request.POST, request.FILES)
+            if params['file_form'].is_valid():
+                params['file_form'].save_file()
+                return HttpResponseRedirect(reverse('grader:submissions', args=(assgnid,userid)))
+        
+        params['file_form'] = FileUploadForm(subs[0].get_directory(suplement=True))                    
+            
+        if request.method == 'POST' and request.POST.get('action', None) == 'grade':
+            params['file_form'] = FileUploadForm(subs[0].get_directory(suplement=True))
+            
             form = GradeForm(subs[0], request.POST)
             form.instance.grader = request.user
 
@@ -293,7 +304,7 @@ def submissions(request, assgnid, userid):
         
     return render(request, 'grader/submissions.html', params)
     
-def submission_download(request, subid):
+def submission_download(request, subid, filename=None):
     """
     Returns a download response for the requested submission
     """
@@ -310,7 +321,28 @@ def submission_download(request, subid):
     if not (sub.student == request.user or course.has_instructor(request.user) or course.has_ta(request.user)):
         return render(request, 'grader/access_denied.html', {'course': course})
     
-    return get_download(os.path.join(sub.get_directory(), sub.get_filename()))
+    if filename:
+        return get_download(os.path.join(sub.get_directory(suplement=True), filename))
+    else:
+        return get_download(os.path.join(sub.get_directory(), sub.get_filename()))
+
+def submission_delete(request, subid, filename):
+    
+    #Make sure user is logged in
+    if not request.user.is_authenticated():
+        return login_redirect(request)
+    
+    #Get the course
+    sub = Submission.objects.filter(id=subid)[0]
+    
+    #Make sure user should be able to delete this file
+    course = sub.assignment.course
+    if not (course.has_instructor(request.user) or course.has_student(request.user)):
+        return render(request, 'grader/access_denied.html', {'course': course})
+        
+    os.remove(os.path.join(sub.get_directory(True), filename))
+        
+    return HttpResponseRedirect(reverse('grader:submissions', args=(sub.assignment.id,sub.student.id,)))
     
 def course_file_download(request, courseid, filename):
     
@@ -488,7 +520,16 @@ def edit_course(request, courseid=None):
         form = CourseForm(instance=course, initial=form_data)
         
     return render(request, 'grader/edit_course.html', {'form': form})
+    
+def remove_grade(request, gradeid):
+    grade = Grade.objects.get(id=gradeid)
+    sub = grade.submission
+    grade.delete()
+    
+    sub.status = Submission.CH_SUBMITTED
+    sub.save()
 
+    return HttpResponseRedirect(reverse('grader:submissions', args=(sub.assignment.id,sub.student.id)))
 
 
 

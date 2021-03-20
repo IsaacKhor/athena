@@ -111,6 +111,7 @@ class GradeForm(ModelForm):
         """
         super().__init__(*args, **kw)
         self.fields['grade'].max_value = sub.assignment.max_grade
+        self.fields['grade'].min_value = 0
         self.instance.submission = sub
         bootstrapFormControls(self)
         
