@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load tags %}
 
 {% block scripts %}
 <script language="JavaScript">
@@ -126,14 +126,7 @@ function toggle_selected(source, name) {
         <a href={% url 'grader:submissions' assgn.id user.id %}>{{s.sub_date}}</a>
         {%endif%}
     </td>
-    <td>
-        {% if s.status == s.CH_GRADED %} Graded
-        {% elif s.status == s.CH_SUBMITTED %} Submitted
-        {% elif s.status == s.CH_TO_AUTOGRADE %} Submitted
-        {% elif s.status == s.CH_AUTOGRADED and not s.autograderresult.visible %} Submitted
-        {% elif s.status == s.CH_AUTOGRADED and s.autograderresult.visible %} Autograded
-        {% elif s.status == s.CH_PREVIOUS %} Previous Sub.
-        {% endif %}</td>
+    <td> {{ s|submission_status:instructor_view }} </td>
     <!--Download option-->
     <td><a class="btn btn-default btn-sm" href={% url 'grader:submission_download' s.id %}>
       <span class="glyphicon glyphicon-arrow-down"></span>
@@ -190,7 +183,7 @@ function toggle_selected(source, name) {
                   <td><a href={% url 'grader:submissions' assgn.id recent.student.id %}>
                       {{recent.student.first_name}} {{recent.student.last_name}}</a></td>
                   <td>{{recent.sub_date}}</td>
-                  <td>{% if recent.status == recent.CH_GRADED %}Graded{%else%}Submitted{%endif%}</td>
+                  <td>{{recent|submission_status:instructor_view}}</td>
                   
                   <!--Details option-->
                   <td><a class="btn btn-default" href={% url 'grader:submissions' assgn.id recent.student.id %}>

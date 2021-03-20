@@ -36,14 +36,16 @@ def run_autograder(sub):
     
     #Get the score from the report
     score = 0
-    for fname in glob.glob("%s/*-test.txt" % sub.get_directory(report=True)):
-        f = open(fname)
-        for line in f:
-            m = SCORE_RE.match(line)
-            if m:
-                score = float(m.group(1))
-                break
-        f.close()
+    for path, dirs, fnames in os.walk(sub.get_directory(subdir=Submission.REPORT_DIR)):
+        for fname in fnames:
+            if re.match(".*-test.txt$", fname):
+                f = open(os.path.join(path, fname))
+                for line in f:
+                    m = SCORE_RE.match(line)
+                    if m:
+                        score = float(m.group(1))
+                        break
+                f.close()
     
     #Save the autograder result
     sub.status = Submission.CH_AUTOGRADED

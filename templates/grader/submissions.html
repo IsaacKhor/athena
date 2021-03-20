@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load tags %}
 
 {% block title %}{{recent.assignment.code}} Submission - {{recent.student}}{% endblock %}
 {% block header %}{{recent.student.username}} {% endblock %}
@@ -20,7 +21,7 @@
     </tr><tr>
      <td><b>Last Submission</b></td><td>{{recent.sub_date}}</td>
     </tr><tr>
-     <td><b>Status</b></td><td>{{status}}</td>
+     <td><b>Status</b></td><td>{{recent|submission_status:instructor_view}}</td>
     </tr>
     
     {% if autograded %}
@@ -94,12 +95,12 @@
       
   {% for filename, size, create_date in suplement_files %}
   <tr>
-      <td><a href={% url 'grader:submission_download_suplement' recent.id filename %}>{{ filename }}</a></td>
+      <td><a href={% url 'grader:submission_download_subdir' recent.id recent.SUPLEMENT_DIR filename %}>{{ filename }}</a></td>
       <td>Uploaded File</td>
       <td>{{ create_date }}</td>
       <td>{{ size }}</td>
       {% if instructor_view or ta_view %}
-      <td><a class='btn btn-default' href={% url 'grader:submission_delete' recent.id filename %}>
+      <td><a class='btn btn-default' href={% url 'grader:submission_delete_subdir' recent.id recent.SUPLEMENT_DIR filename %}>
       <span class="glyphicon glyphicon-trash"></span>
       </a></td>
       {% endif %}
@@ -109,7 +110,7 @@
   
   {% for filename, size, create_date in report_files %}
   <tr>
-      <td><a href={% url 'grader:submission_download_report' recent.id filename %}>{{ filename }}</a></td>
+      <td><a href={% url 'grader:submission_download_subdir' recent.id recent.REPORT_DIR filename %}>{{ filename }}</a></td>
       {% if show_autograde %}
       <td>Autograder File</td>
       {% else %}
@@ -118,7 +119,7 @@
       <td>{{ create_date }}</td>
       <td>{{ size }}</td>
       {% if instructor_view or ta_view %}
-      <td><a class='btn btn-default' href={% url 'grader:report_delete' recent.id filename %}>
+      <td><a class='btn btn-default' href={% url 'grader:submission_delete_subdir' recent.id recent.REPORT_DIR filename %}>
       <span class="glyphicon glyphicon-trash"></span>
       </a></td>
       {% endif %}

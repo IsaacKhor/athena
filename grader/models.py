@@ -235,11 +235,48 @@ class Submission(models.Model):
         (CH_PREVIOUS, 'Past'),
         (CH_TO_AUTOGRADE, 'Submitted'),
     )
+    
+    REPORT_DIR = "report"
+    SUPLEMENT_DIR = "suplements"
 
     assignment = models.ForeignKey('Assignment')
     student = models.ForeignKey(User)
     status = models.IntegerField(choices=STATUS_CHOICES, default=0)
     sub_date = models.DateTimeField(auto_now_add=True)
+    
+    def get_status_instructor():
+        if self.status == self.CH_SUBMITTED:
+            return "Submitted"
+            
+        elif self.status == self.CH_AUTOGRADED:
+            if self.autograderresult.visible:
+                return "Autograded (released)"
+            else:
+                return "Autograded (hidden)"
+            
+        elif self.status == self.CH_GRADED:
+            return "Graded"
+            
+        elif self.status == self.CH_PREVIOUS:
+            return "Previous sub"
+            
+        elif self.status == self.CH_TO_AUTOGRADE:
+            return "Pending"
+    
+    testthing = "ehllo"
+    def get_status_student():
+        if (self.status == self.CH_GRADED or 
+            (self.status == self.CH_AUTOGRADED and self.autograderresult.visible)):
+            return "Graded"
+            
+        elif self.status == self.CH_PREVIOUS:
+            return "Previous sub"
+            
+        else:
+            return "Submitted"
+        
+        return "NOTHING"
+        
     
     def set_recent(self):
         """
@@ -250,17 +287,14 @@ class Submission(models.Model):
                 sub.status = self.CH_PREVIOUS
                 sub.save()
         
-    def get_directory(self, suplement=False, report=False):
+    def get_directory(self, subdir=None):
         """
         Builds the path to the directory where this submission is stored
         """
         path = os.path.join(settings.SUBMISSION_DIR, str(self.id))
         
-        if suplement:
-            path = os.path.join(path, "suplements")
-            
-        elif report:
-            path = os.path.join(path, "report")
+        if subdir:
+            path = os.path.join(path, subdir)
             
         return path
         
@@ -278,28 +312,28 @@ class Submission(models.Model):
     def get_suplement_files(self):
         files = list()
         
-        if not os.path.exists(self.get_directory(suplement=True)):
+        if not os.path.exists(self.get_directory(subdir=self.SUPLEMENT_DIR)):
             return files
         
-        for f in os.listdir(self.get_directory(suplement=True)):
-            if os.path.isfile(os.path.join(self.get_directory(suplement=True), f)):
-                info = os.stat(os.path.join(self.get_directory(suplement=True), f))
+        for f in os.listdir(self.get_directory(subdir=self.SUPLEMENT_DIR)):
+            if os.path.isfile(os.path.join(self.get_directory(subdir=self.SUPLEMENT_DIR), f)):
+                info = os.stat(os.path.join(self.get_directory(subdir=self.SUPLEMENT_DIR), f))
                 files.append((f, int(info[6]), datetime.fromtimestamp(info[9])))
         
         return files
         
     def get_report_files(self):
-        files = list()
+        file_list = list()
         
-        if not os.path.exists(self.get_directory(report=True)):
+        if not os.path.exists(self.get_directory(subdir=self.REPORT_DIR)):
             return None
         
-        for f in os.listdir(self.get_directory(report=True)):
-            if os.path.isfile(os.path.join(self.get_directory(report=True), f)):
-                info = os.stat(os.path.join(self.get_directory(report=True), f))
-                files.append((f, int(info[6]), datetime.fromtimestamp(info[9])))
+        for path, dirs, files in os.walk(self.get_directory(subdir=self.REPORT_DIR)):
+            for f in files:
+                info = os.stat(os.path.join(path, f))
+                file_list.append((f, int(info[6]), datetime.fromtimestamp(info[9])))
         
-        return files
+        return file_list
         
     def get_assignment_files(self):
         """
