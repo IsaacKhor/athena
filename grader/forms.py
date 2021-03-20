@@ -10,7 +10,9 @@ class AssgnForm(ModelForm):
     """
     class Meta:
         model = Assignment
-        fields = ['title', 'code', 'desc', 'desc_format', 'due_date', 'enforce_deadline', 'max_grade', 'max_subs', 'visible_date',]
+        fields = ['title', 'code', 'desc', 'desc_format', 'due_date', 
+                  'enforce_deadline', 'max_grade', 'max_subs', 
+                  'visible_date', 'autograde_mode']
         
         widgets = {
             'due_date': DateTimeWidget(attrs={'id':"due_date"}, usel10n = True, bootstrap_version=3),
@@ -60,6 +62,10 @@ class SubmitForm(Form):
     def save_submission(self):
         #Create a new submission from the form data
         new_sub = Submission(assignment=self.assignment, student=self.user)
+        
+        if self.assignment.autograde_mode != Assignment.NO_AUTOGRADE:
+            new_sub.status = Submission.CH_TO_AUTOGRADE
+        
         new_sub.set_recent()
         new_sub.save()
         

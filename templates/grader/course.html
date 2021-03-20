@@ -41,7 +41,13 @@
         {% if student_view %}
         {% if a.recent %}
         <a href={% url 'grader:submissions' a.id user.id %}>
+            
+        {% if a.recent.autograderresult and a.recent.autograderresult.visible %}
+        Autograded
+        {% else %}
         {{a.status}}
+        {% endif %}
+        
         {% if a.recent.grade %}
         <b>({{a.recent.grade.grade}}/{{a.max_grade}})</b>
         {% endif %}

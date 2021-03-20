@@ -211,10 +211,24 @@ def assignment(request, assgnid):
         
         if request.method == 'POST':
             if len(request.POST.get('submissions', [])) > 0:
-                print(request.POST.getlist('submissions'))
+                
                 if 'download_many' in request.POST.get('action', []):
                     zipfile = assgn.make_submissions_zip(request.POST.getlist('submissions'))
                     return get_download(zipfile)
+                
+                elif 'show_reports' in request.POST.get('action', []):
+                    subs = Submission.objects.filter(pk__in=request.POST.getlist('submissions')).prefetch_related('autograderresult')
+                    for s in subs:
+                        s.autograderresult.visible = True
+                        s.autograderresult.save()
+                    return HttpResponseRedirect(reverse('grader:assignment', args=(assgnid,)))
+                
+                elif 'hide_reports' in request.POST.get('action', []):
+                    subs = Submission.objects.filter(pk__in=request.POST.getlist('submissions')).prefetch_related('autograderresult')
+                    for s in subs:
+                        s.autograderresult.visible = False
+                        s.autograderresult.save()
+                    return HttpResponseRedirect(reverse('grader:assignment', args=(assgnid,)))
                     
             elif not 'action' in request.POST:
                 params['file_form'] = FileUploadForm(assgn.get_assignment_path(), request.POST, request.FILES)
@@ -234,6 +248,9 @@ def assignment(request, assgnid):
             if not s.student in students_added:
                 params['recent_subs'].append(s)
                 students_added.add(s.student)
+                
+        params['show_autograde'] = assgn.autograde_mode != Assignment.NO_AUTOGRADE
+            
 
     #Render the page
     return render(request, 'grader/assignment.html', params)
@@ -270,6 +287,13 @@ def submissions(request, assgnid, userid):
     params['status'] = Submission.STATUS_CHOICES[subs[0].status][1]
     params['suplement_files'] = subs[0].get_suplement_files()
     
+    params['autograded'] = hasattr(subs[0], 'autograderresult')
+    if params['autograded']:
+        params['show_autograde'] = subs[0].autograderresult.visible
+        if params.get('instructor_view') or params.get('ta_view') or params['show_autograde']:
+            params['report_files'] = subs[0].get_report_files()
+    
+    
     if params.get('instructor_view') or params.get('ta_view'):
         
         #Get data from previous grading form
@@ -294,7 +318,8 @@ def submissions(request, assgnid, userid):
                 form.save()
 
                 #Redirect back to the submission
-                return HttpResponseRedirect(reverse('grader:submissions', args=(assgn.id, student.id)))
+                return HttpResponseRedirect(reverse('grader:submissions', args=(assgn.id, student.id)))           
+            
 
         #Generate a new grading form
         else:
@@ -325,6 +350,25 @@ def submission_download(request, subid, filename=None):
         return get_download(os.path.join(sub.get_directory(suplement=True), filename))
     else:
         return get_download(os.path.join(sub.get_directory(), sub.get_filename()))
+    
+def report_download(request, subid, filename):
+    """
+    Returns a download response for the requested submission
+    """
+    
+    #Make sure user is logged in
+    if not request.user.is_authenticated():
+        return login_redirect(request)
+    
+    #Get the submission
+    sub = Submission.objects.filter(id=subid)[0]
+    
+    #Make sure user should be able to see this submission
+    course = sub.assignment.course
+    if not (sub.student == request.user or course.has_instructor(request.user) or course.has_ta(request.user)):
+        return render(request, 'grader/access_denied.html', {'course': course})
+    
+    return get_download(os.path.join(sub.get_directory(report=True), filename))
 
 def submission_delete(request, subid, filename):
     
@@ -337,10 +381,28 @@ def submission_delete(request, subid, filename):
     
     #Make sure user should be able to delete this file
     course = sub.assignment.course
-    if not (course.has_instructor(request.user) or course.has_student(request.user)):
+    if not (course.has_ta(request.user) or course.has_instructor(request.user) or course.has_student(request.user)):
         return render(request, 'grader/access_denied.html', {'course': course})
         
-    os.remove(os.path.join(sub.get_directory(True), filename))
+    os.remove(os.path.join(sub.get_directory(suplement=True), filename))
+        
+    return HttpResponseRedirect(reverse('grader:submissions', args=(sub.assignment.id,sub.student.id,)))
+
+def report_delete(request, subid, filename):
+    
+    #Make sure user is logged in
+    if not request.user.is_authenticated():
+        return login_redirect(request)
+    
+    #Get the course
+    sub = Submission.objects.filter(id=subid)[0]
+    
+    #Make sure user should be able to delete this file
+    course = sub.assignment.course
+    if not (course.has_ta(request.user) or course.has_instructor(request.user) or course.has_student(request.user)):
+        return render(request, 'grader/access_denied.html', {'course': course})
+        
+    os.remove(os.path.join(sub.get_directory(report=True), filename))
         
     return HttpResponseRedirect(reverse('grader:submissions', args=(sub.assignment.id,sub.student.id,)))
     
@@ -527,6 +589,16 @@ def remove_grade(request, gradeid):
     grade.delete()
     
     sub.status = Submission.CH_SUBMITTED
+    sub.save()
+
+    return HttpResponseRedirect(reverse('grader:submissions', args=(sub.assignment.id,sub.student.id)))
+    
+def reset_autograde(request, gradeid):
+    grade = AutograderResult.objects.get(id=gradeid)
+    sub = grade.submission
+    grade.delete()
+    
+    sub.status = Submission.CH_TO_AUTOGRADE
     sub.save()
 
     return HttpResponseRedirect(reverse('grader:submissions', args=(sub.assignment.id,sub.student.id)))

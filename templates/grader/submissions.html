@@ -23,6 +23,19 @@
      <td><b>Status</b></td><td>{{status}}</td>
     </tr>
     
+    {% if autograded %}
+    {% if show_autograde or instructor_view or ta_view %}
+    
+    <tr>
+        <td><b>Autograde Result</b></td>
+        <td>{{recent.autograderresult.score}} 
+        {% if not show_autograde %} (not visible) {% endif %}
+        </td>
+    </tr>
+    
+    {% endif %}
+    {% endif %}
+    
     {% if recent.status == recent.CH_GRADED %}
     <tr><td><b>Grade</b></td><td>{{recent.grade.grade}}/{{recent.assignment.max_grade}}</td></tr>
     {% if recent.grade.comments|length > 0 %}
@@ -34,6 +47,13 @@
   <a class="btn btn-default" href={% url 'grader:submission_download' recent.id %}>
       <span class="glyphicon glyphicon-arrow-down"></span> Download Submission
   </a> 
+  
+  
+  {% if instructor_view and recent.autograderresult %}
+  <a class="btn btn-default" href={% url 'grader:reset_autograde' recent.autograderresult.id %}>
+      <span class="glyphicon glyphicon-repeat"></span> Re-run Autograder
+  </a> 
+  {% endif %}
   
   {% if instructor_view and recent.status == recent.CH_GRADED %}
   <a class="btn btn-default" href={% url 'grader:remove_grade' recent.grade.id %}>
@@ -62,25 +82,49 @@
   
   {% endif %}
   
-  {% if instructor_view or ta_view or suplement_files|length > 0 %}
+  
+  
+  {% if instructor_view or ta_view or suplement_files|length > 0 or report_files %}
   <h2>Suplementary Files</h2>
   
-  {% if suplement_files|length > 0 %}
+  {% if suplement_files|length > 0 or report_files %}
   
   <table class='table table-striped'>
-      <th>Filename</th><th>Date Created</th><th>Size (bytes)</th>{% if instructor_view %}<th>Delete</th>{% endif %}
+      <th>Filename</th><th>Info</th><th>Date Created</th><th>Size (bytes)</th>{% if instructor_view or ta_view %}<th>Delete</th>{% endif %}
+      
   {% for filename, size, create_date in suplement_files %}
   <tr>
       <td><a href={% url 'grader:submission_download_suplement' recent.id filename %}>{{ filename }}</a></td>
+      <td>Uploaded File</td>
       <td>{{ create_date }}</td>
       <td>{{ size }}</td>
-      {% if instructor_view %}
+      {% if instructor_view or ta_view %}
       <td><a class='btn btn-default' href={% url 'grader:submission_delete' recent.id filename %}>
       <span class="glyphicon glyphicon-trash"></span>
-  </a></td>
+      </a></td>
       {% endif %}
   </tr>
   {% endfor %}
+  
+  
+  {% for filename, size, create_date in report_files %}
+  <tr>
+      <td><a href={% url 'grader:submission_download_report' recent.id filename %}>{{ filename }}</a></td>
+      {% if show_autograde %}
+      <td>Autograder File</td>
+      {% else %}
+      <td>Hidden File</td>
+      {% endif %}
+      <td>{{ create_date }}</td>
+      <td>{{ size }}</td>
+      {% if instructor_view or ta_view %}
+      <td><a class='btn btn-default' href={% url 'grader:report_delete' recent.id filename %}>
+      <span class="glyphicon glyphicon-trash"></span>
+      </a></td>
+      {% endif %}
+  </tr>
+  {% endfor %}
+  
   </table>
   {% endif %}
   

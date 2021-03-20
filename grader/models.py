@@ -107,6 +107,17 @@ class Assignment(models.Model):
     Details of assignment should be stored on filesystem
     """
     
+    NO_AUTOGRADE = 0
+    MANUAL_REL_AUTOGRADE = 1
+    DEADLINE_REL_AUTOGRADE = 2
+    IMMEDIATE_REL_AUTOGRADE = 3
+    
+    AUTOGRADER_CHOICES = ((NO_AUTOGRADE, "No Autograder"),
+                          (MANUAL_REL_AUTOGRADE, "Autograde - manually release results"),)
+                          #(DEADLINE_REL_AUTOGRADE, "Autograde - release results after deadline"),
+                          #(IMMEDIATE_REL_AUTOGRADE, "Autograde - release results immediately"))
+                      
+    
     code = models.CharField(max_length=20) #ie HW1, Project2, Midterm, Final
     course = models.ForeignKey('Course')
     title = models.CharField(max_length=128, blank=True, null=True)
@@ -117,6 +128,7 @@ class Assignment(models.Model):
     enforce_deadline = models.BooleanField(default=True)
     visible_date = models.DateTimeField(default=timezone.now)
     desc_format = models.IntegerField(choices=FORMAT_CHOICES, default=TEXT_FORMAT, verbose_name='description format')
+    autograde_mode = models.IntegerField(choices=AUTOGRADER_CHOICES, default=NO_AUTOGRADE, verbose_name='autograder options')
 
 
     class Meta:
@@ -215,11 +227,13 @@ class Submission(models.Model):
     CH_AUTOGRADED = 1
     CH_GRADED = 2
     CH_PREVIOUS = 3
+    CH_TO_AUTOGRADE = 4
     STATUS_CHOICES = (
         (CH_SUBMITTED, 'Submitted'),
-        (CH_AUTOGRADED, 'Submitted'),#Should later be labeled something else - hidden for now
+        (CH_AUTOGRADED, 'Submitted'), #Should later be labeled something else - hidden for now
         (CH_GRADED, 'Instructor Graded'),
-        (CH_PREVIOUS, 'Past')
+        (CH_PREVIOUS, 'Past'),
+        (CH_TO_AUTOGRADE, 'Submitted'),
     )
 
     assignment = models.ForeignKey('Assignment')
@@ -236,7 +250,7 @@ class Submission(models.Model):
                 sub.status = self.CH_PREVIOUS
                 sub.save()
         
-    def get_directory(self, suplement=False):
+    def get_directory(self, suplement=False, report=False):
         """
         Builds the path to the directory where this submission is stored
         """
@@ -244,6 +258,9 @@ class Submission(models.Model):
         
         if suplement:
             path = os.path.join(path, "suplements")
+            
+        elif report:
+            path = os.path.join(path, "report")
             
         return path
         
@@ -267,6 +284,19 @@ class Submission(models.Model):
         for f in os.listdir(self.get_directory(suplement=True)):
             if os.path.isfile(os.path.join(self.get_directory(suplement=True), f)):
                 info = os.stat(os.path.join(self.get_directory(suplement=True), f))
+                files.append((f, int(info[6]), datetime.fromtimestamp(info[9])))
+        
+        return files
+        
+    def get_report_files(self):
+        files = list()
+        
+        if not os.path.exists(self.get_directory(report=True)):
+            return None
+        
+        for f in os.listdir(self.get_directory(report=True)):
+            if os.path.isfile(os.path.join(self.get_directory(report=True), f)):
+                info = os.stat(os.path.join(self.get_directory(report=True), f))
                 files.append((f, int(info[6]), datetime.fromtimestamp(info[9])))
         
         return files
@@ -311,23 +341,15 @@ class AutograderResult(models.Model):
     """
     Stores a result from the auto grader
     """
-    PASS = 0
-    FAIL = 1
-    TIMEOUT = 2
-    
-    RESULT_CHOICES = (
-        (PASS, 'Passed'),
-        (FAIL, 'Failed'),
-        (TIMEOUT, 'Timed Out')
-    )
 
     submission = models.OneToOneField('Submission')
     date = models.DateTimeField(auto_now=True)
-    info_file = models.TextField()
-    result = models.IntegerField(choices=RESULT_CHOICES)
+    result_dir = models.TextField()
+    score = models.FloatField(default=0)
+    visible = models.BooleanField(default=False)
         
     def __str__(self):
-        return str(self.submission)
+        return "yes"
     
 
 def load_user_groups(user):

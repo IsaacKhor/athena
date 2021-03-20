@@ -17,9 +17,11 @@ urlpatterns = patterns('',
     url(r'^assignment/(?P<assgnid>[0-9]+)/delete_file/(?P<filename>[^/]+)$', views.assgn_file_delete, name='assgn_file_delete'),
     url(r'^download_sub/(?P<subid>[0-9]+)$', views.submission_download, name='submission_download'),
     url(r'^download_sub/(?P<subid>[0-9]+)/(?P<filename>[^/]+)$', views.submission_download, name='submission_download_suplement'),
+    url(r'^download_sub/(?P<subid>[0-9]+)/report/(?P<filename>[^/]+)$', views.report_download, name='submission_download_report'),
     url(r'^download_sub/(?P<subid>[0-9]+)/delete_file/(?P<filename>[^/]+)$', views.submission_delete, name='submission_delete'),
+    url(r'^download_sub/(?P<subid>[0-9]+)/delete_report/(?P<filename>[^/]+)$', views.report_delete, name='report_delete'),
     url(r'^remove_grade/(?P<gradeid>[0-9]+)', views.remove_grade, name='remove_grade'),
-    
+    url(r'^reset_autograde/(?P<gradeid>[0-9]+)', views.reset_autograde, name='reset_autograde'),
     
     url(r'^login/$', views.login, name='login'),
     url(r'^logout/$', views.logout, name='logout'),
