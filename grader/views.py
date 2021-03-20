@@ -171,11 +171,11 @@ def assignment(request, assgnid):
     #Determine what type of user is viewing the page
     if course.has_instructor(request.user):
         params['instructor_view'] = True
-    elif course.has_ta(request.user):
+    if course.has_ta(request.user):
         params['ta_view'] = True
-    elif course.has_student(request.user) and assgn.is_visible():
+    if course.has_student(request.user) and assgn.is_visible():
         params['student_view'] = True        
-    else:
+    if not (params.get('instructor_view', False) or params.get('ta_view', False) or params.get('student_view', False)):
         return render(request, 'grader/access_denied.html', params)
     
     #Load submissions into parameters
@@ -207,7 +207,7 @@ def assignment(request, assgnid):
             params['form'] = form
     
     #Load each student's most recent submission
-    else:
+    if params.get('instructor_view', False) or params.get('ta_view', False):
         
         if request.method == 'POST':
             if len(request.POST.get('submissions', [])) > 0:
