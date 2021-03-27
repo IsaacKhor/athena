@@ -18,6 +18,7 @@ urlpatterns = patterns('',
     url(r'^assignment/(?P<assgnid>[0-9]+)/(?P<filename>[^/]+)$', file_access.assgn_file_download, name='assgn_file_download'),
     url(r'^assignment/(?P<assgnid>[0-9]+)/delete_file/(?P<filename>[^/]+)$', file_access.assgn_file_delete, name='assgn_file_delete'),
     
+    url(r'^download_grades/(?P<courseid>[0-9]+)$', file_access.grades_download, name='grades_download'),
     url(r'^download_subfile/(?P<subid>[0-9]+)$', file_access.submission_download, name='submission_download'),
     url(r'^download_subfile/(?P<subid>[0-9]+)/(?P<subdir>[^/]+)/(?P<filename>[^/]+)$', file_access.submission_download, name='submission_download_subdir'),
     url(r'^delete_subfile/(?P<subid>[0-9]+)/(?P<subdir>[^/]+)/(?P<filename>[^/]+)$', file_access.submission_delete, name='submission_delete_subdir'),

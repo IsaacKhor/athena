@@ -25,8 +25,22 @@ def get_conn():
     return conn
 """
     
+
 def get_new_subs():
     return list(Submission.objects.filter(status=Submission.CH_TO_AUTOGRADE).order_by('sub_date'))
+    
+def find_pending():
+    print("finding new subs")
+    new_subs = Submission.objects.all().order_by('-sub_date')
+    for sub in new_subs:
+	#print(sub.assignment)
+        if sub.assignment.id == 45:
+           # if sub.student.username == "ryaking":
+            print(sub.get_directory() + "  " + sub.student.username)
+            #sub.status = 0
+            #sub.save()
+
+  
 
 def run_autograder(sub):
     print ("Autograding %d..." % sub.id)
@@ -57,10 +71,11 @@ if __name__ == "__main__":
     #conn = get_conn()
 
     print ("Waiting for notifications on channel 'grader'")
+
     while True:
         
         to_grade = get_new_subs()
-                
+
         print ("<%s> %d submissions to grade" % (str(datetime.now()), len(to_grade)))
         
         if len(to_grade) > 0:

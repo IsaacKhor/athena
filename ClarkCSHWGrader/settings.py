@@ -20,7 +20,7 @@ SECRET_KEY = 'yge7&9=pn(g*(c-5o3di42+hz&d_c16+g)oea7gdshhu_n!3+3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["140.232.229.10"]
+ALLOWED_HOSTS = ["140.232.229.10", "athena.clarku.edu"]
 
 # Application definition
 INSTALLED_APPS = (

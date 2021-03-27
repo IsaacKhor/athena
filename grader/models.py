@@ -7,6 +7,7 @@ from django.utils import timezone
 import os
 import markdown
 import html
+import csv
 
 
 TEXT_FORMAT = 0
@@ -154,12 +155,13 @@ class Course(models.Model):
         Returns list of info about the course files in the form (filename, size, date created)
         """
         
+        files = list()
+        
         #Make sure course file directory exists
         if not os.path.exists(self.get_course_path()):
             return files
         
         #Add each file in course directory to list
-        files = list()
         for f in os.listdir(self.get_course_path()):
             if os.path.isfile(os.path.join(self.get_course_path(), f)):
                 info = os.stat(os.path.join(self.get_course_path(), f))
@@ -167,6 +169,72 @@ class Course(models.Model):
             
         return files
     
+    
+    def make_grades_csv(self, subids):
+        """
+        Creates a CSV file containing grades/autorgrader results for each given submission
+        Returns system path to the CSV file
+        """
+        
+        #Initial filename
+        csv_path = os.path.join(settings.TEMP_DIR, "%s_grades.csv" % (self.code))
+        
+        #Find new tmp filename
+        i = 1
+        while os.path.exists(csv_path):
+            csv_path = os.path.join(settings.TEMP_DIR, "%s_grades_%d.csv" % (self.code, i))
+            i += 1
+        
+        #Get all submissions and grades
+        submissions = Submission.objects.filter(id__in=subids).prefetch_related("grade", "autograderresult")
+        
+        #Check if fields should be included for grades and autograder results
+        show_grade = False
+        show_auto = False
+        for sub in submissions:
+            show_grade = show_grade or hasattr(sub, "grade")   
+            show_auto = show_auto or hasattr(sub, "autograderresult")
+        
+        #Generate CSV file header (column names)
+        header = ['Assignment', 'Username', 'Submission Date']
+        
+        #Grade columns
+        if show_grade:
+            header += ['Grade', 'Comments']
+        
+        #Autograder columns
+        if show_auto:
+            header += ['Autograder Score']
+        
+        #Begin writing file
+        csv_file = open(csv_path, 'w')
+        csv_writer = csv.writer(csv_file)
+        csv_writer.writerow(header)
+        
+        #Write row for each submission
+        for sub in submissions:
+            row = [sub.assignment.code, sub.student.username, sub.sub_date]
+            
+            #Write grade columns
+            if hasattr(sub, "grade"):
+                row += [sub.grade.grade, sub.grade.comments]
+            elif show_grade:
+                row += ['', '']
+            
+            #Write autograder column
+            if hasattr(sub, "autograderresult"):
+                row += [sub.autograderresult.score]
+            elif show_auto:
+                row += ['']
+            
+            #Write the row
+            csv_writer.writerow(row)
+        
+        #Save the file
+        csv_file.close()
+        
+        #Return the file name
+        return csv_path
     
     def get_description(self):
         """
@@ -317,10 +385,11 @@ class Assignment(models.Model):
         return path.replace(" ", "_")
     
     
-    def make_submissions_zip(self, subids=None):
+    def make_submissions_zip(self, subids, incl_subs=True, incl_reports=False, additional_files=None):
         """
         Creates zip file of specified submissions and returns path to it
-        If no list of submission IDs provided, will zip all of them
+        Gives option to include or exclude submission file and report files
+        Also allows additional files to be put into zip (for example, CSV of all grades)
         """
         
         #Initial filename
@@ -336,19 +405,34 @@ class Assignment(models.Model):
         zfile = ZipFile(zip_path, "w")
         
         #Load submissions to put into zipfile
-        if subids:
-            submissions = self.submission_set.filter(id__in=subids)
-        else:
-            submissions = self.submission_set.all()
+        submissions = self.submission_set.filter(id__in=subids)
         
         #Write all submissions to the zip file
         for sub in submissions:
-            sub_path = sub.get_directory()
-            sub_name = sub.get_filename()
-            zfile.write(os.path.join(sub_path, sub_name), os.path.join(sub.student.username, sub_name))
-        zfile.close()
+            
+            #Write submission files
+            if incl_subs:
+                sub_path = sub.get_directory()
+                sub_name = sub.get_filename()
+                zfile.write(os.path.join(sub_path, sub_name), os.path.join(sub.student.username, sub_name))
+            
+            #Write report files
+            if incl_reports and sub.get_report_files():
+                rep_path = sub.get_directory(subdir='report')
+                for filename, date, size in sub.get_report_files():
+                    zfile.write(os.path.join(rep_path, filename), os.path.join(sub.student.username, 'report', filename))
         
+        #Write additional files
+        if additional_files:
+            if type(additional_files) != list:
+                additional_files = [additional_files]
+            for filename in additional_files:
+                zfile.write(filename, os.path.basename(filename))
+        
+        #Save zip file and return path
+        zfile.close()
         return zip_path
+    
 
 class Submission(models.Model):
     """

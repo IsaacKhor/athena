@@ -127,7 +127,7 @@ function toggle_selected(source, name) {
         <a href={% url 'grader:submissions' assgn.id user.id %}>{{s.sub_date}}</a>
         {%endif%}
     </td>
-    <td> {{ s|submission_status:instructor_view }} </td>
+    <td> {{ s|submission_status:student_view }} </td>
     <!--Download option-->
     <td><a class="btn btn-default btn-sm" href={% url 'grader:submission_download' s.id %}>
       <span class="glyphicon glyphicon-arrow-down"></span>
@@ -149,16 +149,6 @@ function toggle_selected(source, name) {
   <form method='POST'>
       {% csrf_token %}
       
-      <!--
-      <button type='submit' class='btn btn-primary' name='action' value="grade_many">
-      <span class="glyphicon glyphicon-ok"></span> Grade Selected
-      </button>
-      -->
-       
-      <button type='submit' class='btn btn-default' name='action' value="download_many">
-      <span class="glyphicon glyphicon-arrow-down"></span> Download Selected
-      </button>
-      
       {% if show_autograde %}
       <button type='submit' class='btn btn-default' name='action' value="show_reports">
         <span class="glyphicon glyphicon-eye-open"></span> Show Selected Reports
@@ -167,7 +157,21 @@ function toggle_selected(source, name) {
       <button type='submit' class='btn btn-default' name='action' value="hide_reports">
         <span class="glyphicon glyphicon-eye-close"></span> Hide Selected Reports
       </button>
+      <br/>
+      <br/>
       {% endif %}
+      
+      Download: 
+      <label><input type='checkbox' name='download_type' value='submissions' checked> Submissions </label>
+      <label><input type='checkbox' name='download_type' value='grades' checked> Grades </label>
+      {% if show_autograde %}
+      <label><input type='checkbox' name='download_type' value='reports' checked> Reports </label>
+      {% endif %}
+      <br/>
+       
+      <button type='submit' class='btn btn-default' name='action' value="download_many">
+      <span class="glyphicon glyphicon-arrow-down"></span> Download Selected
+      </button>
       
       <br/>
       <br/>
@@ -184,7 +188,7 @@ function toggle_selected(source, name) {
                   <td><a href={% url 'grader:submissions' assgn.id recent.student.id %}>
                       {{recent.student.first_name}} {{recent.student.last_name}}</a></td>
                   <td>{{recent.sub_date}}</td>
-                  <td>{{recent|submission_status:instructor_view}}</td>
+                  <td>{{recent|submission_status:student_view}}</td>
                   
                   <!--Details option-->
                   <td><a class="btn btn-default" href={% url 'grader:submissions' assgn.id recent.student.id %}>

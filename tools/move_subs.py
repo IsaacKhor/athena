@@ -17,4 +17,4 @@ if __name__ == "__main__":
         
         new_filename = os.path.join(sub.get_directory(), sub.get_filename_old())
         os.renames(old_filename, new_filename)
-        print("%s -> %s\n" % (old_filename, new_filename)
+        print("%s -> %s\n" % (old_filename, new_filename))

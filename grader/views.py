@@ -236,14 +236,31 @@ def assignment(request, assgnid):
             #Submissions were selected from table
             if len(request.POST.get('submissions', [])) > 0:
                 
+                subids = request.POST.getlist('submissions')
+                
                 #Download selected submissions
                 if 'download_many' in request.POST.get('action', []):
-                    zipfile = assgn.make_submissions_zip(request.POST.getlist('submissions'))
+                    
+                    #Generate CSV file of grades if requested
+                    csv_file = None
+                    if 'grades' in request.POST.getlist('download_type'):
+                        csv_file = course.make_grades_csv(subids)
+                        
+                        #Return CSV file download if nothing else requested
+                        if len(request.POST.getlist('download_type')) == 1:
+                            return get_download(csv_file)
+                    
+                    #Get what needs to be downloaded
+                    incl_reports = 'reports' in request.POST.getlist('download_type')
+                    incl_subs = 'submissions' in request.POST.getlist('download_type')
+                    
+                    zipfile = assgn.make_submissions_zip(subids, incl_subs, incl_reports, csv_file)
+                    
                     return get_download(zipfile)
                 
                 #Set AutograderResults on selected submissions to visible
                 elif 'show_reports' in request.POST.get('action', []):
-                    subs = Submission.objects.filter(pk__in=request.POST.getlist('submissions')).prefetch_related('autograderresult')
+                    subs = Submission.objects.filter(pk__in=subids).prefetch_related('autograderresult')
                     for s in subs:
                         s.autograderresult.visible = True
                         s.autograderresult.save()
@@ -251,7 +268,7 @@ def assignment(request, assgnid):
                 
                 #Set AutograderResults on selected submissions to not visible
                 elif 'hide_reports' in request.POST.get('action', []):
-                    subs = Submission.objects.filter(pk__in=request.POST.getlist('submissions')).prefetch_related('autograderresult')
+                    subs = Submission.objects.filter(pk__in=subids).prefetch_related('autograderresult')
                     for s in subs:
                         s.autograderresult.visible = False
                         s.autograderresult.save()
@@ -350,10 +367,15 @@ def submissions(request, assgnid, userid):
         else:
             params['file_form'] = FileUploadForm(subs[0].get_directory(subdir=Submission.SUPLEMENT_DIR))                    
         
+        #Get the current grade for the submission if it exists
+        try:
+            grade = Grade.objects.get(submission=subs[0])
+        except:
+            grade = None
+                
         #Update grade
         if request.method == 'POST' and request.POST.get('action', None) == 'grade':
-            
-            form = GradeForm(subs[0], request.POST)
+            form = GradeForm(subs[0], request.POST, instance=grade)
             form.instance.grader = request.user
 
             #Save the grade
@@ -367,11 +389,6 @@ def submissions(request, assgnid, userid):
             
         #Generate a new grading form
         else:
-            try:
-                grade = Grade.objects.get(submission=subs[0])
-            except:
-                grade = None
-                
             form = GradeForm(subs[0], instance=grade)
         
         params['form'] = form

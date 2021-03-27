@@ -16,6 +16,8 @@
 
   <h1>{{course.code}} - {{course.title}} (Section {{course.section}})</h1>
   
+  <div style='width:600px'>
+      
   {% if instructor_view %}
   <a class='btn btn-default' href={% url 'grader:edit_course' course.id %}>
       <span class="glyphicon glyphicon-pencil"></span> Edit Course
@@ -26,11 +28,10 @@
   {{course.get_description|safe}}
 
   <h2>Assignments</h2>
-  
+      
   {% if assignments|length == 0 %}
-  There are no assignments listed for this course.
-  {% endif %}
-  <div style='width:600px'>
+  There are no assignments listed for this course. <br/>
+  {% else %}
   <table class="table table-striped">
     <th>Name</th><th>Due Date</th><th>Status</th>    
   {% for a in assignments %}
@@ -43,7 +44,7 @@
         {% if a.recent %}
         <a href={% url 'grader:submissions' a.id user.id %}>
             
-        {{ a.recent|submission_status:instructor_view }}
+        {{ a.recent|submission_status:student_view }}
         
         {% if a.recent.grade %}
         <b>({{a.recent.grade.grade}}/{{a.max_grade}})</b>
@@ -65,11 +66,19 @@
   {% endif %}
   {% endfor %}
   </table>
+  {% endif %}
 
   {% if instructor_view %}
   <a class='btn btn-default' href={% url 'grader:add_assgn' course.id %}>
       <span class="glyphicon glyphicon-plus"></span> Add Assignement
   </a>
+  
+  
+  {% if assignments|length > 0 %}
+  <a class='btn btn-default' href={% url 'grader:grades_download' course.id %}>
+      <span class="glyphicon glyphicon-arrow-down"></span> Download All Grades
+  </a>
+  {% endif %}
   {% endif %}
   </div>
   
@@ -124,10 +133,12 @@
   {% for i in course.instructors.all %}
       <li><a href='mailto:{{i.email}}'>{{i.first_name}} {{i.last_name}} &lt{{i.email}}&gt</a><br/></li>
   {% endfor %}
-
+  
+  {% if course.tas.all|length > 0 %}
   <h4>Teaching Assistant{% if course.tas.all|length > 1 %}s{% endif %}</h4>
   {% for t in course.tas.all %}
       <li><a href='mailto:{{t.email}}'>{{t.first_name}} {{t.last_name}} &lt{{t.email}}&gt</a><br/></li>
   {% endfor %}
+  {% endif %}
 
 {% endblock %}

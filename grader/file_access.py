@@ -169,13 +169,33 @@ def remove_grade(request, gradeid):
     
     #Update status of submission
     sub = grade.submission
-    sub.status = Submission.CH_SUBMITTED
+    if (AutograderResult.objects.filter(submission=grade.submission).count() > 0):
+        sub.status = Submission.CH_AUTOGRADED
+    else:
+        sub.status = Submission.CH_SUBMITTED
     sub.save()
     
     #Delete the grade
     grade.delete()
 
     return HttpResponseRedirect(reverse('grader:submissions', args=(sub.assignment.id,sub.student.id)))
+    
+    
+def grades_download(request, courseid):
+    
+    course = Course.objects.get(id=courseid)
+    
+    #Check if user is allowed to view grades
+    if not (course.has_instructor(request.user) or course.has_ta(request.user)):
+        return render(request, 'grader/access_denied.html', {'course': course})
+    
+    assgns = Assignment.objects.filter(course=course)
+    subs = Submission.objects.filter(assignment__in=assgns).exclude(status=Submission.CH_PREVIOUS)
+    subids = map(lambda s: s.id, subs)
+    
+    csv = course.make_grades_csv(subids)
+    
+    return get_download(csv)
     
     
 def reset_autograde(request, gradeid):
