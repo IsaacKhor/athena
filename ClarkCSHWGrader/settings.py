@@ -10,55 +10,41 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os, sys
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-#Add base path
-sys.path.append(BASE_DIR)
+from pathlib import Path
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'yge7&9=pn(g*(c-5o3di42+hz&d_c16+g)oea7gdshhu_n!3+3'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["140.232.229.10", "athena.clarku.edu"]
 
 # Application definition
 INSTALLED_APPS = (
     # third party packages
-    'autocomplete_light',
-    'bootstrap3',
-    'datetimewidget',
+    'django_bootstrap5',
+    'django_python3_ldap',
+    'django_rq',
 
     #django apps
-    'django_admin_bootstrapped',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_python3_ldap',
+
     # custom apps
     'grader',
+    'autogapp'
 )
-
-import django_python3_ldap.utils
 
 #LDAP authentication options
-AUTHENTICATION_BACKENDS = (
-    'django_python3_ldap.auth.LDAPBackend',
-    'django.contrib.auth.backends.ModelBackend',
-)
-# The URL of the LDAP server.
+AUTHENTICATION_BACKENDS = [ 'django_python3_ldap.auth.LDAPBackend' ]
 LDAP_AUTH_URL = "ldap://140.232.229.7:389"
-
-# Initiate TLS on connection.
 LDAP_AUTH_USE_TLS = False
-
-# The LDAP search base for looking up users.
 LDAP_AUTH_SEARCH_BASE = "dc=cslab"
-
-# The LDAP class that represents a user.
 LDAP_AUTH_OBJECT_CLASS = "inetOrgPerson"
 
 # The LDAP Username and password of a user so ldap_sync_users can be run
@@ -80,6 +66,7 @@ LDAP_AUTH_USER_LOOKUP_FIELDS = ("username",)
 # LDAP into a form suitable for creating a user.
 # Override this to set custom field formatting for your
 # user model.
+import django_python3_ldap.utils
 LDAP_AUTH_CLEAN_USER_DATA = django_python3_ldap.utils.clean_user_data
 
 
@@ -100,7 +87,7 @@ ROOT_URLCONF = 'ClarkCSHWGrader.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -134,36 +121,38 @@ DATABASES = {
 #    }
 #}
 #Import databse configuration
-import db_conf
-DATABASES = db_conf.DATABASES
-
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'US/Eastern'
-
-USE_I18N = True
-
-USE_L10N = True
-
+USE_I18N = False
+USE_L10N = False
 USE_TZ = True
 
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
-
+STATIC_ROOT = BASE_DIR / 'static'
 STATIC_URL = '/static/'
 
-#Directories to store user files
-SUBMISSION_DIR = os.path.join(BASE_DIR, 'submissions')
-COURSE_DIR = os.path.join(BASE_DIR, 'course_files')
-TEMP_DIR = os.path.join(BASE_DIR, 'tmp')
+# Runtime data directories
+SUBMISSION_DIR = BASE_DIR / 'runtimedata' / 'submissions'
+COURSE_DIR = BASE_DIR / 'runtimedata' / 'course_files'
+TEMP_DIR = BASE_DIR / 'runtimedata' / 'tmp'
 
 #Email host to use for usernames
 DEFAULT_EMAIL_HOST = "clarku.edu"
 
-# to add bootstrap to django
-DAB_FIELD_RENDERER = 'django_admin_bootstrapped.renderers.BootstrapFieldRenderer'
-from django.contrib import messages
-MESSAGE_TAGS = {
-    messages.SUCCESS: 'alert-success success',
-    messages.WARNING: 'alert-warning warning',
-    messages.ERROR: 'alert-danger error'
+# Queue for django-rq tasks (running the autograder)
+RQ_QUEUES = {
+    'default': {
+        'HOST': 'localhost',
+        'PORT': 6379,
+        'DB': 0,
+        'PASSWORD': 'some-password',
+        'DEFAULT_TIMEOUT': 300,
+    }
+}
+
+# Database, test only
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'runtimedata' / 'db.sqlite3',
+    }
 }
