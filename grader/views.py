@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect, StreamingHttpResponse, HttpResponseNotFound
 from django.core.urlresolvers import reverse
-from django.core.servers.basehttp import FileWrapper
 from django.contrib.auth.models import User, Group
 import django.contrib.auth as auth
 from grader.models import *
@@ -9,9 +8,12 @@ from grader.forms import *
 from datetime import datetime
 from django.db.models import Max
 
+from grader.file_access import get_download
+
 import os
 import mimetypes
 import re
+
 
 def login(request):
     """
@@ -121,7 +123,6 @@ def course(request, courseid):
     else:
         return render(request, 'grader/access_denied.html', params)
     
-    
     #Load all assignments for course
     assignments = course.assignment_set.order_by('due_date').reverse().prefetch_related('submission_set')
     
@@ -180,6 +181,9 @@ def assignment(request, assgnid):
     submissions = assgn.submission_set.all()
     
     params = {'assgn': assgn, 'instructor_view': False, 'ta_view': False, 'student_view': False}
+        
+    #Load files uploaded for the assignment
+    params['files'] = assgn.get_assignment_files()
     
     #Determine what type of user is viewing the page
     if course.has_instructor(request.user):
@@ -191,23 +195,27 @@ def assignment(request, assgnid):
     if not (params.get('instructor_view', False) or params.get('ta_view', False) or params.get('student_view', False)):
         return render(request, 'grader/access_denied.html', params)
     
-    #Load submissions into parameters
+    #Load info for student
     if params.get('student_view', False):
+        
+        #Load user's submissions
         params['prev_submissions'] = assgn.submission_set.filter(student=request.user).order_by('sub_date').reverse()
 
-        #Make sure user should be able to submit
+        #Check if student can make new submission
         if (assgn.is_past_due() and assgn.enforce_deadline):
             params['past_due'] = True
         elif (assgn.max_subs and len(params['prev_submissions']) >= assgn.max_subs):
             params['max_subs'] = True
             
+        #Student can submit - generate form/save submission
         else:
-            #Get data from a submission
+            
+            #Read info from previously submitted submission form
             if request.method == 'POST':
                 form = SubmitForm(assgn, request.user, request.POST, request.FILES)
-
+                
+                #Vaildate form and save user's submission
                 if form.is_valid():
-
                     new_sub = form.save_submission()
                     
                     #Redirect back to the assignment page
@@ -219,29 +227,21 @@ def assignment(request, assgnid):
             
             params['form'] = form
     
-    #Load each student's most recent submission
+    #Load info for instructors/TAs
     if params.get('instructor_view', False) or params.get('ta_view', False):
-        ##############################
-        ######I DON'T LIKE THIS.######
-        ###SHOULD THIS BE IN FORMS?###
-        #SHOULD ACTIONS BE MORE CLEAR#
-        ######LIKE ON THE VALUE#######
-        ##THE VALUE OF THE SUBMISSION#
-        ######OK LOOK INTO THAT#######
-        ##############################
         
-        #But for now
-        #Check if a request was made
+        #Form data was submitted
         if request.method == 'POST':
-        #We'll keep going with this    
             
-            #Do an a
+            #Submissions were selected from table
             if len(request.POST.get('submissions', [])) > 0:
                 
+                #Download selected submissions
                 if 'download_many' in request.POST.get('action', []):
                     zipfile = assgn.make_submissions_zip(request.POST.getlist('submissions'))
                     return get_download(zipfile)
                 
+                #Set AutograderResults on selected submissions to visible
                 elif 'show_reports' in request.POST.get('action', []):
                     subs = Submission.objects.filter(pk__in=request.POST.getlist('submissions')).prefetch_related('autograderresult')
                     for s in subs:
@@ -249,35 +249,39 @@ def assignment(request, assgnid):
                         s.autograderresult.save()
                     return HttpResponseRedirect(reverse('grader:assignment', args=(assgnid,)))
                 
+                #Set AutograderResults on selected submissions to not visible
                 elif 'hide_reports' in request.POST.get('action', []):
                     subs = Submission.objects.filter(pk__in=request.POST.getlist('submissions')).prefetch_related('autograderresult')
                     for s in subs:
                         s.autograderresult.visible = False
                         s.autograderresult.save()
                     return HttpResponseRedirect(reverse('grader:assignment', args=(assgnid,)))
-                    
-            elif not 'action' in request.POST:
+            
+            #Upload file and associated it with assignment
+            if 'add_file' in request.POST.get('action', []):
                 params['file_form'] = FileUploadForm(assgn.get_assignment_path(), request.POST, request.FILES)
                 if params['file_form'].is_valid():
                     params['file_form'].save_file()
                     return HttpResponseRedirect(reverse('grader:assignment', args=(assgnid,)))
-                    
+        
+        #Create new file uploading form
         else:
             params['file_form'] = FileUploadForm(assgn.get_assignment_path())
         
-        params['files'] = assgn.get_assignment_files()
-        
+        #Get all user submissions
         all_subs = assgn.submission_set.order_by('sub_date').reverse()
+        
+        #Get most recent submission for each student
         params['recent_subs'] = list()
         students_added = set()
         for s in all_subs:
             if not s.student in students_added:
                 params['recent_subs'].append(s)
                 students_added.add(s.student)
-                
+        
+        #Check to show options for autograder reports
         params['show_autograde'] = assgn.autograde_mode != Assignment.NO_AUTOGRADE
             
-
     #Render the page
     return render(request, 'grader/assignment.html', params)
 
@@ -307,30 +311,39 @@ def submissions(request, assgnid, userid):
         params['student_view'] = True        
     else:
         return render(request, 'grader/access_denied.html', {'course': assgn.course})
-        
+    
+    #Load info most recent and previous submissions
     params['recent'] = subs[0]
     params['prev'] = subs[1:]
+    
+    #Get status (graded, submitted, etc) for most recent submission
     params['status'] = Submission.STATUS_CHOICES[subs[0].status][1]
+    
+    #Load suplemental files for most recent submission
     params['suplement_files'] = subs[0].get_suplement_files()
     
+    #Load autograder information for most recent submission
     params['autograded'] = hasattr(subs[0], 'autograderresult')
     if params['autograded']:
         params['show_autograde'] = subs[0].autograderresult.visible
         if params.get('instructor_view') or params.get('ta_view') or params['show_autograde']:
             params['report_files'] = subs[0].get_report_files()
     
-    
+    #Load forms for instructors/TAs
     if params.get('instructor_view') or params.get('ta_view'):
         
-        #Get data from previous grading form
+        #Add file to assignment page
         if request.method == 'POST' and request.POST.get('action', None) == 'add_file':
             params['file_form'] = FileUploadForm(subs[0].get_directory(subdir=Submission.SUPLEMENT_DIR), request.POST, request.FILES)
             if params['file_form'].is_valid():
                 params['file_form'].save_file()
                 return HttpResponseRedirect(reverse('grader:submissions', args=(assgnid,userid)))
         
-        params['file_form'] = FileUploadForm(subs[0].get_directory(subdir=Submission.SUPLEMENT_DIR))                    
-            
+        #Create new form to submit files
+        else:
+            params['file_form'] = FileUploadForm(subs[0].get_directory(subdir=Submission.SUPLEMENT_DIR))                    
+        
+        #Update grade
         if request.method == 'POST' and request.POST.get('action', None) == 'grade':
             params['file_form'] = FileUploadForm(subs[0].get_directory(subdir=Submission.SUPLEMENT_DIR))
             
@@ -346,7 +359,6 @@ def submissions(request, assgnid, userid):
                 #Redirect back to the submission
                 return HttpResponseRedirect(reverse('grader:submissions', args=(assgn.id, student.id)))           
             
-
         #Generate a new grading form
         else:
             form = GradeForm(subs[0])
@@ -358,19 +370,18 @@ def submissions(request, assgnid, userid):
 
 def edit_assgn(request, courseid, assgnid=None):
     """
-    Renders a page for adding an assignment to a course
-
-    In the future should only be visible to instructors
+    Renders a page for editting an assignment
+    If no assignment ID provided, will generate empty form to create a new assignment
     """
     
     #Make sure user is logged in
-    if not request.user.is_authenticated():
+    if not load_user_groups(request.user):
         return login_redirect(request)
 
-    #Get the course to add the assignment to
+    #Get the course associated with assignment
     course = Course.objects.get(id=courseid)
     
-    #Make sure user should be able to create assignments
+    #Make sure user is an instructor or a TA
     if not (course.has_instructor(request.user) or course.has_ta(request.user)):
         return render(request, 'grader/access_denied.html', {'course': course})
         
@@ -380,8 +391,7 @@ def edit_assgn(request, courseid, assgnid=None):
     else:
         assgn = None
     
-
-    #If the form is submitted, get the data
+    #Get data from previously submitted form
     if request.method == 'POST':
         form = AssgnForm(request.POST, instance=assgn)
         form.instance.course = course
@@ -389,9 +399,11 @@ def edit_assgn(request, courseid, assgnid=None):
         #Save the assignemnt
         if form.is_valid():
             form.save()
+            
+            #Redirect to assignment page
             return HttpResponseRedirect(reverse('grader:assignment', args=(form.instance.id,)))
 
-    #Create a new form and render the page
+    #Create a new form
     else:
         form = AssgnForm(instance=assgn)
         
@@ -399,18 +411,18 @@ def edit_assgn(request, courseid, assgnid=None):
 
 DELIM_RE = re.compile(r", *|[\n\r]*")
 
+
 def edit_course(request, courseid=None):
     """
-    Renders a page for adding a course
-
-    In the future should only be visible to instructors
+    Renders a page for editing a course
+    If no course ID provided, will generate empty form to create a new course
     """
     
     #Make sure user is logged in
     if not load_user_groups(request.user):
         return login_redirect(request)
     
-    #Load course data
+    #Load course data if provided
     if courseid:
         course = Course.objects.filter(id=courseid)[0]
         instructor_names = "\n".join(map(lambda u: u.username, course.instructors.all()))
@@ -423,9 +435,9 @@ def edit_course(request, courseid=None):
         
         
     #Make sure user should be able to edit this course (or the course is just being created)
-    #Todo: only certain users should be able to create courses in the first place
-    #if (not course and not request.user.is_faculty) or not (course and (course.has_instructor(request.user) or course.has_ta(request.user))):
-    if not (request.user.is_superuser or (course and (course.has_instructor(request.user) or course.has_ta(request.user))) or (not course and request.user.is_faculty)):
+    if not (request.user.is_superuser                                                            #User must either be a superuser...
+            or (course and (course.has_instructor(request.user) or course.has_ta(request.user))) #Or instructor/TA of course being altered...
+            or (not course and request.user.is_faculty)):                                        #Or listed as faculty and creating a new course
         return render(request, 'grader/access_denied.html', {'course': course})
     
     #If the form is submitted, get the data
@@ -439,7 +451,6 @@ def edit_course(request, courseid=None):
             instructors = User.objects.filter(username__in=DELIM_RE.split(form.cleaned_data['instructor_field']))
             students = User.objects.filter(username__in=DELIM_RE.split(form.cleaned_data['student_field']))
             tas = User.objects.filter(username__in=DELIM_RE.split(form.cleaned_data['ta_field']))
-            
             
             #Need to save course before adding users
             if not courseid:
@@ -458,26 +469,6 @@ def edit_course(request, courseid=None):
         form = CourseForm(instance=course, initial=form_data)
         
     return render(request, 'grader/edit_course.html', {'form': form})
-    
-def remove_grade(request, gradeid):
-    grade = Grade.objects.get(id=gradeid)
-    sub = grade.submission
-    grade.delete()
-    
-    sub.status = Submission.CH_SUBMITTED
-    sub.save()
-
-    return HttpResponseRedirect(reverse('grader:submissions', args=(sub.assignment.id,sub.student.id)))
-    
-def reset_autograde(request, gradeid):
-    grade = AutograderResult.objects.get(id=gradeid)
-    sub = grade.submission
-    grade.delete()
-    
-    sub.status = Submission.CH_TO_AUTOGRADE
-    sub.save()
-
-    return HttpResponseRedirect(reverse('grader:submissions', args=(sub.assignment.id,sub.student.id)))
 
 
 

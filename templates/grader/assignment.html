@@ -83,7 +83,8 @@ function toggle_selected(source, name) {
     {% csrf_token %}
       {{ file_form }}
       <br/>
-    <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span> Add File</button>
+    <button type="submit" class="btn btn-default" name="action" value="add_file">
+        <span class="glyphicon glyphicon-plus"></span>Add File </button>
   </form>
   {% endif %}
 

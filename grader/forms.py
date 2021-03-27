@@ -34,9 +34,9 @@ class CourseForm(ModelForm):
     
     USER_TEXTAREA = Textarea(attrs={'rows': '3'})
     
-    instructor_field = CharField(label='Instructors', widget=USER_TEXTAREA)
-    student_field = CharField(label='Students', widget=USER_TEXTAREA)
-    ta_field = CharField(label='TAs', widget=USER_TEXTAREA)
+    instructor_field = CharField(label='Instructors', widget=USER_TEXTAREA, required=False)
+    student_field = CharField(label='Students', widget=USER_TEXTAREA, required=False)
+    ta_field = CharField(label='TAs', widget=USER_TEXTAREA, required=False)
     
     def __init__(self, *args, **kwargs):
         super(CourseForm, self).__init__(*args, **kwargs)
@@ -60,20 +60,28 @@ class SubmitForm(Form):
         bootstrapFormControls(self)
     
     def save_submission(self):
+        """
+        Creates a new submission from the form input
+        """
+        
         #Create a new submission from the form data
         new_sub = Submission(assignment=self.assignment, student=self.user)
         
+        #Set status to needing to be autograded if assignment is autograded
         if self.assignment.autograde_mode != Assignment.NO_AUTOGRADE:
             new_sub.status = Submission.CH_TO_AUTOGRADE
         
+        #Set as user's most recent submission
         new_sub.set_recent()
+        
+        #Save the submission entry in database
         new_sub.save()
         
         #Make submission directory
         if not os.path.exists(new_sub.get_directory()):
             os.makedirs(new_sub.get_directory())
         
-        #Save submission
+        #Save submission to the filesystem
         filename = os.path.join(new_sub.get_directory(), self.cleaned_data['sub_file'].name)
         with open(filename, 'wb+') as f:
             for chunk in self.cleaned_data['sub_file'].chunks():
@@ -90,11 +98,18 @@ class FileUploadForm(Form):
     file_field = FileField(label='Add File', allow_empty_file=False)
     
     def __init__(self, upload_dir, *args, **kw):
+        """
+        Initialize form and set directory to upload file to
+        """
+        
         super(Form, self).__init__(*args, **kw)
         self.upload_dir = upload_dir
         #bootstrapFormControls(self)
         
     def save_file(self):
+        """
+        Saves the uploaded file to the directory specified on initialization
+        """
         
         #Make directory
         if not os.path.exists(self.upload_dir):
@@ -106,7 +121,11 @@ class FileUploadForm(Form):
             for chunk in self.cleaned_data['file_field'].chunks():
                 f.write(chunk)
         
+        
 class GradeForm(ModelForm):
+    """
+    Form to set an assignment grade
+    """
     class Meta:
         model = Grade
         fields = ['grade', 'comments']
@@ -133,7 +152,9 @@ class LoginForm(AuthenticationForm):
         
 
 def bootstrapFormControls(self):
-    #bootstrapping form controls
+    """
+    Sets all widgets in a form to use bootstrap controls
+    """
     for field in self.fields:
         if type(self.fields[field].widget) != CheckboxInput:
             self.fields[field].widget.attrs['class'] = 'form-control'

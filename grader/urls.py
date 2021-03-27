@@ -23,8 +23,8 @@ urlpatterns = patterns('',
     url(r'^delete_subfile/(?P<subid>[0-9]+)/(?P<subdir>[^/]+)/(?P<filename>[^/]+)$', file_access.submission_delete, name='submission_delete_subdir'),
     
     
-    url(r'^remove_grade/(?P<gradeid>[0-9]+)', views.remove_grade, name='remove_grade'),
-    url(r'^reset_autograde/(?P<gradeid>[0-9]+)', views.reset_autograde, name='reset_autograde'),
+    url(r'^remove_grade/(?P<gradeid>[0-9]+)', file_access.remove_grade, name='remove_grade'),
+    url(r'^reset_autograde/(?P<gradeid>[0-9]+)', file_access.reset_autograde, name='reset_autograde'),
     
     url(r'^login/$', views.login, name='login'),
     url(r'^logout/$', views.logout, name='logout'),

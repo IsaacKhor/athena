@@ -7,7 +7,7 @@ register = template.Library()
 def submission_status(sub, is_instructor):
         
     if sub.status == sub.CH_AUTOGRADED and is_instructor:
-        if sub.autograderresult.visible:
+        if hasattr(sub, "auutograderresult") and sub.autograderresult.visible:
             return "Autograded (released)"
         else:
             return "Autograded (hidden)"
