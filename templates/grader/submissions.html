@@ -55,22 +55,14 @@
       <span class="glyphicon glyphicon-repeat"></span> Re-run Autograder
   </a> 
   {% endif %}
-  
-  {% if instructor_view and recent.status == recent.CH_GRADED %}
-  <a class="btn btn-default" href={% url 'grader:remove_grade' recent.grade.id %}>
-      <span class="glyphicon glyphicon-remove"></span> Remove Grade
-  </a>
-  {% endif %}
   <br/>
   </div>
   
   
   <div style='width:600px'>
-  {% if recent.status != recent.CH_GRADED %} 
   
   
   {% if instructor_view or ta_view %}
-  
   <h2>Grade</h2>
   <form method="POST" id='grade_form'>
     {% csrf_token %}
@@ -78,10 +70,15 @@
       {{ form.as_table }}
     </table>
     <button type="submit" class="btn btn-default" name="action" value="grade">Submit</button>
+  
+    {% if recent.status == recent.CH_GRADED %}
+    <a class="btn btn-default" href={% url 'grader:remove_grade' recent.grade.id %}>
+        <span class="glyphicon glyphicon-remove"></span> Remove Grade
+    </a>
+    {% endif %}
   </form>
   {% endif %}
   
-  {% endif %}
   
   
   
@@ -111,7 +108,7 @@
   {% for filename, size, create_date in report_files %}
   <tr>
       <td><a href={% url 'grader:submission_download_subdir' recent.id recent.REPORT_DIR filename %}>{{ filename }}</a></td>
-      {% if show_autograde %}
+      {% if show_report %}
       <td>Autograder File</td>
       {% else %}
       <td>Hidden File</td>

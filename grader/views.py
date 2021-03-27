@@ -325,8 +325,15 @@ def submissions(request, assgnid, userid):
     #Load autograder information for most recent submission
     params['autograded'] = hasattr(subs[0], 'autograderresult')
     if params['autograded']:
-        params['show_autograde'] = subs[0].autograderresult.visible
-        if params.get('instructor_view') or params.get('ta_view') or params['show_autograde']:
+        
+        #Report should be shown if autograde set to visible
+        params['show_report'] = subs[0].autograderresult.visible
+        
+        #Autograder grade should be shown if set to visible and no other grade exists
+        params['show_autograde'] = params['show_report'] and Grade.objects.filter(submission=subs[0]).count() == 0
+        
+        #Load report files if required
+        if params.get('instructor_view') or params.get('ta_view') or params['show_report']:
             params['report_files'] = subs[0].get_report_files()
     
     #Load forms for instructors/TAs
@@ -345,7 +352,6 @@ def submissions(request, assgnid, userid):
         
         #Update grade
         if request.method == 'POST' and request.POST.get('action', None) == 'grade':
-            params['file_form'] = FileUploadForm(subs[0].get_directory(subdir=Submission.SUPLEMENT_DIR))
             
             form = GradeForm(subs[0], request.POST)
             form.instance.grader = request.user
@@ -361,7 +367,12 @@ def submissions(request, assgnid, userid):
             
         #Generate a new grading form
         else:
-            form = GradeForm(subs[0])
+            try:
+                grade = Grade.objects.get(submission=subs[0])
+            except:
+                grade = None
+                
+            form = GradeForm(subs[0], instance=grade)
         
         params['form'] = form
         
