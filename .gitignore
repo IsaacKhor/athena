@@ -6,4 +6,5 @@ runtimedata/
 autograders/
 
 # Misc
+__pycache__/
 **.pyc
