@@ -1,8 +1,7 @@
-from django.conf.urls import include, url, patterns
+from django.urls import include, path
 from django.contrib import admin
-admin.autodiscover()  ## what???
 
 urlpatterns = [
-    url(r'^admin/', include(admin.site.urls,)),
-    url(r'^', include('grader.urls', namespace="grader")),
+    path('admin/', admin.site.urls),
+    path('', include('grader.urls', namespace="grader")),
 ]

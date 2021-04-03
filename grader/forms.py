@@ -1,5 +1,4 @@
-from django.forms import ModelForm, Form, FileField, ChoiceField, CharField, Textarea, BooleanField, MultipleChoiceField, CheckboxSelectMultiple, CheckboxInput
-from datetimewidget.widgets import DateTimeWidget
+from django.forms import *
 from grader.models import *
 from  django.contrib.auth.forms import AuthenticationForm
 
@@ -13,11 +12,6 @@ class AssgnForm(ModelForm):
         fields = ['title', 'code', 'desc', 'desc_format', 'due_date', 
                   'enforce_deadline', 'max_grade', 'max_subs', 
                   'visible_date', 'autograde_mode']
-        
-        widgets = {
-            'due_date': DateTimeWidget(attrs={'id':"due_date"}, usel10n = True, bootstrap_version=3),
-            'visible_date': DateTimeWidget(attrs={'id':"visible_date"}, usel10n = True, bootstrap_version=3)
-        }
 
     def __init__(self, *args, **kwargs):
         super(AssgnForm, self).__init__(*args, **kwargs)

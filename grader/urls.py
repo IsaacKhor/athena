@@ -3,6 +3,7 @@ from django.urls import path, include
 
 from grader import views, file_access
 
+app_name = 'grader'
 urlpatterns = [
     path(''                                                         , views.home       ,               name='home'),
     path('course/<int:courseid>/add_assgn'                          , views.course,                    name='add_assgn'),

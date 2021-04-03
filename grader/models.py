@@ -84,7 +84,7 @@ class Course(models.Model):
     #########################
     
     #Semester for the course
-    semester = models.ForeignKey('Semester', blank=True, null=True)
+    semester = models.ForeignKey('Semester', blank=True, null=True, on_delete=models.CASCADE)
     
     #Course department + number (i.e. CSCI160, CSCI120)
     code = models.CharField(max_length=10)
@@ -275,7 +275,7 @@ class Assignment(models.Model):
     #########################
     
     #Course that the assignment is for
-    course = models.ForeignKey('Course')
+    course = models.ForeignKey('Course', blank=False, null=False, on_delete=models.CASCADE)
     
     #Short assignment code (ie HW1, Project2, Midterm, Final)
     code = models.CharField(max_length=20)
@@ -467,10 +467,10 @@ class Submission(models.Model):
     #########################
     
     #Assignment associated with this submission
-    assignment = models.ForeignKey('Assignment')
+    assignment = models.ForeignKey('Assignment', blank=False, null=False, on_delete=models.CASCADE)
     
     #Student who submitted this assignment
-    student = models.ForeignKey(User)
+    student = models.ForeignKey(User, blank=False, null=False, on_delete=models.CASCADE)
     
     #Date of submission
     sub_date = models.DateTimeField(auto_now_add=True)
@@ -614,10 +614,10 @@ class Grade(models.Model):
     #########################
 
     #Submission associated with this grade
-    submission = models.OneToOneField('Submission')
+    submission = models.OneToOneField('Submission', on_delete=models.CASCADE)
     
     #Instructor/TA who submitted grade
-    grader = models.ForeignKey(User)
+    grader = models.ForeignKey(User, blank=False, null=False, on_delete=models.CASCADE)
     
     #Grade value
     grade = models.FloatField()
@@ -649,7 +649,7 @@ class AutograderResult(models.Model):
     #########################
     
     #Submission associated with this result
-    submission = models.OneToOneField('Submission')
+    submission = models.OneToOneField('Submission', on_delete=models.CASCADE)
     
     #Date autograder completed
     date = models.DateTimeField(auto_now=True)

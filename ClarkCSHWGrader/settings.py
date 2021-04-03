@@ -1,15 +1,3 @@
-"""
-Django settings for ClarkCSHWGrader project.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/1.8/topics/settings/
-
-For the full list of settings and their values, see
-https://docs.djangoproject.com/en/1.8/ref/settings/
-"""
-
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import os, sys
 from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -18,7 +6,11 @@ SECRET_KEY = 'yge7&9=pn(g*(c-5o3di42+hz&d_c16+g)oea7gdshhu_n!3+3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["140.232.229.10", "athena.clarku.edu"]
+ALLOWED_HOSTS = [
+    '140.232.229.10', 
+    'athena.clarku.edu', 
+    'localhost'
+]
 
 # Application definition
 INSTALLED_APPS = (
@@ -39,6 +31,34 @@ INSTALLED_APPS = (
     'grader',
     'autogapp'
 )
+
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [BASE_DIR / 'templates'],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
+WSGI_APPLICATION = 'ClarkCSHWGrader.wsgi.application'
 
 #LDAP authentication options
 AUTHENTICATION_BACKENDS = [ 'django_python3_ldap.auth.LDAPBackend' ]
@@ -68,19 +88,6 @@ LDAP_AUTH_USER_LOOKUP_FIELDS = ("username",)
 # user model.
 import django_python3_ldap.utils
 LDAP_AUTH_CLEAN_USER_DATA = django_python3_ldap.utils.clean_user_data
-
-
-MIDDLEWARE_CLASSES = (
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
-)
 
 ROOT_URLCONF = 'ClarkCSHWGrader.urls'
 
@@ -131,9 +138,10 @@ STATIC_ROOT = BASE_DIR / 'static'
 STATIC_URL = '/static/'
 
 # Runtime data directories
-SUBMISSION_DIR = BASE_DIR / 'runtimedata' / 'submissions'
-COURSE_DIR = BASE_DIR / 'runtimedata' / 'course_files'
-TEMP_DIR = BASE_DIR / 'runtimedata' / 'tmp'
+MEDIA_ROOT = BASE_DIR / 'runtimedata'
+SUBMISSION_DIR = MEDIA_ROOT / 'submissions'
+COURSE_DIR = MEDIA_ROOT / 'course_files'
+TEMP_DIR = MEDIA_ROOT / 'tmp'
 
 #Email host to use for usernames
 DEFAULT_EMAIL_HOST = "clarku.edu"
@@ -148,6 +156,8 @@ RQ_QUEUES = {
         'DEFAULT_TIMEOUT': 300,
     }
 }
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Database, test only
 DATABASES = {
