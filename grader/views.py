@@ -106,7 +106,7 @@ def course(request, courseid):
     """
     
     #Make sure user is logged in
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return login_redirect(request)
 
     #Get the course
@@ -173,7 +173,7 @@ def assignment(request, assgnid):
     """
     
     #Make sure user is logged in
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return login_redirect(request)
 
     #Get the assigment
@@ -310,7 +310,7 @@ def submissions(request, assgnid, userid):
     """
     
     #Make sure user is logged in
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return login_redirect(request)
 
     #Get the submission

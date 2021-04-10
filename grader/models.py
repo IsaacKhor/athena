@@ -683,7 +683,7 @@ def load_user_groups(user):
     
     Returns False if user is not logged in, true otherwise
     """
-    if not user.is_authenticated():
+    if not user.is_authenticated:
         return False
         
     user.is_faculty = len(user.groups.filter(name='faculty')) > 0
@@ -697,7 +697,7 @@ def create_user_email(user):
     Generates user email based on username
     Should be run every time a user logs in
     """
-    if not user.is_authenticated():
+    if not user.is_authenticated:
         return False
     
     user.email = "%s@%s" % (user.username, settings.DEFAULT_EMAIL_HOST)

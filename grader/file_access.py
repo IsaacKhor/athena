@@ -21,7 +21,7 @@ def submission_download(request, subid, subdir=None, filename=None):
     """
     
     #Make sure user is logged in
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return login_redirect(request)
     
     #Get the submission
@@ -50,7 +50,7 @@ def submission_delete(request, subid, subdir, filename):
     """
     
     #Make sure user is logged in
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return login_redirect(request)
     
     #Get the course
@@ -75,7 +75,7 @@ def course_file_download(request, courseid, filename):
     """
     
     #Make sure user is logged in
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return login_redirect(request)
     
     #Get the course
@@ -95,7 +95,7 @@ def course_file_delete(request, courseid, filename):
     """
     
     #Make sure user is logged in
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return login_redirect(request)
     
     #Get the course
@@ -118,7 +118,7 @@ def assgn_file_download(request, assgnid, filename):
     """
     
     #Make sure user is logged in
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return login_redirect(request)
     
     #Get the course
@@ -138,7 +138,7 @@ def assgn_file_delete(request, assgnid, filename):
     """
     
     #Make sure user is logged in
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return login_redirect(request)
     
     #Get the course
