@@ -14,7 +14,7 @@
 {% block content %}
   <h1>{{recent.assignment.course.code}} {{recent.assignment.code}} Submission</h1>
   
-  <div style='width:400px'>
+  <div class='container-fluid'>
    <table class='table'>
     <tr>
      <td><b>Student</b></td><td>{{recent.student.first_name}} {{recent.student.last_name}}</td>
@@ -45,13 +45,13 @@
     {% endif %}
     
    </table>
-  <button class="button btn-primary" href={% url 'grader:submission_download' recent.id %}>
+  <button class="btn btn-primary" href={% url 'grader:submission_download' recent.id %}>
       <span class="bi bi-download"></span> Download Submission
   </button> 
   
   
   {% if instructor_view and recent.autograderresult %}
-  <button class="button btn-primary" href={% url 'grader:reset_autograde' recent.autograderresult.id %}>
+  <button class="btn btn-primary" href={% url 'grader:reset_autograde' recent.autograderresult.id %}>
       <span class="bi bi-arrow-repeat"></span> Re-run Autograder
   </button> 
   {% endif %}
@@ -59,7 +59,7 @@
   </div>
   
   
-  <div style='width:600px'>
+  <div class='container-fluid'>
   
   
   {% if instructor_view or ta_view %}
@@ -69,10 +69,10 @@
     <table class="table">
       {{ form.as_table }}
     </table>
-    <button type="submit" class="button btn-primary" name="action" value="grade">Submit</button>
+    <button type="submit" class="btn btn-primary" name="action" value="grade">Submit</button>
   
     {% if recent.status == recent.CH_GRADED %}
-    <button class="button btn-primary" href={% url 'grader:remove_grade' recent.grade.id %}>
+    <button class="btn btn-primary" href={% url 'grader:remove_grade' recent.grade.id %}>
         <span class="bi bi-trash"></span> Remove Grade
     </button>
     {% endif %}
@@ -134,7 +134,7 @@
     <table class="table">
       {{ file_form.as_table }}
     </table>
-    <button type="submit" class="button btn-primary" name="action" value="add_file">Add</button>
+    <button type="submit" class="btn btn-primary" name="action" value="add_file">Add</button>
   </form>
   {% endif %}
   </div>

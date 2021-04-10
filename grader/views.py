@@ -486,9 +486,9 @@ def edit_course(request, courseid=None):
                 form.save()
             
             #Add users to course
-            form.instance.instructors = instructors
-            form.instance.students = students
-            form.instance.tas = tas
+            form.instance.instructors.set(instructors)
+            form.instance.instructors.set(students)
+            form.instance.instructors.set(tas)
             form.save()
             
             return HttpResponseRedirect(reverse('grader:course', args=(form.instance.id,)))
