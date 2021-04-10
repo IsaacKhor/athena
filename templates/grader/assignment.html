@@ -32,7 +32,7 @@ function toggle_selected(source, name) {
   
   {% if instructor_view %}
   <a class='btn btn-primary' href={% url 'grader:edit_assgn' assgn.course.id assgn.id %}>
-      <span class="glyphicon glyphicon-pencil"></span> Edit Assignment
+      <span class="bi bi-pencil-square"></span> Edit Assignment
   </a><br/>
   {% endif %}
   
@@ -70,7 +70,7 @@ function toggle_selected(source, name) {
       <td>{{ size }}</td>
       {% if instructor_view %}
       <td><a class='btn btn-primary' href={% url 'grader:assgn_file_delete' assgn.id filename %}>
-      <span class="glyphicon glyphicon-trash"></span>
+      <span class="bi bi-trash"></span>
   </a></td>
       {% endif %}
   </tr>
@@ -84,7 +84,7 @@ function toggle_selected(source, name) {
       {{ file_form }}
       <br/>
     <button type="submit" class="button btn-primary" name="action" value="add_file">
-        <span class="glyphicon glyphicon-plus"></span>Add File </button>
+        <span class="bi bi-plus"></span>Add File </button>
   </form>
   {% endif %}
 
@@ -151,11 +151,11 @@ function toggle_selected(source, name) {
       
       {% if show_autograde %}
       <button type='submit' class='btn btn-primary' name='action' value="show_reports">
-        <span class="glyphicon glyphicon-eye-open"></span> Show Selected Reports
+        <span class="bi bi-eye-fill"></span> Show Selected Reports
       </button>
       
       <button type='submit' class='btn btn-primary' name='action' value="hide_reports">
-        <span class="glyphicon glyphicon-eye-close"></span> Hide Selected Reports
+        <span class="bi bi-eye-slash-fill"></span> Hide Selected Reports
       </button>
       <br/>
       <br/>
@@ -170,7 +170,7 @@ function toggle_selected(source, name) {
       <br/>
        
       <button type='submit' class='btn btn-primary' name='action' value="download_many">
-      <span class="glyphicon glyphicon-arrow-down"></span> Download Selected
+      <span class="bi bi-download"></span> Download Selected
       </button>
       
       <br/>
@@ -192,12 +192,12 @@ function toggle_selected(source, name) {
                   
                   <!--Details option-->
                   <td><button class="button btn-primary" href={% url 'grader:submissions' assgn.id recent.student.id %}>
-                    <span class="glyphicon glyphicon-ok"></span>
+                    <span class="bi bi-check"></span>
                   </button></td>
                   
                   <!--Download option-->
                   <td><button class="button btn-primary" href={% url 'grader:submission_download' recent.id %}>
-                    <span class="glyphicon glyphicon-arrow-down"></span>
+                    <span class="bi bi-download"></span>
                   </button></td>
                   
                   {% if show_autograde %}

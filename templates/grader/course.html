@@ -19,13 +19,13 @@
   <div style='width:600px'>
       
   {% if instructor_view %}
-  <button type='button' class='btn btn-primary' href={% url 'grader:edit_course' course.id %}>
+  <a type='button' class='btn btn-primary' href={% url 'grader:edit_course' course.id %}>
       <span class="bi bi-pencil-square"></span> Edit Course
-  </button>
+  </a>
   {% endif %}
 
   <h2>Description</h2>
-  {{course.get_description|safe}}
+  <p>{{course.get_description|safe}}</p>
 
   <h2>Assignments</h2>
       
@@ -70,13 +70,13 @@
 
   {% if instructor_view %}
   <a class='btn btn-primary' href={% url 'grader:add_assgn' course.id %}>
-      <span class="glyphicon glyphicon-plus"></span> Add Assignement
+      <span class="bi bi-plus"></span> Add Assignement
   </a>
   
   
   {% if assignments|length > 0 %}
   <a class='btn btn-primary' href={% url 'grader:grades_download' course.id %}>
-      <span class="glyphicon glyphicon-arrow-down"></span> Download All Grades
+      <span class="bi bi-download"></span> Download All Grades
   </a>
   {% endif %}
   {% endif %}
@@ -98,7 +98,7 @@
       <td>{{ size }}</td>
       {% if instructor_view %}
       <td><a class='button btn-primary' href={% url 'grader:course_file_delete' course.id filename %}>
-      <span class="glyphicon glyphicon-trash"></span>
+      <span class="bi bi-trash"></span>
   </a></td>
       {% endif %}
   </tr>
@@ -111,7 +111,7 @@
     {% csrf_token %}
       {{ file_form }}
       <br/>
-    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Add File</button>
+    <a type="submit" class="btn btn-primary"><span class="bi bi-plus"></span> Add File</a>
   </form>
   {% endif %}
 
