@@ -19,9 +19,9 @@
   <div style='width:600px'>
       
   {% if instructor_view %}
-  <a class='btn btn-primary' href={% url 'grader:edit_course' course.id %}>
-      <span class="glyphicon glyphicon-pencil"></span> Edit Course
-  </a>
+  <button type='button' class='btn btn-primary' href={% url 'grader:edit_course' course.id %}>
+      <span class="bi bi-pencil-square"></span> Edit Course
+  </button>
   {% endif %}
 
   <h2>Description</h2>
@@ -97,7 +97,7 @@
       <td>{{ create_date }}</td>
       <td>{{ size }}</td>
       {% if instructor_view %}
-      <td><a class='btn btn-primary' href={% url 'grader:course_file_delete' course.id filename %}>
+      <td><a class='button btn-primary' href={% url 'grader:course_file_delete' course.id filename %}>
       <span class="glyphicon glyphicon-trash"></span>
   </a></td>
       {% endif %}
@@ -111,7 +111,7 @@
     {% csrf_token %}
       {{ file_form }}
       <br/>
-    <button type="submit" class="button btn-primary"><span class="glyphicon glyphicon-plus"></span> Add File</button>
+    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Add File</button>
   </form>
   {% endif %}
 

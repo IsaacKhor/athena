@@ -129,9 +129,9 @@ function toggle_selected(source, name) {
     </td>
     <td> {{ s|submission_status:student_view }} </td>
     <!--Download option-->
-    <td><a class="button btn-primary btn-sm" href={% url 'grader:submission_download' s.id %}>
-      <span class="glyphicon glyphicon-arrow-down"></span>
-    </a></td>
+    <td><button class="button btn-primary btn-sm" href={% url 'grader:submission_download' s.id %}>
+      <i class="bi bi-download"></i>
+    </button></td>
   </tr>
   {% endfor %}
   </table>
@@ -191,14 +191,14 @@ function toggle_selected(source, name) {
                   <td>{{recent|submission_status:student_view}}</td>
                   
                   <!--Details option-->
-                  <td><a class="button btn-primary" href={% url 'grader:submissions' assgn.id recent.student.id %}>
+                  <td><button class="button btn-primary" href={% url 'grader:submissions' assgn.id recent.student.id %}>
                     <span class="glyphicon glyphicon-ok"></span>
-                  <a/></td>
+                  </button></td>
                   
                   <!--Download option-->
-                  <td><a class="button btn-primary" href={% url 'grader:submission_download' recent.id %}>
+                  <td><button class="button btn-primary" href={% url 'grader:submission_download' recent.id %}>
                     <span class="glyphicon glyphicon-arrow-down"></span>
-                  </a></td>
+                  </button></td>
                   
                   {% if show_autograde %}
                   

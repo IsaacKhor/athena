@@ -45,15 +45,15 @@
     {% endif %}
     
    </table>
-  <a class="button btn-primary" href={% url 'grader:submission_download' recent.id %}>
+  <button class="button btn-primary" href={% url 'grader:submission_download' recent.id %}>
       <span class="glyphicon glyphicon-arrow-down"></span> Download Submission
-  </a> 
+  </button> 
   
   
   {% if instructor_view and recent.autograderresult %}
-  <a class="button btn-primary" href={% url 'grader:reset_autograde' recent.autograderresult.id %}>
+  <button class="button btn-primary" href={% url 'grader:reset_autograde' recent.autograderresult.id %}>
       <span class="glyphicon glyphicon-repeat"></span> Re-run Autograder
-  </a> 
+  </button> 
   {% endif %}
   <br/>
   </div>
@@ -72,9 +72,9 @@
     <button type="submit" class="button btn-primary" name="action" value="grade">Submit</button>
   
     {% if recent.status == recent.CH_GRADED %}
-    <a class="button btn-primary" href={% url 'grader:remove_grade' recent.grade.id %}>
+    <button class="button btn-primary" href={% url 'grader:remove_grade' recent.grade.id %}>
         <span class="glyphicon glyphicon-remove"></span> Remove Grade
-    </a>
+    </button>
     {% endif %}
   </form>
   {% endif %}
