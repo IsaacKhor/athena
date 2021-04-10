@@ -83,7 +83,7 @@ function toggle_selected(source, name) {
     {% csrf_token %}
       {{ file_form }}
       <br/>
-    <button type="submit" class="btn btn-default" name="action" value="add_file">
+    <button type="submit" class="button btn-default" name="action" value="add_file">
         <span class="glyphicon glyphicon-plus"></span>Add File </button>
   </form>
   {% endif %}
@@ -102,7 +102,7 @@ function toggle_selected(source, name) {
     <table class="table">
       {{ form.as_table }}
     </table>
-    <input type="submit" class="btn btn-default" value="Submit" />
+    <input type="submit" class="button btn-default" value="Submit" />
   </form>
   {% elif past_due %}
   Submissions for this assignment are closed.
@@ -129,7 +129,7 @@ function toggle_selected(source, name) {
     </td>
     <td> {{ s|submission_status:student_view }} </td>
     <!--Download option-->
-    <td><a class="btn btn-default btn-sm" href={% url 'grader:submission_download' s.id %}>
+    <td><a class="button btn-default btn-sm" href={% url 'grader:submission_download' s.id %}>
       <span class="glyphicon glyphicon-arrow-down"></span>
     </a></td>
   </tr>
@@ -191,12 +191,12 @@ function toggle_selected(source, name) {
                   <td>{{recent|submission_status:student_view}}</td>
                   
                   <!--Details option-->
-                  <td><a class="btn btn-default" href={% url 'grader:submissions' assgn.id recent.student.id %}>
+                  <td><a class="button btn-default" href={% url 'grader:submissions' assgn.id recent.student.id %}>
                     <span class="glyphicon glyphicon-ok"></span>
                   <a/></td>
                   
                   <!--Download option-->
-                  <td><a class="btn btn-default" href={% url 'grader:submission_download' recent.id %}>
+                  <td><a class="button btn-default" href={% url 'grader:submission_download' recent.id %}>
                     <span class="glyphicon glyphicon-arrow-down"></span>
                   </a></td>
                   

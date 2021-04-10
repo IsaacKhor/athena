@@ -1,32 +1,19 @@
-{% load staticfiles %}
-{% load tags %}
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <title>{% block title %} {% endblock %}</title>
-
-    <link href="{% static 'css/template.css' %}" rel="stylesheet" media="screen">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    
-    {% load bootstrap3 %}
-
-    {# Load CSS and JavaScript #}
+    {% load django_bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
-    
-    {% block scripts %}
-    {% endblock %}
-
     {# Display django.contrib.messages as Bootstrap alerts #}
     {% bootstrap_messages %}
 
+    {% block scripts %}
+    {% endblock %}
   </head>
   <body>
-    <nav class="navbar navbar-default">
-        
+    <nav class="navbar navbar-light navbar-expand-lg bg-light">
       <div class="container-fluid">
-          
         <div class="navbar-header">
           <a class="navbar-brand" href={% url 'grader:home' %}>
             <b>P</b>rogramming <b>A</b>ssignment <b>S</b>ubmission <b>S</b>ystem
