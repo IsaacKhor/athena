@@ -45,13 +45,13 @@
     {% endif %}
     
    </table>
-  <a class="button btn-default" href={% url 'grader:submission_download' recent.id %}>
+  <a class="button btn-primary" href={% url 'grader:submission_download' recent.id %}>
       <span class="glyphicon glyphicon-arrow-down"></span> Download Submission
   </a> 
   
   
   {% if instructor_view and recent.autograderresult %}
-  <a class="button btn-default" href={% url 'grader:reset_autograde' recent.autograderresult.id %}>
+  <a class="button btn-primary" href={% url 'grader:reset_autograde' recent.autograderresult.id %}>
       <span class="glyphicon glyphicon-repeat"></span> Re-run Autograder
   </a> 
   {% endif %}
@@ -69,10 +69,10 @@
     <table class="table">
       {{ form.as_table }}
     </table>
-    <button type="submit" class="button btn-default" name="action" value="grade">Submit</button>
+    <button type="submit" class="button btn-primary" name="action" value="grade">Submit</button>
   
     {% if recent.status == recent.CH_GRADED %}
-    <a class="button btn-default" href={% url 'grader:remove_grade' recent.grade.id %}>
+    <a class="button btn-primary" href={% url 'grader:remove_grade' recent.grade.id %}>
         <span class="glyphicon glyphicon-remove"></span> Remove Grade
     </a>
     {% endif %}
@@ -97,7 +97,7 @@
       <td>{{ create_date }}</td>
       <td>{{ size }}</td>
       {% if instructor_view or ta_view %}
-      <td><a class='btn btn-default' href={% url 'grader:submission_delete_subdir' recent.id recent.SUPLEMENT_DIR filename %}>
+      <td><a class='btn btn-primary' href={% url 'grader:submission_delete_subdir' recent.id recent.SUPLEMENT_DIR filename %}>
       <span class="glyphicon glyphicon-trash"></span>
       </a></td>
       {% endif %}
@@ -116,7 +116,7 @@
       <td>{{ create_date }}</td>
       <td>{{ size }}</td>
       {% if instructor_view or ta_view %}
-      <td><a class='btn btn-default' href={% url 'grader:submission_delete_subdir' recent.id recent.REPORT_DIR filename %}>
+      <td><a class='btn btn-primary' href={% url 'grader:submission_delete_subdir' recent.id recent.REPORT_DIR filename %}>
       <span class="glyphicon glyphicon-trash"></span>
       </a></td>
       {% endif %}
@@ -134,7 +134,7 @@
     <table class="table">
       {{ file_form.as_table }}
     </table>
-    <button type="submit" class="button btn-default" name="action" value="add_file">Add</button>
+    <button type="submit" class="button btn-primary" name="action" value="add_file">Add</button>
   </form>
   {% endif %}
   </div>

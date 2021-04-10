@@ -19,7 +19,7 @@
   <div style='width:600px'>
       
   {% if instructor_view %}
-  <a class='btn btn-default' href={% url 'grader:edit_course' course.id %}>
+  <a class='btn btn-primary' href={% url 'grader:edit_course' course.id %}>
       <span class="glyphicon glyphicon-pencil"></span> Edit Course
   </a>
   {% endif %}
@@ -69,13 +69,13 @@
   {% endif %}
 
   {% if instructor_view %}
-  <a class='btn btn-default' href={% url 'grader:add_assgn' course.id %}>
+  <a class='btn btn-primary' href={% url 'grader:add_assgn' course.id %}>
       <span class="glyphicon glyphicon-plus"></span> Add Assignement
   </a>
   
   
   {% if assignments|length > 0 %}
-  <a class='btn btn-default' href={% url 'grader:grades_download' course.id %}>
+  <a class='btn btn-primary' href={% url 'grader:grades_download' course.id %}>
       <span class="glyphicon glyphicon-arrow-down"></span> Download All Grades
   </a>
   {% endif %}
@@ -97,7 +97,7 @@
       <td>{{ create_date }}</td>
       <td>{{ size }}</td>
       {% if instructor_view %}
-      <td><a class='btn btn-default' href={% url 'grader:course_file_delete' course.id filename %}>
+      <td><a class='btn btn-primary' href={% url 'grader:course_file_delete' course.id filename %}>
       <span class="glyphicon glyphicon-trash"></span>
   </a></td>
       {% endif %}
@@ -111,7 +111,7 @@
     {% csrf_token %}
       {{ file_form }}
       <br/>
-    <button type="submit" class="button btn-default"><span class="glyphicon glyphicon-plus"></span> Add File</button>
+    <button type="submit" class="button btn-primary"><span class="glyphicon glyphicon-plus"></span> Add File</button>
   </form>
   {% endif %}
 
