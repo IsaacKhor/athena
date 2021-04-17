@@ -23,22 +23,24 @@
     <div class="container-fluid">
       <a class="navbar-brand" href="#">Athena Homework Submission System</a>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarText">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="https://cs.clarku.edu/mathcs">CS Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="https://cs.clarku.edu/mathcs/ta">TA Hours</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="maitlo:ikhor@clarku.edu?subject=Athena HW site issue/feedback">Report a problem</a>
-        </li>
-      </ul>
-    </div>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
+        aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="https://cs.clarku.edu/mathcs">CS Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://cs.clarku.edu/mathcs/ta">TA Hours</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="maitlo:ikhor@clarku.edu?subject=Athena HW site issue/feedback">Report a
+              problem</a>
+          </li>
+        </ul>
+      </div>
 
       {% if user.is_authenticated %}
       <span class="navbar-text">
@@ -60,6 +62,15 @@
 
   <div class="container">
     {% block content %} This is default block. {% endblock %}
+  </div>
+
+  <div class='container mb-5 mt-5'>
+    <hr />
+    <footer>
+      For questions or concerns, contact the current sysadmins for the CS servers. Athena
+      was written by Isaac Khor, pulling from PASS written by Sam Kovaka. Built on Django 3
+      and Bootstrap 5.
+    </footer>
   </div>
 </body>
 
