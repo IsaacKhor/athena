@@ -22,9 +22,9 @@
 
 
 {% block breadcrumbs %}
-<li><a href={% url 'grader:home' %}>Home</a></li>
-<li><a href={% url 'grader:course' assgn.course.id %}>{{assgn.course.code}}</a></li>
-<li class='active'>Assignment</li>
+<li class='breadcrumb-item'><a href={% url 'grader:home' %}>Home</a></li>
+<li class='breadcrumb-item'><a href={% url 'grader:course' assgn.course.id %}>{{assgn.course.code}}</a></li>
+<li class='breadcrumb-item active'>Assignment</li>
 {% endblock %}
 
 {% block content %}

@@ -5,12 +5,12 @@
 {% block header %} Login {% endblock %}
 
 {% block breadcrumbs %}
-<li><a href={% url 'grader:login' %}>Home</a></li>
-<li class='active'>Login</li>
+<li class='breadcrumb-item'><a href={% url 'grader:login' %}>Home</a></li>
+<li class='breadcrumb-item active'>Login</li>
 {% endblock %}
 
 {% block content %}
-<div class='container-fluid'>
+<div class='container'>
   <form method="post">
     {% csrf_token %}
     <table class="table">

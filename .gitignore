@@ -4,6 +4,7 @@
 # Runtime stuff
 runtimedata/
 autograders/
+static/admin/
 
 # Misc
 __pycache__/

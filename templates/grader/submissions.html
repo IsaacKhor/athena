@@ -5,10 +5,10 @@
 {% block header %}{{recent.student.username}} {% endblock %}
 
 {% block breadcrumbs %}
-<li><a href={% url 'grader:home' %}>Home</a></li>
-<li><a href={% url 'grader:course' recent.assignment.course.id %}>{{recent.assignment.course.code}}</a></li>
-<li><a href={% url 'grader:assignment' recent.assignment.id %}>{{recent.assignment.code}}</a></li>
-<li class='active'>Submission</li>
+<li class='breadcrumb-item'><a href={% url 'grader:home' %}>Home</a></li>
+<li class='breadcrumb-item'><a href={% url 'grader:course' recent.assignment.course.id %}>{{recent.assignment.course.code}}</a></li>
+<li class='breadcrumb-item'><a href={% url 'grader:assignment' recent.assignment.id %}>{{recent.assignment.code}}</a></li>
+<li class='breadcrumb-item active'>Submission</li>
 {% endblock %}
 
 {% block content %}
@@ -74,7 +74,7 @@
 
 
   {% if instructor_view or ta_view %}
-  <h2>Grade</h2>
+  <h2 class='mt-3'>Grade</h2>
   <form method="POST" id='grade_form'>
     {% csrf_token %}
     <table class="table">
@@ -94,7 +94,7 @@
 
 
   {% if instructor_view or ta_view or suplement_files|length > 0 or report_files %}
-  <h2>Suplementary Files</h2>
+  <h2 class='mt-3'>Suplementary Files</h2>
 
   {% if suplement_files|length > 0 or report_files %}
 
