@@ -261,14 +261,10 @@ class Assignment(models.Model):
     #Options for autograding mode
     #Commented out statuses are not yet implemented
     #Should be implemented once autograder is reliable enough for automatic release
-    NO_AUTOGRADE = 0
-    MANUAL_REL_AUTOGRADE = 1
-    #DEADLINE_REL_AUTOGRADE = 2
-    #IMMEDIATE_REL_AUTOGRADE = 3
-    AUTOGRADER_CHOICES = ((NO_AUTOGRADE, "No Autograder"),
-                          (MANUAL_REL_AUTOGRADE, "Autograde - manually release results"),)
-                          #(DEADLINE_REL_AUTOGRADE, "Autograde - release results after deadline"),
-                          #(IMMEDIATE_REL_AUTOGRADE, "Autograde - release results immediately"))
+    MANUAL_GRADE = 0
+    AUTOGRADE = 1
+    AUTOGRADER_CHOICES = ((MANUAL_GRADE, "No Autograder"),
+                          (AUTOGRADE, "Autograde -- results released immediately"),)
                       
     #########################
     # Start of model fields #
@@ -305,7 +301,14 @@ class Assignment(models.Model):
     
     #Determines if assignment can be autograded
     #In the future will also give options for auto-releasing results
-    autograde_mode = models.IntegerField(choices=AUTOGRADER_CHOICES, default=NO_AUTOGRADE, verbose_name='autograder options')
+    autograde_mode = models.IntegerField(choices=AUTOGRADER_CHOICES, default=MANUAL_GRADE, verbose_name='autograder options')
+
+    # The zipped autograder file
+    # Check documentation for how the zip must be structured
+    autograder_path = models.FilePathField(
+        blank=True, null=False, default='',
+        path=settings.AUTOGRADER_DIR.as_posix(), verbose_name='autograder zip path',
+        recursive=True, allow_folders=False, allow_files=True)
     
     #######################
     # End of model fields #
