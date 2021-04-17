@@ -12,56 +12,67 @@
 {% endblock %}
 
 {% block content %}
-  <h1>{{recent.assignment.course.code}} {{recent.assignment.code}} Submission</h1>
-  
-  <div class='container-fluid'>
-   <table class='table'>
+<h1>{{recent.assignment.course.code}} {{recent.assignment.code}} Submission</h1>
+
+<div class='container-fluid'>
+  <table class='table'>
     <tr>
-     <td><b>Student</b></td><td>{{recent.student.first_name}} {{recent.student.last_name}}</td>
-    </tr><tr>
-     <td><b>Last Submission</b></td><td>{{recent.sub_date}}</td>
-    </tr><tr>
-     <td><b>Status</b></td><td>{{recent|submission_status:student_view}}</td>
+      <td><b>Student</b></td>
+      <td>{{recent.student.first_name}} {{recent.student.last_name}}</td>
     </tr>
-    
+    <tr>
+      <td><b>Last Submission</b></td>
+      <td>{{recent.sub_date}}</td>
+    </tr>
+    <tr>
+      <td><b>Status</b></td>
+      <td>{{recent|submission_status:student_view}}</td>
+    </tr>
+
     {% if autograded %}
     {% if show_autograde or instructor_view or ta_view %}
-    
+
     <tr>
-        <td><b>Autograde Result</b></td>
-        <td>{{recent.autograderresult.score}} 
+      <td><b>Autograde Result</b></td>
+      <td>{{recent.autograderresult.score}}
         {% if not show_autograde %} (not visible) {% endif %}
-        </td>
+      </td>
     </tr>
-    
+
     {% endif %}
     {% endif %}
-    
+
     {% if recent.status == recent.CH_GRADED %}
-    <tr><td><b>Grade</b></td><td>{{recent.grade.grade}}/{{recent.assignment.max_grade}}</td></tr>
+    <tr>
+      <td><b>Grade</b></td>
+      <td>{{recent.grade.grade}}/{{recent.assignment.max_grade}}</td>
+    </tr>
     {% if recent.grade.comments|length > 0 %}
-    <tr><td><b>Comments</b></td><td>{{recent.grade.comments}}</td></tr>
+    <tr>
+      <td><b>Comments</b></td>
+      <td>{{recent.grade.comments}}</td>
+    </tr>
     {% endif %}
     {% endif %}
-    
-   </table>
+
+  </table>
   <button class="btn btn-primary" href={% url 'grader:submission_download' recent.id %}>
-      <span class="bi bi-download"></span> Download Submission
-  </button> 
-  
-  
+    <span class="bi bi-download"></span> Download Submission
+  </button>
+
+
   {% if instructor_view and recent.autograderresult %}
   <button class="btn btn-primary" href={% url 'grader:reset_autograde' recent.autograderresult.id %}>
-      <span class="bi bi-arrow-repeat"></span> Re-run Autograder
-  </button> 
+    <span class="bi bi-arrow-repeat"></span> Re-run Autograder
+  </button>
   {% endif %}
-  <br/>
-  </div>
-  
-  
-  <div class='container-fluid'>
-  
-  
+  <br />
+</div>
+
+
+<div class='container-fluid'>
+
+
   {% if instructor_view or ta_view %}
   <h2>Grade</h2>
   <form method="POST" id='grade_form'>
@@ -70,44 +81,51 @@
       {{ form.as_table }}
     </table>
     <button type="submit" class="btn btn-primary" name="action" value="grade">Submit</button>
-  
+
     {% if recent.status == recent.CH_GRADED %}
     <button class="btn btn-primary" href={% url 'grader:remove_grade' recent.grade.id %}>
-        <span class="bi bi-trash"></span> Remove Grade
+      <span class="bi bi-trash"></span> Remove Grade
     </button>
     {% endif %}
   </form>
   {% endif %}
-  
-  
-  
-  
+
+
+
+
   {% if instructor_view or ta_view or suplement_files|length > 0 or report_files %}
   <h2>Suplementary Files</h2>
-  
+
   {% if suplement_files|length > 0 or report_files %}
-  
+
   <table class='table table-striped'>
-      <th>Filename</th><th>Info</th><th>Date Created</th><th>Size (bytes)</th>{% if instructor_view or ta_view %}<th>Delete</th>{% endif %}
-      
-  {% for filename, size, create_date in suplement_files %}
-  <tr>
-      <td><a href={% url 'grader:submission_download_subdir' recent.id recent.SUPLEMENT_DIR filename %}>{{ filename }}</a></td>
+    <th>Filename</th>
+    <th>Info</th>
+    <th>Date Created</th>
+    <th>Size (bytes)</th>{% if instructor_view or ta_view %}<th>Delete</th>{% endif %}
+
+    {% for filename, size, create_date in suplement_files %}
+    <tr>
+      <td><a
+          href={% url 'grader:submission_download_subdir' recent.id recent.SUPLEMENT_DIR filename %}>{{ filename }}</a>
+      </td>
       <td>Uploaded File</td>
       <td>{{ create_date }}</td>
       <td>{{ size }}</td>
       {% if instructor_view or ta_view %}
-      <td><a class='btn btn-primary' href={% url 'grader:submission_delete_subdir' recent.id recent.SUPLEMENT_DIR filename %}>
-      <span class="bi bi-trash"></span>
-      </a></td>
+      <td><a class='btn btn-primary'
+          href={% url 'grader:submission_delete_subdir' recent.id recent.SUPLEMENT_DIR filename %}>
+          <span class="bi bi-trash"></span>
+        </a></td>
       {% endif %}
-  </tr>
-  {% endfor %}
-  
-  
-  {% for filename, size, create_date in report_files %}
-  <tr>
-      <td><a href={% url 'grader:submission_download_subdir' recent.id recent.REPORT_DIR filename %}>{{ filename }}</a></td>
+    </tr>
+    {% endfor %}
+
+
+    {% for filename, size, create_date in report_files %}
+    <tr>
+      <td><a href={% url 'grader:submission_download_subdir' recent.id recent.REPORT_DIR filename %}>{{ filename }}</a>
+      </td>
       {% if show_report %}
       <td>Autograder File</td>
       {% else %}
@@ -116,18 +134,19 @@
       <td>{{ create_date }}</td>
       <td>{{ size }}</td>
       {% if instructor_view or ta_view %}
-      <td><a class='btn btn-primary' href={% url 'grader:submission_delete_subdir' recent.id recent.REPORT_DIR filename %}>
-      <span class="bi bi-trash"></span>
-      </a></td>
+      <td><a class='btn btn-primary'
+          href={% url 'grader:submission_delete_subdir' recent.id recent.REPORT_DIR filename %}>
+          <span class="bi bi-trash"></span>
+        </a></td>
       {% endif %}
-  </tr>
-  {% endfor %}
-  
+    </tr>
+    {% endfor %}
+
   </table>
   {% endif %}
-  
+
   {% endif %}
-  
+
   {% if instructor_view or ta_view %}
   <form method="POST" id='file_form' enctype="multipart/form-data">
     {% csrf_token %}
@@ -137,6 +156,6 @@
     <button type="submit" class="btn btn-primary" name="action" value="add_file">Add</button>
   </form>
   {% endif %}
-  </div>
+</div>
 
 {% endblock %}

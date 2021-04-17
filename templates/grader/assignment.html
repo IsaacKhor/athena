@@ -60,7 +60,7 @@ This assignment <b>is visible</b> to students.
 <div class='container'>
   <h3 class='mt-3'>Assignment Files</h3>
   {% if files|length > 0 %}
-  
+
   <table class='table table-striped'>
     <th>Filename</th>
     <th>Date Created</th>
@@ -72,14 +72,14 @@ This assignment <b>is visible</b> to students.
       <td>{{ size }}</td>
       {% if instructor_view %}
       <td><a class='btn btn-primary' href={% url 'grader:assgn_file_delete' assgn.id filename %}>
-        <span class="bi bi-trash"></span>
-      </a></td>
+          <span class="bi bi-trash"></span>
+        </a></td>
       {% endif %}
     </tr>
     {% endfor %}
   </table>
   {% endif %}
-  
+
   {% if instructor_view %}
   <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
@@ -90,7 +90,7 @@ This assignment <b>is visible</b> to students.
     </button>
   </form>
   {% endif %}
-  
+
 </div>
 {% endif %}
 
@@ -98,7 +98,7 @@ This assignment <b>is visible</b> to students.
 
 <div class='container-fluid'>
   <h3 class='mt-3'>Submit</h3>
-  
+
   {% if form %}
   <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
@@ -112,7 +112,7 @@ This assignment <b>is visible</b> to students.
   {% elif max_subs %}
   You have submitted the maximum number of times
   {% endif %}
-  
+
 </div>
 
 {% if prev_submissions|length > 0 %}
@@ -124,15 +124,15 @@ This assignment <b>is visible</b> to students.
     <th>Download</th>
     {% for s in prev_submissions %}
     <tr>
-      
+
       <td>
         <a href={% url 'grader:submissions' assgn.id user.id %}>{{s.sub_date}}</a>
       </td>
       <td> {{ s|submission_status:student_view }} </td>
       <!--Download option-->
       <td><button class="btn btn-primary btn-sm" href={% url 'grader:submission_download' s.id %}>
-        <i class="bi bi-download"></i>
-      </button></td>
+          <i class="bi bi-download"></i>
+        </button></td>
     </tr>
     {% endfor %}
   </table>
@@ -146,22 +146,22 @@ You have not submitted anything for this assignment yet
 {% if ta_view or instructor_view %}
 <div class='container-fluid'>
   <h2 class='mt-3'>Submissions</h2>
-  
+
   <form method='POST'>
     {% csrf_token %}
-    
+
     {% if show_autograde %}
     <button type='submit' class='btn btn-primary' name='action' value="show_reports">
       <span class="bi bi-eye-fill"></span> Show Selected Reports
     </button>
-    
+
     <button type='submit' class='btn btn-primary' name='action' value="hide_reports">
       <span class="bi bi-eye-slash-fill"></span> Hide Selected Reports
     </button>
     <br />
     <br />
     {% endif %}
-    
+
     Download:
     <label><input type='checkbox' name='download_type' value='submissions' checked> Submissions </label>
     <label><input type='checkbox' name='download_type' value='grades' checked> Grades </label>
@@ -169,14 +169,14 @@ You have not submitted anything for this assignment yet
     <label><input type='checkbox' name='download_type' value='reports' checked> Reports </label>
     {% endif %}
     <br />
-    
+
     <button type='submit' class='btn btn-primary' name='action' value="download_many">
       <span class="bi bi-download"></span> Download Selected
     </button>
-    
+
     <br />
     <br />
-    
+
     <table class="table table-striped">
       <th><input type='checkbox' onClick='toggle_selected(this, "submissions")'></th>
       <th>Student</th>
@@ -184,30 +184,30 @@ You have not submitted anything for this assignment yet
       <th>Status</th>
       <th>Grade</th>
       <th>Download</th>
-      
+
       {% if show_autograde %}<th>Report</th> {%endif%}
-      
+
       {% for recent in recent_subs %}
       <tr valign='center'>
         <td><input type='checkbox' name='submissions' value='{{recent.id}}'></td>
         <td><a href={% url 'grader:submissions' assgn.id recent.student.id %}>
-          {{recent.student.first_name}} {{recent.student.last_name}}</a>
+            {{recent.student.first_name}} {{recent.student.last_name}}</a>
         </td>
         <td>{{recent.sub_date}}</td>
         <td>{{recent|submission_status:student_view}}</td>
-        
+
         <!--Details option-->
         <td><button class="btn btn-primary" href={% url 'grader:submissions' assgn.id recent.student.id %}>
-          <span class="bi bi-check"></span>
-        </button></td>
-        
+            <span class="bi bi-check"></span>
+          </button></td>
+
         <!--Download option-->
         <td><button class="btn btn-primary" href={% url 'grader:submission_download' recent.id %}>
-          <span class="bi bi-download"></span>
-        </button></td>
-        
+            <span class="bi bi-download"></span>
+          </button></td>
+
         {% if show_autograde %}
-        
+
         <td>
           {% if recent.autograderresult %}
           {% if recent.autograderresult.visible %}
