@@ -23,7 +23,9 @@
 
 {% block breadcrumbs %}
 <li class='breadcrumb-item'><a href={% url 'grader:home' %}>Home</a></li>
-<li class='breadcrumb-item'><a href={% url 'grader:course' assgn.course.id %}>{{assgn.course.code}}</a></li>
+<li class='breadcrumb-item'><a
+    href={% url 'grader:course' assgn.course.id %}>{{assgn.course.code}}</a>
+</li>
 <li class='breadcrumb-item active'>Assignment</li>
 {% endblock %}
 
@@ -31,7 +33,8 @@
 <h1>{{assgn.code}}: {{assgn.title}}</h1>
 
 {% if instructor_view %}
-<a class='btn btn-primary' href={% url 'grader:edit_assgn' assgn.course.id assgn.id %}>
+<a class='btn btn-primary'
+  href={% url 'grader:edit_assgn' assgn.course.id assgn.id %}>
   <span class="bi bi-pencil-square"></span> Edit Assignment
 </a><br />
 {% endif %}
@@ -67,11 +70,14 @@ This assignment <b>is visible</b> to students.
     <th>Size (bytes)</th>{% if instructor_view %}<th>Delete</th>{% endif %}
     {% for filename, size, create_date in files %}
     <tr>
-      <td><a href={% url 'grader:assgn_file_download' assgn.id filename%}>{{ filename }}</a></td>
+      <td><a
+          href={% url 'grader:assgn_file_download' assgn.id filename%}>{{ filename }}</a>
+      </td>
       <td>{{ create_date }}</td>
       <td>{{ size }}</td>
       {% if instructor_view %}
-      <td><a class='btn btn-primary' href={% url 'grader:assgn_file_delete' assgn.id filename %}>
+      <td><a class='btn btn-primary'
+          href={% url 'grader:assgn_file_delete' assgn.id filename %}>
           <span class="bi bi-trash"></span>
         </a></td>
       {% endif %}
@@ -85,7 +91,8 @@ This assignment <b>is visible</b> to students.
     {% csrf_token %}
     {{ file_form }}
     <br />
-    <button type="submit" class="btn btn-primary" name="action" value="add_file">
+    <button type="submit" class="btn btn-primary" name="action"
+      value="add_file">
       <span class="bi bi-plus"></span>Add File
     </button>
   </form>
@@ -126,11 +133,13 @@ This assignment <b>is visible</b> to students.
     <tr>
 
       <td>
-        <a href={% url 'grader:submissions' assgn.id user.id %}>{{s.sub_date}}</a>
+        <a
+          href={% url 'grader:submissions' assgn.id user.id %}>{{s.sub_date}}</a>
       </td>
       <td> {{ s|submission_status:student_view }} </td>
       <!--Download option-->
-      <td><button class="btn btn-primary btn-sm" href={% url 'grader:submission_download' s.id %}>
+      <td><button class="btn btn-primary btn-sm"
+          href={% url 'grader:submission_download' s.id %}>
           <i class="bi bi-download"></i>
         </button></td>
     </tr>
@@ -151,11 +160,13 @@ You have not submitted anything for this assignment yet
     {% csrf_token %}
 
     {% if show_autograde %}
-    <button type='submit' class='btn btn-primary' name='action' value="show_reports">
+    <button type='submit' class='btn btn-primary' name='action'
+      value="show_reports">
       <span class="bi bi-eye-fill"></span> Show Selected Reports
     </button>
 
-    <button type='submit' class='btn btn-primary' name='action' value="hide_reports">
+    <button type='submit' class='btn btn-primary' name='action'
+      value="hide_reports">
       <span class="bi bi-eye-slash-fill"></span> Hide Selected Reports
     </button>
     <br />
@@ -163,14 +174,18 @@ You have not submitted anything for this assignment yet
     {% endif %}
 
     Download:
-    <label><input type='checkbox' name='download_type' value='submissions' checked> Submissions </label>
-    <label><input type='checkbox' name='download_type' value='grades' checked> Grades </label>
+    <label><input type='checkbox' name='download_type' value='submissions'
+        checked> Submissions </label>
+    <label><input type='checkbox' name='download_type' value='grades' checked>
+      Grades </label>
     {% if show_autograde %}
-    <label><input type='checkbox' name='download_type' value='reports' checked> Reports </label>
+    <label><input type='checkbox' name='download_type' value='reports' checked>
+      Reports </label>
     {% endif %}
     <br />
 
-    <button type='submit' class='btn btn-primary' name='action' value="download_many">
+    <button type='submit' class='btn btn-primary' name='action'
+      value="download_many">
       <span class="bi bi-download"></span> Download Selected
     </button>
 
@@ -178,7 +193,8 @@ You have not submitted anything for this assignment yet
     <br />
 
     <table class="table table-striped">
-      <th><input type='checkbox' onClick='toggle_selected(this, "submissions")'></th>
+      <th><input type='checkbox' onClick='toggle_selected(this, "submissions")'>
+      </th>
       <th>Student</th>
       <th>Last Submission</th>
       <th>Status</th>
@@ -189,7 +205,8 @@ You have not submitted anything for this assignment yet
 
       {% for recent in recent_subs %}
       <tr valign='center'>
-        <td><input type='checkbox' name='submissions' value='{{recent.id}}'></td>
+        <td><input type='checkbox' name='submissions' value='{{recent.id}}'>
+        </td>
         <td><a href={% url 'grader:submissions' assgn.id recent.student.id %}>
             {{recent.student.first_name}} {{recent.student.last_name}}</a>
         </td>
@@ -197,12 +214,14 @@ You have not submitted anything for this assignment yet
         <td>{{recent|submission_status:student_view}}</td>
 
         <!--Details option-->
-        <td><button class="btn btn-primary" href={% url 'grader:submissions' assgn.id recent.student.id %}>
+        <td><button class="btn btn-primary"
+            href={% url 'grader:submissions' assgn.id recent.student.id %}>
             <span class="bi bi-check"></span>
           </button></td>
 
         <!--Download option-->
-        <td><button class="btn btn-primary" href={% url 'grader:submission_download' recent.id %}>
+        <td><button class="btn btn-primary"
+            href={% url 'grader:submission_download' recent.id %}>
             <span class="bi bi-download"></span>
           </button></td>
 

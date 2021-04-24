@@ -1,13 +1,18 @@
 {% extends "base.html" %}
 {% load tags %}
 
-{% block title %}{{recent.assignment.code}} Submission - {{recent.student}}{% endblock %}
+{% block title %}{{recent.assignment.code}} Submission -
+{{recent.student}}{% endblock %}
 {% block header %}{{recent.student.username}} {% endblock %}
 
 {% block breadcrumbs %}
 <li class='breadcrumb-item'><a href={% url 'grader:home' %}>Home</a></li>
-<li class='breadcrumb-item'><a href={% url 'grader:course' recent.assignment.course.id %}>{{recent.assignment.course.code}}</a></li>
-<li class='breadcrumb-item'><a href={% url 'grader:assignment' recent.assignment.id %}>{{recent.assignment.code}}</a></li>
+<li class='breadcrumb-item'><a
+    href={% url 'grader:course' recent.assignment.course.id %}>{{recent.assignment.course.code}}</a>
+</li>
+<li class='breadcrumb-item'><a
+    href={% url 'grader:assignment' recent.assignment.id %}>{{recent.assignment.code}}</a>
+</li>
 <li class='breadcrumb-item active'>Submission</li>
 {% endblock %}
 
@@ -56,13 +61,15 @@
     {% endif %}
 
   </table>
-  <button class="btn btn-primary" href={% url 'grader:submission_download' recent.id %}>
+  <button class="btn btn-primary"
+    href={% url 'grader:submission_download' recent.id %}>
     <span class="bi bi-download"></span> Download Submission
   </button>
 
 
   {% if instructor_view and recent.autograderresult %}
-  <button class="btn btn-primary" href={% url 'grader:reset_autograde' recent.autograderresult.id %}>
+  <button class="btn btn-primary"
+    href={% url 'grader:reset_autograde' recent.autograderresult.id %}>
     <span class="bi bi-arrow-repeat"></span> Re-run Autograder
   </button>
   {% endif %}
@@ -80,10 +87,12 @@
     <table class="table">
       {{ form.as_table }}
     </table>
-    <button type="submit" class="btn btn-primary" name="action" value="grade">Submit</button>
+    <button type="submit" class="btn btn-primary" name="action"
+      value="grade">Submit</button>
 
     {% if recent.status == recent.CH_GRADED %}
-    <button class="btn btn-primary" href={% url 'grader:remove_grade' recent.grade.id %}>
+    <button class="btn btn-primary"
+      href={% url 'grader:remove_grade' recent.grade.id %}>
       <span class="bi bi-trash"></span> Remove Grade
     </button>
     {% endif %}
@@ -102,7 +111,8 @@
     <th>Filename</th>
     <th>Info</th>
     <th>Date Created</th>
-    <th>Size (bytes)</th>{% if instructor_view or ta_view %}<th>Delete</th>{% endif %}
+    <th>Size (bytes)</th>{% if instructor_view or ta_view %}<th>Delete</th>
+    {% endif %}
 
     {% for filename, size, create_date in suplement_files %}
     <tr>
@@ -124,7 +134,8 @@
 
     {% for filename, size, create_date in report_files %}
     <tr>
-      <td><a href={% url 'grader:submission_download_subdir' recent.id recent.REPORT_DIR filename %}>{{ filename }}</a>
+      <td><a
+          href={% url 'grader:submission_download_subdir' recent.id recent.REPORT_DIR filename %}>{{ filename }}</a>
       </td>
       {% if show_report %}
       <td>Autograder File</td>
@@ -153,7 +164,8 @@
     <table class="table">
       {{ file_form.as_table }}
     </table>
-    <button type="submit" class="btn btn-primary" name="action" value="add_file">Add</button>
+    <button type="submit" class="btn btn-primary" name="action"
+      value="add_file">Add</button>
   </form>
   {% endif %}
 </div>

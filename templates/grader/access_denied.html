@@ -12,11 +12,13 @@
 
 <h1>Access denined</h1>
 <p>
-    You do not have permission to view this resource related to <b>{{ course.code }}: {{course.title}}
+    You do not have permission to view this resource related to
+    <b>{{ course.code }}: {{course.title}}
         ({{ course.semester }}, section {{course.section}})</b>
 </p>
 <p>
-    If you believe this is an error please contact one of the course instructors listed below:<br>
+    If you believe this is an error please contact one of the course instructors
+    listed below:<br>
 </p>
 
 {% for i in course.instructors.all %}

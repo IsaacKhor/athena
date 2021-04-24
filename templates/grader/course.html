@@ -36,7 +36,8 @@
     {% for a in assignments %}
     {% if a.is_visible or not student_view %}
     <tr>
-      <td><a href={% url 'grader:assignment' a.id %}>{{a.code}}: {{a.title}}</a></td>
+      <td><a href={% url 'grader:assignment' a.id %}>{{a.code}}: {{a.title}}</a>
+      </td>
       <td>{{a.due_date}}</td>
       <td>
         {% if student_view %}
@@ -92,11 +93,14 @@
     <th>Size (bytes)</th>{% if instructor_view %}<th>Delete</th>{% endif %}
     {% for filename, size, create_date in files %}
     <tr>
-      <td><a href={% url 'grader:course_file_download' course.id filename%}>{{ filename }}</a></td>
+      <td><a
+          href={% url 'grader:course_file_download' course.id filename%}>{{ filename }}</a>
+      </td>
       <td>{{ create_date }}</td>
       <td>{{ size }}</td>
       {% if instructor_view %}
-      <td><a class='btn btn-primary' href={% url 'grader:course_file_delete' course.id filename %}>
+      <td><a class='btn btn-primary'
+          href={% url 'grader:course_file_delete' course.id filename %}>
           <span class="bi bi-trash"></span>
         </a></td>
       {% endif %}
@@ -110,16 +114,19 @@
     {% csrf_token %}
     {{ file_form }}
     <br />
-    <a type="submit" class="btn btn-primary"><span class="bi bi-plus"></span> Add File</a>
+    <a type="submit" class="btn btn-primary"><span class="bi bi-plus"></span>
+      Add File</a>
   </form>
   {% endif %}
 
   {% endif %}
 
   {% if instructor_view or ta_view %}
-  <h2 class='mt-3'>Student{% if course.students.all|length > 1 %}s{% endif %}</h2>
+  <h2 class='mt-3'>Student{% if course.students.all|length > 1 %}s{% endif %}
+  </h2>
   {% for s in course.students.all %}
-  <li><a href='mailto:{{s.email}}'>{{s.first_name}} {{s.last_name}} &lt{{s.email}}&gt</a><br /></li>
+  <li><a href='mailto:{{s.email}}'>{{s.first_name}} {{s.last_name}}
+      &lt{{s.email}}&gt</a><br /></li>
   {% endfor %}
   {% endif %}
 
@@ -128,13 +135,15 @@
 
   <h4>Intsructor{% if course.instructors.all|length > 1 %}s{% endif %}</h4>
   {% for i in course.instructors.all %}
-  <li><a href='mailto:{{i.email}}'>{{i.first_name}} {{i.last_name}} &lt{{i.email}}&gt</a><br /></li>
+  <li><a href='mailto:{{i.email}}'>{{i.first_name}} {{i.last_name}}
+      &lt{{i.email}}&gt</a><br /></li>
   {% endfor %}
 
   {% if course.tas.all|length > 0 %}
   <h4>Teaching Assistant{% if course.tas.all|length > 1 %}s{% endif %}</h4>
   {% for t in course.tas.all %}
-  <li><a href='mailto:{{t.email}}'>{{t.first_name}} {{t.last_name}} &lt{{t.email}}&gt</a><br /></li>
+  <li><a href='mailto:{{t.email}}'>{{t.first_name}} {{t.last_name}}
+      &lt{{t.email}}&gt</a><br /></li>
   {% endfor %}
   {% endif %}
 </div>
