@@ -298,7 +298,7 @@ def assignment(request, assgnid):
                 students_added.add(s.student)
         
         #Check to show options for autograder reports
-        params['show_autograde'] = assgn.autograde_mode != Assignment.NO_AUTOGRADE
+        params['show_autograde'] = assgn.autograde_mode != Assignment.MANUAL_GRADE
             
     #Render the page
     return render(request, 'grader/assignment.html', params)
@@ -402,7 +402,7 @@ def edit_assgn(request, courseid, assgnid=None):
     Renders a page for editting an assignment
     If no assignment ID provided, will generate empty form to create a new assignment
     """
-    
+
     #Make sure user is logged in
     if not load_user_groups(request.user):
         return login_redirect(request)
@@ -446,7 +446,6 @@ def edit_course(request, courseid=None):
     Renders a page for editing a course
     If no course ID provided, will generate empty form to create a new course
     """
-    
     #Make sure user is logged in
     if not load_user_groups(request.user):
         return login_redirect(request)

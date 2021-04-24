@@ -146,6 +146,9 @@ TEMP_DIR = MEDIA_ROOT / 'tmp'
 #Email host to use for usernames
 DEFAULT_EMAIL_HOST = "clarku.edu"
 
+# Custom settinsg
+AUTOGRADER_DIR = BASE_DIR / 'autograder'
+
 # Queue for django-rq tasks (running the autograder)
 RQ_QUEUES = {
     'default': {

@@ -11,7 +11,7 @@ class AssgnForm(ModelForm):
         model = Assignment
         fields = ['title', 'code', 'desc', 'desc_format', 'due_date', 
                   'enforce_deadline', 'max_grade', 'max_subs', 
-                  'visible_date', 'autograde_mode']
+                  'visible_date', 'autograde_mode', 'autograder_path']
 
     def __init__(self, *args, **kwargs):
         super(AssgnForm, self).__init__(*args, **kwargs)
@@ -62,7 +62,7 @@ class SubmitForm(Form):
         new_sub = Submission(assignment=self.assignment, student=self.user)
         
         #Set status to needing to be autograded if assignment is autograded
-        if self.assignment.autograde_mode != Assignment.NO_AUTOGRADE:
+        if self.assignment.autograde_mode != Assignment.MANUAL_GRADE:
             new_sub.status = Submission.CH_TO_AUTOGRADE
         
         #Set as user's most recent submission
