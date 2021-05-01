@@ -17,7 +17,7 @@ INSTALLED_APPS = (
     # third party packages
     'django_bootstrap5',
     'django_python3_ldap',
-    'django_rq',
+    'django_q',
 
     #django apps
     'django.contrib.admin',
@@ -142,23 +142,10 @@ MEDIA_ROOT = BASE_DIR / 'runtimedata'
 SUBMISSION_DIR = MEDIA_ROOT / 'submissions'
 COURSE_DIR = MEDIA_ROOT / 'course_files'
 TEMP_DIR = MEDIA_ROOT / 'tmp'
+AUTOGRADER_DIR = BASE_DIR / 'autograder' # Location of autograder .zip files
 
 #Email host to use for usernames
 DEFAULT_EMAIL_HOST = "clarku.edu"
-
-# Custom settinsg
-AUTOGRADER_DIR = BASE_DIR / 'autograder'
-
-# Queue for django-rq tasks (running the autograder)
-RQ_QUEUES = {
-    'default': {
-        'HOST': 'localhost',
-        'PORT': 6379,
-        'DB': 0,
-        'PASSWORD': 'some-password',
-        'DEFAULT_TIMEOUT': 300,
-    }
-}
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -168,4 +155,16 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'runtimedata' / 'db.sqlite3',
     }
+}
+
+# Django-q cluster config
+Q_CLUSTER = {
+    'name': 'autograder-cluster',
+    'workers': 6,
+    'recycle': 500,
+    'timeout': 900, # in seconds, can be overriden per-task
+    'compress': False,
+    'save_limit': 100,
+    'queue_limit': 36,
+    'label': 'Autograder Queue',
 }
