@@ -2,10 +2,10 @@
 
 set -euo pipefail
 
-$base_dir="$1"
-$autograder_zip="$2"
-$submission_zip="$3"
-$reports_dir="$4"
+base_dir="$1"
+autograder_zip="$2"
+submission_zip="$3"
+reports_dir="$4"
 
 # Make and enter the base directory
 mkdir -p "$base_dir"
@@ -21,7 +21,7 @@ mkdir -p "submission"
 unzip "$submission_zip" -d "submission/"
 
 # Run the run_autograder script that should be in here
-mkdir 'results'
+mkdir -p 'results'
 echo "=== Running autograder ==="
 . run_autograder
 
