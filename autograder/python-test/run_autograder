@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-mkdir -p output
-python3 sumtest.py > results.json
+cp submission/* ./
+python3 sumtest.py > results/results.json
