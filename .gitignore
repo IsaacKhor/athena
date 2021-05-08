@@ -5,6 +5,7 @@
 runtimedata/
 autograders/
 static/admin/
+dump.rdb
 
 # Misc
 __pycache__/

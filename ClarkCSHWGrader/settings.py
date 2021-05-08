@@ -142,7 +142,10 @@ MEDIA_ROOT = BASE_DIR / 'runtimedata'
 SUBMISSION_DIR = MEDIA_ROOT / 'submissions'
 COURSE_DIR = MEDIA_ROOT / 'course_files'
 TEMP_DIR = MEDIA_ROOT / 'tmp'
+
+# Autograder settings
 AUTOGRADER_DIR = BASE_DIR / 'autograder' # Location of autograder .zip files
+AUTOGRADE_SCRIPT = BASE_DIR / 'autograder' / 'autograde.sh'
 
 #Email host to use for usernames
 DEFAULT_EMAIL_HOST = "clarku.edu"
@@ -152,8 +155,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Database, test only
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'runtimedata' / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'athena',
+        'USER': 'athena',
+        'PASSWORD': 'athena',
+        'HOST': 'localhost',
+        'PORT': 5432,
     }
 }
 
@@ -163,6 +170,7 @@ Q_CLUSTER = {
     'workers': 6,
     'recycle': 500,
     'timeout': 900, # in seconds, can be overriden per-task
+    'retry': 1000,
     'compress': False,
     'save_limit': 100,
     'queue_limit': 36,
