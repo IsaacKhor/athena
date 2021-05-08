@@ -452,11 +452,11 @@ class Submission(models.Model):
     CH_PREVIOUS = 3
     CH_TO_AUTOGRADE = 4
     STATUS_CHOICES = (
-        (CH_SUBMITTED, 'Submitted'),
-        (CH_AUTOGRADED, 'Autograded'), 
-        (CH_GRADED, 'Instructor Graded'),
         (CH_PREVIOUS, 'Past'),
-        (CH_TO_AUTOGRADE, 'Submitted'),
+        (CH_SUBMITTED, 'Submitted (waiting for grade)'),
+        (CH_GRADED, 'Graded (manually)'),
+        (CH_AUTOGRADED, 'Graded (autograde)'), 
+        (CH_TO_AUTOGRADE, 'Waiting for autograde'),
     )
     
     #Name of direcories to store extra files
@@ -538,15 +538,15 @@ class Submission(models.Model):
     def get_directory(self, subdir=None):
         """
         Builds the path to the directory where this submission is stored
-        Will be "<SUBMISSION_DIR>/<self.id>", where SUBMISSION_DIR is defined in settings.py
+        Will be "<SUBMISSION_DIR>/<self.assignment.id>/<self.id>", 
+        where SUBMISSION_DIR is defined in settings.py
         
         Also allows for optional subdirectory (such as 'report' or 'suplement')
         """
-        path = os.path.join(settings.SUBMISSION_DIR, str(self.id))
-        
+        path = settings.SUBMISSION_DIR / str(self.assignment.id) / str(self.id)
         if subdir:
-            path = os.path.join(path, subdir)
-            
+            path = path / subdir
+
         return path
         
         
