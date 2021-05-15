@@ -1,17 +1,12 @@
 from django.shortcuts import render
 from django.http import *
 from django.urls import reverse
-from django.contrib.auth.models import User, Group
-import django.contrib.auth as auth
 
 from grader.models import *
 from grader.forms import *
-from datetime import datetime
-from django.db.models import Max
 
 import os
 import mimetypes
-import re
 
 
 def submission_download(request, subid, subdir=None, filename=None):
@@ -228,10 +223,4 @@ def get_download(filename):
     Filename must be full filesystem path
     """
     basename = os.path.basename(filename)
-    chunk_size = 8192
-    with open(filename, 'rb') as fh:
-        content = fh.read()
-    response = StreamingHttpResponse(content, content_type=mimetypes.guess_type(filename)[0])
-    response['Content-Length'] = os.path.getsize(filename)    
-    response['Content-Disposition'] = "attachment; filename=%s" % basename
-    return response
+    return FileResponse(open(filename, 'rb'), as_attachment=False, filename=basename)
