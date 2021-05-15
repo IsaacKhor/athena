@@ -306,8 +306,8 @@ class Assignment(models.Model):
     # The zipped autograder file
     # Check documentation for how the zip must be structured
     autograder_path = models.FilePathField(
-        blank=True, null=False, default='',
-        path=settings.AUTOGRADER_DIR.as_posix(), verbose_name='autograder zip path',
+        blank=True, null=False, default='', verbose_name='autograder zip path',
+        match=r'.*\.zip', path=settings.AUTOGRADER_DIR.as_posix(),
         recursive=True, allow_folders=False, allow_files=True)
     
     #######################
