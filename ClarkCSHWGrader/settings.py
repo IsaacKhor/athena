@@ -18,6 +18,7 @@ INSTALLED_APPS = (
     'django_bootstrap5',
     'django_python3_ldap',
     'django_q',
+    'django_extensions',
 
     #django apps
     'django.contrib.admin',
