@@ -1,6 +1,7 @@
 from django.forms import *
 from grader.models import *
 from  django.contrib.auth.forms import AuthenticationForm
+import grader.tasks
 
 
 class AssgnForm(ModelForm):
@@ -36,6 +37,9 @@ class CourseForm(ModelForm):
         super(CourseForm, self).__init__(*args, **kwargs)
         bootstrapFormControls(self)
      
+
+def zip_validator(f):
+    pass
         
 class SubmitForm(Form):
     """
@@ -60,11 +64,9 @@ class SubmitForm(Form):
         
         #Create a new submission from the form data
         new_sub = Submission(assignment=self.assignment, student=self.user)
-        
-        #Set status to needing to be autograded if assignment is autograded
-        if self.assignment.autograde_mode != Assignment.MANUAL_GRADE:
-            new_sub.status = Submission.CH_TO_AUTOGRADE
-        
+
+        is_autograde = self.assignment.autograde_mode == Assignment.AUTOGRADE
+
         #Set as user's most recent submission
         new_sub.set_recent()
         
@@ -80,7 +82,11 @@ class SubmitForm(Form):
         with open(filename, 'wb+') as f:
             for chunk in self.cleaned_data['sub_file'].chunks():
                 f.write(chunk)
-        
+
+        if is_autograde:
+            new_sub.status = Submission.CH_TO_AUTOGRADE
+            grader.tasks.autograde_submission(new_sub, filename)
+
         return new_sub
       
         

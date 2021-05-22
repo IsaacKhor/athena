@@ -464,6 +464,7 @@ class Submission(models.Model):
     #SUBMISSION_DIR specified in settings.py
     REPORT_DIR = "report"
     SUPLEMENT_DIR = "suplements"
+    RESULTS_FILENAME = 'results.json'
     
     #########################
     # Start of model fields #
@@ -548,6 +549,18 @@ class Submission(models.Model):
             path = path / subdir
 
         return path
+
+    
+    def get_report_dir(self):
+        d = self.get_directory(self.REPORT_DIR)
+        if not d.exists():
+            d.mkdir(parents=True)
+        return d
+
+    
+    def get_autograde_output_log(self):
+        reportd = self.get_report_dir()
+        return (reportd / 'autograder_stdout.log').resolve()
         
         
     def get_filename(self):
@@ -666,11 +679,19 @@ class AutograderResult(models.Model):
     #Will not shown if false
     #Currently must be manually set to true (by instructor)
     #Eventually may be changed automatically after due date
-    visible = models.BooleanField(default=False)
+    # EDIT: just make it true by default
+    visible = models.BooleanField(default=True)
+
+    # Represents if autograder completed successfully
+    # Failure defined as non-zero exit code
+    autograde_success = models.BooleanField()
     
     #######################
     # End of model fields #
     #######################
+
+    def get_logfile(self):
+        return self.submission.get_autograde_output_log()
         
     def __str__(self):
         """
