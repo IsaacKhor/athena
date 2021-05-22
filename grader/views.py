@@ -1,18 +1,14 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect, StreamingHttpResponse, HttpResponseNotFound
+from django.http import *
 from django.urls import reverse
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User
 import django.contrib.auth as auth
 
 from grader.models import *
 from grader.forms import *
-from datetime import datetime
-from django.db.models import Max
 
 from grader.file_access import get_download
 
-import os
-import mimetypes
 import re
 
 
