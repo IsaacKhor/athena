@@ -21,7 +21,7 @@ urlpatterns = [
 
     path('submissions/<int:subid>/download'                         , file_access.submission_download, name='submission_download'),
     path('submissions/<int:subid>/<str:subdir>/<str:filename>/download', file_access.submission_download, name='submission_download_subdir'),
-    path('submissions/<int:subid>/<str:subdir>/<str:filename>/delete', file_access.submission_download, name='submission_download_subdir'),
+    path('submissions/<int:subid>/<str:subdir>/<str:filename>/delete', file_access.submission_download, name='submission_delete_subdir'),
 
     path('grades/<int:gradeid>/remove'                              , file_access.remove_grade,        name='remove_grade'),
     path('grades/<int:gradeid>/reset_autograde'                     , file_access.reset_autograde,     name='reset_autograde'),
