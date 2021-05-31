@@ -30,7 +30,6 @@ INSTALLED_APPS = (
 
     # custom apps
     'grader',
-    'autogapp'
 )
 
 MIDDLEWARE = [
