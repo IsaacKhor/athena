@@ -1,0 +1,1487 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>grader package &#8212; Athena  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="grader-package">
+<h1>grader package<a class="headerlink" href="#grader-package" title="Permalink to this headline">¶</a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="grader.migrations.html">grader.migrations package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="grader.migrations.html#module-grader.migrations.0001_initial">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="grader.migrations.html#module-grader.migrations">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="grader.templatetags.html">grader.templatetags package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="grader.templatetags.html#module-grader.templatetags.tags">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="grader.templatetags.html#module-grader.templatetags">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="module-grader.admin">
+<span id="submodules"></span><h2>Submodules<a class="headerlink" href="#module-grader.admin" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-grader.file_access"></span><dl class="py function">
+<dt class="sig sig-object py" id="grader.file_access.assgn_file_delete">
+<span class="sig-prename descclassname"><span class="pre">grader.file_access.</span></span><span class="sig-name descname"><span class="pre">assgn_file_delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">assgnid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.file_access.assgn_file_delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes an assignment file 
+Redirects back to submission page after</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="grader.file_access.assgn_file_download">
+<span class="sig-prename descclassname"><span class="pre">grader.file_access.</span></span><span class="sig-name descname"><span class="pre">assgn_file_download</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">assgnid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.file_access.assgn_file_download" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a download response for an assignment file (uploaded by an instructor/TA)</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="grader.file_access.course_file_delete">
+<span class="sig-prename descclassname"><span class="pre">grader.file_access.</span></span><span class="sig-name descname"><span class="pre">course_file_delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">courseid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.file_access.course_file_delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes a course file 
+Redirects back to submission page after</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="grader.file_access.course_file_download">
+<span class="sig-prename descclassname"><span class="pre">grader.file_access.</span></span><span class="sig-name descname"><span class="pre">course_file_download</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">courseid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.file_access.course_file_download" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a download response for a course file (uploaded by an instructor/TA)</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="grader.file_access.get_download">
+<span class="sig-prename descclassname"><span class="pre">grader.file_access.</span></span><span class="sig-name descname"><span class="pre">get_download</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.file_access.get_download" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a download response for a file on the server
+Filename must be full filesystem path</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="grader.file_access.grades_download">
+<span class="sig-prename descclassname"><span class="pre">grader.file_access.</span></span><span class="sig-name descname"><span class="pre">grades_download</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">courseid</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.file_access.grades_download" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="grader.file_access.remove_grade">
+<span class="sig-prename descclassname"><span class="pre">grader.file_access.</span></span><span class="sig-name descname"><span class="pre">remove_grade</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradeid</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.file_access.remove_grade" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes a grade from a user’s submission</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="grader.file_access.reset_autograde">
+<span class="sig-prename descclassname"><span class="pre">grader.file_access.</span></span><span class="sig-name descname"><span class="pre">reset_autograde</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradeid</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.file_access.reset_autograde" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes an autograder result from a user’s submission</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="grader.file_access.submission_delete">
+<span class="sig-prename descclassname"><span class="pre">grader.file_access.</span></span><span class="sig-name descname"><span class="pre">submission_delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subdir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.file_access.submission_delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes a suplemental or report file 
+Redirects back to submission page after</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="grader.file_access.submission_download">
+<span class="sig-prename descclassname"><span class="pre">grader.file_access.</span></span><span class="sig-name descname"><span class="pre">submission_download</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subdir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.file_access.submission_download" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a download response for a submission
+Can also download a suplementary file (uploaded by instructor) or autograder report, as specified by subdir and filename</p>
+</dd></dl>
+
+<span class="target" id="module-grader.forms"></span><dl class="py class">
+<dt class="sig sig-object py" id="grader.forms.AssgnForm">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">grader.forms.</span></span><span class="sig-name descname"><span class="pre">AssgnForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.forms.AssgnForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.forms.models.ModelForm</span></code></p>
+<p>Form for creating a new assignment</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="grader.forms.AssgnForm.Meta">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="headerlink" href="#grader.forms.AssgnForm.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.forms.AssgnForm.Meta.fields">
+<span class="sig-name descname"><span class="pre">fields</span></span><em class="property"> <span class="pre">=</span> <span class="pre">['title',</span> <span class="pre">'code',</span> <span class="pre">'desc',</span> <span class="pre">'desc_format',</span> <span class="pre">'due_date',</span> <span class="pre">'enforce_deadline',</span> <span class="pre">'max_grade',</span> <span class="pre">'max_subs',</span> <span class="pre">'visible_date',</span> <span class="pre">'autograde_mode',</span> <span class="pre">'autograder_path']</span></em><a class="headerlink" href="#grader.forms.AssgnForm.Meta.fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.forms.AssgnForm.Meta.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#grader.forms.AssgnForm.Meta.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#grader.models.Assignment" title="grader.models.Assignment"><code class="xref py py-class docutils literal notranslate"><span class="pre">grader.models.Assignment</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.forms.AssgnForm.base_fields">
+<span class="sig-name descname"><span class="pre">base_fields</span></span><em class="property"> <span class="pre">=</span> <span class="pre">{'autograde_mode':</span> <span class="pre">&lt;django.forms.fields.TypedChoiceField</span> <span class="pre">object&gt;,</span> <span class="pre">'autograder_path':</span> <span class="pre">&lt;django.forms.fields.FilePathField</span> <span class="pre">object&gt;,</span> <span class="pre">'code':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;,</span> <span class="pre">'desc':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;,</span> <span class="pre">'desc_format':</span> <span class="pre">&lt;django.forms.fields.TypedChoiceField</span> <span class="pre">object&gt;,</span> <span class="pre">'due_date':</span> <span class="pre">&lt;django.forms.fields.DateTimeField</span> <span class="pre">object&gt;,</span> <span class="pre">'enforce_deadline':</span> <span class="pre">&lt;django.forms.fields.BooleanField</span> <span class="pre">object&gt;,</span> <span class="pre">'max_grade':</span> <span class="pre">&lt;django.forms.fields.FloatField</span> <span class="pre">object&gt;,</span> <span class="pre">'max_subs':</span> <span class="pre">&lt;django.forms.fields.IntegerField</span> <span class="pre">object&gt;,</span> <span class="pre">'title':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;,</span> <span class="pre">'visible_date':</span> <span class="pre">&lt;django.forms.fields.DateTimeField</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#grader.forms.AssgnForm.base_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.forms.AssgnForm.declared_fields">
+<span class="sig-name descname"><span class="pre">declared_fields</span></span><em class="property"> <span class="pre">=</span> <span class="pre">{}</span></em><a class="headerlink" href="#grader.forms.AssgnForm.declared_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="grader.forms.AssgnForm.media">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#grader.forms.AssgnForm.media" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return all media required to render the widgets on this form.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="grader.forms.CourseForm">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">grader.forms.</span></span><span class="sig-name descname"><span class="pre">CourseForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.forms.CourseForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.forms.models.ModelForm</span></code></p>
+<p>Form for creating a new course</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="grader.forms.CourseForm.Meta">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="headerlink" href="#grader.forms.CourseForm.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.forms.CourseForm.Meta.fields">
+<span class="sig-name descname"><span class="pre">fields</span></span><em class="property"> <span class="pre">=</span> <span class="pre">['semester',</span> <span class="pre">'code',</span> <span class="pre">'section',</span> <span class="pre">'title',</span> <span class="pre">'desc',</span> <span class="pre">'desc_format']</span></em><a class="headerlink" href="#grader.forms.CourseForm.Meta.fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.forms.CourseForm.Meta.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#grader.forms.CourseForm.Meta.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#grader.models.Course" title="grader.models.Course"><code class="xref py py-class docutils literal notranslate"><span class="pre">grader.models.Course</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.forms.CourseForm.USER_TEXTAREA">
+<span class="sig-name descname"><span class="pre">USER_TEXTAREA</span></span><em class="property"> <span class="pre">=</span> <span class="pre">&lt;django.forms.widgets.Textarea</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#grader.forms.CourseForm.USER_TEXTAREA" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.forms.CourseForm.base_fields">
+<span class="sig-name descname"><span class="pre">base_fields</span></span><em class="property"> <span class="pre">=</span> <span class="pre">{'code':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;,</span> <span class="pre">'desc':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;,</span> <span class="pre">'desc_format':</span> <span class="pre">&lt;django.forms.fields.TypedChoiceField</span> <span class="pre">object&gt;,</span> <span class="pre">'instructor_field':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;,</span> <span class="pre">'section':</span> <span class="pre">&lt;django.forms.fields.IntegerField</span> <span class="pre">object&gt;,</span> <span class="pre">'semester':</span> <span class="pre">&lt;django.forms.models.ModelChoiceField</span> <span class="pre">object&gt;,</span> <span class="pre">'student_field':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;,</span> <span class="pre">'ta_field':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;,</span> <span class="pre">'title':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#grader.forms.CourseForm.base_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.forms.CourseForm.declared_fields">
+<span class="sig-name descname"><span class="pre">declared_fields</span></span><em class="property"> <span class="pre">=</span> <span class="pre">{'instructor_field':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;,</span> <span class="pre">'student_field':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;,</span> <span class="pre">'ta_field':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#grader.forms.CourseForm.declared_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="grader.forms.CourseForm.media">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#grader.forms.CourseForm.media" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return all media required to render the widgets on this form.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="grader.forms.FileUploadForm">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">grader.forms.</span></span><span class="sig-name descname"><span class="pre">FileUploadForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upload_dir</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.forms.FileUploadForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.forms.forms.Form</span></code></p>
+<p>Form for uploading a file</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.forms.FileUploadForm.base_fields">
+<span class="sig-name descname"><span class="pre">base_fields</span></span><em class="property"> <span class="pre">=</span> <span class="pre">{'file_field':</span> <span class="pre">&lt;django.forms.fields.FileField</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#grader.forms.FileUploadForm.base_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.forms.FileUploadForm.declared_fields">
+<span class="sig-name descname"><span class="pre">declared_fields</span></span><em class="property"> <span class="pre">=</span> <span class="pre">{'file_field':</span> <span class="pre">&lt;django.forms.fields.FileField</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#grader.forms.FileUploadForm.declared_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="grader.forms.FileUploadForm.media">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#grader.forms.FileUploadForm.media" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return all media required to render the widgets on this form.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.forms.FileUploadForm.save_file">
+<span class="sig-name descname"><span class="pre">save_file</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#grader.forms.FileUploadForm.save_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves the uploaded file to the directory specified on initialization</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="grader.forms.GradeForm">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">grader.forms.</span></span><span class="sig-name descname"><span class="pre">GradeForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sub</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.forms.GradeForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.forms.models.ModelForm</span></code></p>
+<p>Form to set an assignment grade</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="grader.forms.GradeForm.Meta">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="headerlink" href="#grader.forms.GradeForm.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.forms.GradeForm.Meta.fields">
+<span class="sig-name descname"><span class="pre">fields</span></span><em class="property"> <span class="pre">=</span> <span class="pre">['grade',</span> <span class="pre">'comments']</span></em><a class="headerlink" href="#grader.forms.GradeForm.Meta.fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.forms.GradeForm.Meta.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#grader.forms.GradeForm.Meta.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#grader.models.Grade" title="grader.models.Grade"><code class="xref py py-class docutils literal notranslate"><span class="pre">grader.models.Grade</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.forms.GradeForm.base_fields">
+<span class="sig-name descname"><span class="pre">base_fields</span></span><em class="property"> <span class="pre">=</span> <span class="pre">{'comments':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;,</span> <span class="pre">'grade':</span> <span class="pre">&lt;django.forms.fields.FloatField</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#grader.forms.GradeForm.base_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.forms.GradeForm.declared_fields">
+<span class="sig-name descname"><span class="pre">declared_fields</span></span><em class="property"> <span class="pre">=</span> <span class="pre">{}</span></em><a class="headerlink" href="#grader.forms.GradeForm.declared_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="grader.forms.GradeForm.media">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#grader.forms.GradeForm.media" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return all media required to render the widgets on this form.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="grader.forms.LoginForm">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">grader.forms.</span></span><span class="sig-name descname"><span class="pre">LoginForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.forms.LoginForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.contrib.auth.forms.AuthenticationForm</span></code></p>
+<p>Login form with bootstrap controls</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.forms.LoginForm.base_fields">
+<span class="sig-name descname"><span class="pre">base_fields</span></span><em class="property"> <span class="pre">=</span> <span class="pre">{'password':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;,</span> <span class="pre">'username':</span> <span class="pre">&lt;django.contrib.auth.forms.UsernameField</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#grader.forms.LoginForm.base_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.forms.LoginForm.declared_fields">
+<span class="sig-name descname"><span class="pre">declared_fields</span></span><em class="property"> <span class="pre">=</span> <span class="pre">{'password':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;,</span> <span class="pre">'username':</span> <span class="pre">&lt;django.contrib.auth.forms.UsernameField</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#grader.forms.LoginForm.declared_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="grader.forms.LoginForm.media">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#grader.forms.LoginForm.media" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return all media required to render the widgets on this form.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="grader.forms.SubmitForm">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">grader.forms.</span></span><span class="sig-name descname"><span class="pre">SubmitForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">assignment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.forms.SubmitForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.forms.forms.Form</span></code></p>
+<p>Form for submitting an assignment</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.forms.SubmitForm.base_fields">
+<span class="sig-name descname"><span class="pre">base_fields</span></span><em class="property"> <span class="pre">=</span> <span class="pre">{'sub_file':</span> <span class="pre">&lt;django.forms.fields.FileField</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#grader.forms.SubmitForm.base_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.forms.SubmitForm.declared_fields">
+<span class="sig-name descname"><span class="pre">declared_fields</span></span><em class="property"> <span class="pre">=</span> <span class="pre">{'sub_file':</span> <span class="pre">&lt;django.forms.fields.FileField</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#grader.forms.SubmitForm.declared_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="grader.forms.SubmitForm.media">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#grader.forms.SubmitForm.media" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return all media required to render the widgets on this form.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.forms.SubmitForm.save_submission">
+<span class="sig-name descname"><span class="pre">save_submission</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#grader.forms.SubmitForm.save_submission" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a new submission from the form input</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="grader.forms.bootstrapFormControls">
+<span class="sig-prename descclassname"><span class="pre">grader.forms.</span></span><span class="sig-name descname"><span class="pre">bootstrapFormControls</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.forms.bootstrapFormControls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets all widgets in a form to use bootstrap controls</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="grader.forms.zip_validator">
+<span class="sig-prename descclassname"><span class="pre">grader.forms.</span></span><span class="sig-name descname"><span class="pre">zip_validator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.forms.zip_validator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<span class="target" id="module-grader.models"></span><dl class="py class">
+<dt class="sig sig-object py" id="grader.models.Assignment">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">grader.models.</span></span><span class="sig-name descname"><span class="pre">Assignment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Assignment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.db.models.base.Model</span></code></p>
+<p>Stores an assignment for a course</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Assignment.AUTOGRADE">
+<span class="sig-name descname"><span class="pre">AUTOGRADE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">1</span></em><a class="headerlink" href="#grader.models.Assignment.AUTOGRADE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Assignment.AUTOGRADER_CHOICES">
+<span class="sig-name descname"><span class="pre">AUTOGRADER_CHOICES</span></span><em class="property"> <span class="pre">=</span> <span class="pre">((0,</span> <span class="pre">'No</span> <span class="pre">Autograder'),</span> <span class="pre">(1,</span> <span class="pre">'Autograde</span> <span class="pre">--</span> <span class="pre">results</span> <span class="pre">released</span> <span class="pre">immediately'))</span></em><a class="headerlink" href="#grader.models.Assignment.AUTOGRADER_CHOICES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="grader.models.Assignment.DoesNotExist">
+<em class="property"><span class="pre">exception</span> </em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#grader.models.Assignment.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.core.exceptions.ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Assignment.MANUAL_GRADE">
+<span class="sig-name descname"><span class="pre">MANUAL_GRADE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">0</span></em><a class="headerlink" href="#grader.models.Assignment.MANUAL_GRADE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="grader.models.Assignment.MultipleObjectsReturned">
+<em class="property"><span class="pre">exception</span> </em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#grader.models.Assignment.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.core.exceptions.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Assignment.autograde_mode">
+<span class="sig-name descname"><span class="pre">autograde_mode</span></span><a class="headerlink" href="#grader.models.Assignment.autograde_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Assignment.autograder_path">
+<span class="sig-name descname"><span class="pre">autograder_path</span></span><a class="headerlink" href="#grader.models.Assignment.autograder_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Assignment.code">
+<span class="sig-name descname"><span class="pre">code</span></span><a class="headerlink" href="#grader.models.Assignment.code" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Assignment.course">
+<span class="sig-name descname"><span class="pre">course</span></span><a class="headerlink" href="#grader.models.Assignment.course" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Assignment.course_id">
+<span class="sig-name descname"><span class="pre">course_id</span></span><a class="headerlink" href="#grader.models.Assignment.course_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Assignment.desc">
+<span class="sig-name descname"><span class="pre">desc</span></span><a class="headerlink" href="#grader.models.Assignment.desc" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Assignment.desc_format">
+<span class="sig-name descname"><span class="pre">desc_format</span></span><a class="headerlink" href="#grader.models.Assignment.desc_format" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Assignment.due_date">
+<span class="sig-name descname"><span class="pre">due_date</span></span><a class="headerlink" href="#grader.models.Assignment.due_date" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Assignment.enforce_deadline">
+<span class="sig-name descname"><span class="pre">enforce_deadline</span></span><a class="headerlink" href="#grader.models.Assignment.enforce_deadline" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Assignment.get_assignment_files">
+<span class="sig-name descname"><span class="pre">get_assignment_files</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Assignment.get_assignment_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns list of info about the assignment files in the form (filename, size, date created)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Assignment.get_assignment_path">
+<span class="sig-name descname"><span class="pre">get_assignment_path</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Assignment.get_assignment_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Builds path to the directory where files about the assignment are stored</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Assignment.get_autograde_mode_display">
+<span class="sig-name descname"><span class="pre">get_autograde_mode_display</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">*</span></em>, <em class="sig-param"><span class="pre">field=&lt;django.db.models.fields.IntegerField:</span> <span class="pre">autograde_mode&gt;</span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Assignment.get_autograde_mode_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Assignment.get_desc_format_display">
+<span class="sig-name descname"><span class="pre">get_desc_format_display</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">*</span></em>, <em class="sig-param"><span class="pre">field=&lt;django.db.models.fields.IntegerField:</span> <span class="pre">desc_format&gt;</span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Assignment.get_desc_format_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Assignment.get_description">
+<span class="sig-name descname"><span class="pre">get_description</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Assignment.get_description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns assignment description in specified format</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Assignment.get_directory">
+<span class="sig-name descname"><span class="pre">get_directory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Assignment.get_directory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Builds the path to the directory where all the submissions are stored</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Assignment.get_next_by_due_date">
+<span class="sig-name descname"><span class="pre">get_next_by_due_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">*</span></em>, <em class="sig-param"><span class="pre">field=&lt;django.db.models.fields.DateTimeField:</span> <span class="pre">due_date&gt;</span></em>, <em class="sig-param"><span class="pre">is_next=True</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Assignment.get_next_by_due_date" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Assignment.get_next_by_visible_date">
+<span class="sig-name descname"><span class="pre">get_next_by_visible_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">*</span></em>, <em class="sig-param"><span class="pre">field=&lt;django.db.models.fields.DateTimeField:</span> <span class="pre">visible_date&gt;</span></em>, <em class="sig-param"><span class="pre">is_next=True</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Assignment.get_next_by_visible_date" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Assignment.get_previous_by_due_date">
+<span class="sig-name descname"><span class="pre">get_previous_by_due_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">*</span></em>, <em class="sig-param"><span class="pre">field=&lt;django.db.models.fields.DateTimeField:</span> <span class="pre">due_date&gt;</span></em>, <em class="sig-param"><span class="pre">is_next=False</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Assignment.get_previous_by_due_date" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Assignment.get_previous_by_visible_date">
+<span class="sig-name descname"><span class="pre">get_previous_by_visible_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">*</span></em>, <em class="sig-param"><span class="pre">field=&lt;django.db.models.fields.DateTimeField:</span> <span class="pre">visible_date&gt;</span></em>, <em class="sig-param"><span class="pre">is_next=False</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Assignment.get_previous_by_visible_date" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Assignment.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#grader.models.Assignment.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Assignment.is_past_due">
+<span class="sig-name descname"><span class="pre">is_past_due</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Assignment.is_past_due" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true if due date is past</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Assignment.is_visible">
+<span class="sig-name descname"><span class="pre">is_visible</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Assignment.is_visible" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true if assignment is visible
+(i.e. if current date/time is after visible date)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Assignment.make_submissions_zip">
+<span class="sig-name descname"><span class="pre">make_submissions_zip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subids</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">incl_subs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">incl_reports</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">additional_files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Assignment.make_submissions_zip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates zip file of specified submissions and returns path to it
+Gives option to include or exclude submission file and report files
+Also allows additional files to be put into zip (for example, CSV of all grades)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Assignment.max_grade">
+<span class="sig-name descname"><span class="pre">max_grade</span></span><a class="headerlink" href="#grader.models.Assignment.max_grade" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Assignment.max_subs">
+<span class="sig-name descname"><span class="pre">max_subs</span></span><a class="headerlink" href="#grader.models.Assignment.max_subs" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Assignment.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"> <span class="pre">=</span> <span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#grader.models.Assignment.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Assignment.submission_set">
+<span class="sig-name descname"><span class="pre">submission_set</span></span><a class="headerlink" href="#grader.models.Assignment.submission_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Assignment.title">
+<span class="sig-name descname"><span class="pre">title</span></span><a class="headerlink" href="#grader.models.Assignment.title" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Assignment.visible_date">
+<span class="sig-name descname"><span class="pre">visible_date</span></span><a class="headerlink" href="#grader.models.Assignment.visible_date" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="grader.models.AutograderResult">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">grader.models.</span></span><span class="sig-name descname"><span class="pre">AutograderResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.AutograderResult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.db.models.base.Model</span></code></p>
+<p>Stores a result from the autograder</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="grader.models.AutograderResult.DoesNotExist">
+<em class="property"><span class="pre">exception</span> </em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#grader.models.AutograderResult.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.core.exceptions.ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="grader.models.AutograderResult.MultipleObjectsReturned">
+<em class="property"><span class="pre">exception</span> </em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#grader.models.AutograderResult.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.core.exceptions.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.AutograderResult.autograde_success">
+<span class="sig-name descname"><span class="pre">autograde_success</span></span><a class="headerlink" href="#grader.models.AutograderResult.autograde_success" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.AutograderResult.date">
+<span class="sig-name descname"><span class="pre">date</span></span><a class="headerlink" href="#grader.models.AutograderResult.date" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.AutograderResult.get_logfile">
+<span class="sig-name descname"><span class="pre">get_logfile</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.AutograderResult.get_logfile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.AutograderResult.get_next_by_date">
+<span class="sig-name descname"><span class="pre">get_next_by_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">*</span></em>, <em class="sig-param"><span class="pre">field=&lt;django.db.models.fields.DateTimeField:</span> <span class="pre">date&gt;</span></em>, <em class="sig-param"><span class="pre">is_next=True</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.AutograderResult.get_next_by_date" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.AutograderResult.get_previous_by_date">
+<span class="sig-name descname"><span class="pre">get_previous_by_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">*</span></em>, <em class="sig-param"><span class="pre">field=&lt;django.db.models.fields.DateTimeField:</span> <span class="pre">date&gt;</span></em>, <em class="sig-param"><span class="pre">is_next=False</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.AutograderResult.get_previous_by_date" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.AutograderResult.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#grader.models.AutograderResult.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.AutograderResult.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"> <span class="pre">=</span> <span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#grader.models.AutograderResult.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.AutograderResult.result_dir">
+<span class="sig-name descname"><span class="pre">result_dir</span></span><a class="headerlink" href="#grader.models.AutograderResult.result_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.AutograderResult.score">
+<span class="sig-name descname"><span class="pre">score</span></span><a class="headerlink" href="#grader.models.AutograderResult.score" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.AutograderResult.submission">
+<span class="sig-name descname"><span class="pre">submission</span></span><a class="headerlink" href="#grader.models.AutograderResult.submission" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.AutograderResult.submission_id">
+<span class="sig-name descname"><span class="pre">submission_id</span></span><a class="headerlink" href="#grader.models.AutograderResult.submission_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.AutograderResult.visible">
+<span class="sig-name descname"><span class="pre">visible</span></span><a class="headerlink" href="#grader.models.AutograderResult.visible" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="grader.models.Course">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">grader.models.</span></span><span class="sig-name descname"><span class="pre">Course</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Course" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.db.models.base.Model</span></code></p>
+<p>Stores a section of a course for a specific semester</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="grader.models.Course.DoesNotExist">
+<em class="property"><span class="pre">exception</span> </em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#grader.models.Course.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.core.exceptions.ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="grader.models.Course.MultipleObjectsReturned">
+<em class="property"><span class="pre">exception</span> </em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#grader.models.Course.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.core.exceptions.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Course.assignment_set">
+<span class="sig-name descname"><span class="pre">assignment_set</span></span><a class="headerlink" href="#grader.models.Course.assignment_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Course.code">
+<span class="sig-name descname"><span class="pre">code</span></span><a class="headerlink" href="#grader.models.Course.code" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Course.desc">
+<span class="sig-name descname"><span class="pre">desc</span></span><a class="headerlink" href="#grader.models.Course.desc" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Course.desc_format">
+<span class="sig-name descname"><span class="pre">desc_format</span></span><a class="headerlink" href="#grader.models.Course.desc_format" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Course.get_course_files">
+<span class="sig-name descname"><span class="pre">get_course_files</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Course.get_course_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns list of info about the course files in the form (filename, size, date created)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Course.get_course_path">
+<span class="sig-name descname"><span class="pre">get_course_path</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Course.get_course_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the full path to the directory where course files are stored</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Course.get_desc_format_display">
+<span class="sig-name descname"><span class="pre">get_desc_format_display</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">*</span></em>, <em class="sig-param"><span class="pre">field=&lt;django.db.models.fields.IntegerField:</span> <span class="pre">desc_format&gt;</span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Course.get_desc_format_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Course.get_description">
+<span class="sig-name descname"><span class="pre">get_description</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Course.get_description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns description in description in specified format</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Course.has_instructor">
+<span class="sig-name descname"><span class="pre">has_instructor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_superusers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Course.has_instructor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true if course has instructor</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Course.has_student">
+<span class="sig-name descname"><span class="pre">has_student</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_superusers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Course.has_student" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true if course has student</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Course.has_ta">
+<span class="sig-name descname"><span class="pre">has_ta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_superusers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Course.has_ta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true if course has TA</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Course.has_user">
+<span class="sig-name descname"><span class="pre">has_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_superusers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Course.has_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true if user is a student, instructor, or TA in the course</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Course.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#grader.models.Course.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Course.instructors">
+<span class="sig-name descname"><span class="pre">instructors</span></span><a class="headerlink" href="#grader.models.Course.instructors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the forward and reverse sides of
+a many-to-many relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Pizza</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">toppings</span> <span class="o">=</span> <span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Topping</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;pizzas&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Pizza.toppings</span></code> and <code class="docutils literal notranslate"><span class="pre">Topping.pizzas</span></code> are <code class="docutils literal notranslate"><span class="pre">ManyToManyDescriptor</span></code>
+instances.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Course.make_grades_csv">
+<span class="sig-name descname"><span class="pre">make_grades_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subids</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Course.make_grades_csv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a CSV file containing grades/autorgrader results for each given submission
+Returns system path to the CSV file</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Course.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"> <span class="pre">=</span> <span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#grader.models.Course.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Course.section">
+<span class="sig-name descname"><span class="pre">section</span></span><a class="headerlink" href="#grader.models.Course.section" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Course.semester">
+<span class="sig-name descname"><span class="pre">semester</span></span><a class="headerlink" href="#grader.models.Course.semester" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Course.semester_id">
+<span class="sig-name descname"><span class="pre">semester_id</span></span><a class="headerlink" href="#grader.models.Course.semester_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Course.students">
+<span class="sig-name descname"><span class="pre">students</span></span><a class="headerlink" href="#grader.models.Course.students" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the forward and reverse sides of
+a many-to-many relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Pizza</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">toppings</span> <span class="o">=</span> <span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Topping</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;pizzas&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Pizza.toppings</span></code> and <code class="docutils literal notranslate"><span class="pre">Topping.pizzas</span></code> are <code class="docutils literal notranslate"><span class="pre">ManyToManyDescriptor</span></code>
+instances.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Course.tas">
+<span class="sig-name descname"><span class="pre">tas</span></span><a class="headerlink" href="#grader.models.Course.tas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the forward and reverse sides of
+a many-to-many relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Pizza</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">toppings</span> <span class="o">=</span> <span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Topping</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;pizzas&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Pizza.toppings</span></code> and <code class="docutils literal notranslate"><span class="pre">Topping.pizzas</span></code> are <code class="docutils literal notranslate"><span class="pre">ManyToManyDescriptor</span></code>
+instances.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Course.title">
+<span class="sig-name descname"><span class="pre">title</span></span><a class="headerlink" href="#grader.models.Course.title" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="grader.models.Grade">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">grader.models.</span></span><span class="sig-name descname"><span class="pre">Grade</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Grade" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.db.models.base.Model</span></code></p>
+<p>Stores a instructor/TA submitted grade for a submission</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="grader.models.Grade.DoesNotExist">
+<em class="property"><span class="pre">exception</span> </em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#grader.models.Grade.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.core.exceptions.ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="grader.models.Grade.MultipleObjectsReturned">
+<em class="property"><span class="pre">exception</span> </em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#grader.models.Grade.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.core.exceptions.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Grade.comments">
+<span class="sig-name descname"><span class="pre">comments</span></span><a class="headerlink" href="#grader.models.Grade.comments" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Grade.date">
+<span class="sig-name descname"><span class="pre">date</span></span><a class="headerlink" href="#grader.models.Grade.date" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Grade.get_next_by_date">
+<span class="sig-name descname"><span class="pre">get_next_by_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">*</span></em>, <em class="sig-param"><span class="pre">field=&lt;django.db.models.fields.DateTimeField:</span> <span class="pre">date&gt;</span></em>, <em class="sig-param"><span class="pre">is_next=True</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Grade.get_next_by_date" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Grade.get_previous_by_date">
+<span class="sig-name descname"><span class="pre">get_previous_by_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">*</span></em>, <em class="sig-param"><span class="pre">field=&lt;django.db.models.fields.DateTimeField:</span> <span class="pre">date&gt;</span></em>, <em class="sig-param"><span class="pre">is_next=False</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Grade.get_previous_by_date" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Grade.grade">
+<span class="sig-name descname"><span class="pre">grade</span></span><a class="headerlink" href="#grader.models.Grade.grade" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Grade.grader">
+<span class="sig-name descname"><span class="pre">grader</span></span><a class="headerlink" href="#grader.models.Grade.grader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Grade.grader_id">
+<span class="sig-name descname"><span class="pre">grader_id</span></span><a class="headerlink" href="#grader.models.Grade.grader_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Grade.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#grader.models.Grade.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Grade.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"> <span class="pre">=</span> <span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#grader.models.Grade.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Grade.submission">
+<span class="sig-name descname"><span class="pre">submission</span></span><a class="headerlink" href="#grader.models.Grade.submission" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Grade.submission_id">
+<span class="sig-name descname"><span class="pre">submission_id</span></span><a class="headerlink" href="#grader.models.Grade.submission_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="grader.models.Semester">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">grader.models.</span></span><span class="sig-name descname"><span class="pre">Semester</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Semester" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.db.models.base.Model</span></code></p>
+<p>Stores a semester of the school year
+Current semester is semester with most recent start date that has already passed</p>
+<dl class="simple">
+<dt>Currently semesters can only be created via admin site</dt><dd><ul class="simple">
+<li><p>May want to further automate this in the future</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py exception">
+<dt class="sig sig-object py" id="grader.models.Semester.DoesNotExist">
+<em class="property"><span class="pre">exception</span> </em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#grader.models.Semester.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.core.exceptions.ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Semester.FALL_MONTH">
+<span class="sig-name descname"><span class="pre">FALL_MONTH</span></span><em class="property"> <span class="pre">=</span> <span class="pre">8</span></em><a class="headerlink" href="#grader.models.Semester.FALL_MONTH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="grader.models.Semester.MultipleObjectsReturned">
+<em class="property"><span class="pre">exception</span> </em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#grader.models.Semester.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.core.exceptions.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Semester.SPRING_MONTH">
+<span class="sig-name descname"><span class="pre">SPRING_MONTH</span></span><em class="property"> <span class="pre">=</span> <span class="pre">1</span></em><a class="headerlink" href="#grader.models.Semester.SPRING_MONTH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Semester.SUMMER_MONTH">
+<span class="sig-name descname"><span class="pre">SUMMER_MONTH</span></span><em class="property"> <span class="pre">=</span> <span class="pre">5</span></em><a class="headerlink" href="#grader.models.Semester.SUMMER_MONTH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Semester.TERM_CHOICES">
+<span class="sig-name descname"><span class="pre">TERM_CHOICES</span></span><em class="property"> <span class="pre">=</span> <span class="pre">[(8,</span> <span class="pre">'Fall'),</span> <span class="pre">(1,</span> <span class="pre">'Spring'),</span> <span class="pre">(5,</span> <span class="pre">'Summer')]</span></em><a class="headerlink" href="#grader.models.Semester.TERM_CHOICES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Semester.course_set">
+<span class="sig-name descname"><span class="pre">course_set</span></span><a class="headerlink" href="#grader.models.Semester.course_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Semester.end_date">
+<span class="sig-name descname"><span class="pre">end_date</span></span><a class="headerlink" href="#grader.models.Semester.end_date" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Semester.get_current">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">get_current</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Semester.get_current" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the semester with the most recent start date that has already passed</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Semester.get_next_by_end_date">
+<span class="sig-name descname"><span class="pre">get_next_by_end_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">*</span></em>, <em class="sig-param"><span class="pre">field=&lt;django.db.models.fields.DateField:</span> <span class="pre">end_date&gt;</span></em>, <em class="sig-param"><span class="pre">is_next=True</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Semester.get_next_by_end_date" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Semester.get_next_by_start_date">
+<span class="sig-name descname"><span class="pre">get_next_by_start_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">*</span></em>, <em class="sig-param"><span class="pre">field=&lt;django.db.models.fields.DateField:</span> <span class="pre">start_date&gt;</span></em>, <em class="sig-param"><span class="pre">is_next=True</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Semester.get_next_by_start_date" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Semester.get_previous_by_end_date">
+<span class="sig-name descname"><span class="pre">get_previous_by_end_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">*</span></em>, <em class="sig-param"><span class="pre">field=&lt;django.db.models.fields.DateField:</span> <span class="pre">end_date&gt;</span></em>, <em class="sig-param"><span class="pre">is_next=False</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Semester.get_previous_by_end_date" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Semester.get_previous_by_start_date">
+<span class="sig-name descname"><span class="pre">get_previous_by_start_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">*</span></em>, <em class="sig-param"><span class="pre">field=&lt;django.db.models.fields.DateField:</span> <span class="pre">start_date&gt;</span></em>, <em class="sig-param"><span class="pre">is_next=False</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Semester.get_previous_by_start_date" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Semester.get_start_date">
+<span class="sig-name descname"><span class="pre">get_start_date</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Semester.get_start_date" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns semester start date in form yyyydd
+i.e. 201208, 201601</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Semester.get_term_display">
+<span class="sig-name descname"><span class="pre">get_term_display</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">*</span></em>, <em class="sig-param"><span class="pre">field=&lt;django.db.models.fields.IntegerField:</span> <span class="pre">term&gt;</span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Semester.get_term_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Semester.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#grader.models.Semester.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Semester.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"> <span class="pre">=</span> <span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#grader.models.Semester.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Semester.start_date">
+<span class="sig-name descname"><span class="pre">start_date</span></span><a class="headerlink" href="#grader.models.Semester.start_date" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Semester.term">
+<span class="sig-name descname"><span class="pre">term</span></span><a class="headerlink" href="#grader.models.Semester.term" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Semester.year">
+<span class="sig-name descname"><span class="pre">year</span></span><a class="headerlink" href="#grader.models.Semester.year" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="grader.models.Submission">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">grader.models.</span></span><span class="sig-name descname"><span class="pre">Submission</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Submission" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.db.models.base.Model</span></code></p>
+<p>Stores a record of a submission for an assignment.
+Actual submission will be stored on filesystem</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Submission.CH_AUTOGRADED">
+<span class="sig-name descname"><span class="pre">CH_AUTOGRADED</span></span><em class="property"> <span class="pre">=</span> <span class="pre">1</span></em><a class="headerlink" href="#grader.models.Submission.CH_AUTOGRADED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Submission.CH_GRADED">
+<span class="sig-name descname"><span class="pre">CH_GRADED</span></span><em class="property"> <span class="pre">=</span> <span class="pre">2</span></em><a class="headerlink" href="#grader.models.Submission.CH_GRADED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Submission.CH_PREVIOUS">
+<span class="sig-name descname"><span class="pre">CH_PREVIOUS</span></span><em class="property"> <span class="pre">=</span> <span class="pre">3</span></em><a class="headerlink" href="#grader.models.Submission.CH_PREVIOUS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Submission.CH_SUBMITTED">
+<span class="sig-name descname"><span class="pre">CH_SUBMITTED</span></span><em class="property"> <span class="pre">=</span> <span class="pre">0</span></em><a class="headerlink" href="#grader.models.Submission.CH_SUBMITTED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Submission.CH_TO_AUTOGRADE">
+<span class="sig-name descname"><span class="pre">CH_TO_AUTOGRADE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">4</span></em><a class="headerlink" href="#grader.models.Submission.CH_TO_AUTOGRADE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="grader.models.Submission.DoesNotExist">
+<em class="property"><span class="pre">exception</span> </em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#grader.models.Submission.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.core.exceptions.ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="grader.models.Submission.MultipleObjectsReturned">
+<em class="property"><span class="pre">exception</span> </em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#grader.models.Submission.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.core.exceptions.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Submission.REPORT_DIR">
+<span class="sig-name descname"><span class="pre">REPORT_DIR</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'report'</span></em><a class="headerlink" href="#grader.models.Submission.REPORT_DIR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Submission.RESULTS_FILENAME">
+<span class="sig-name descname"><span class="pre">RESULTS_FILENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'results.json'</span></em><a class="headerlink" href="#grader.models.Submission.RESULTS_FILENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Submission.STATUS_CHOICES">
+<span class="sig-name descname"><span class="pre">STATUS_CHOICES</span></span><em class="property"> <span class="pre">=</span> <span class="pre">((3,</span> <span class="pre">'Past'),</span> <span class="pre">(0,</span> <span class="pre">'Submitted</span> <span class="pre">(waiting</span> <span class="pre">for</span> <span class="pre">grade)'),</span> <span class="pre">(2,</span> <span class="pre">'Graded</span> <span class="pre">(manually)'),</span> <span class="pre">(1,</span> <span class="pre">'Graded</span> <span class="pre">(autograde)'),</span> <span class="pre">(4,</span> <span class="pre">'Waiting</span> <span class="pre">for</span> <span class="pre">autograde'))</span></em><a class="headerlink" href="#grader.models.Submission.STATUS_CHOICES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Submission.SUPLEMENT_DIR">
+<span class="sig-name descname"><span class="pre">SUPLEMENT_DIR</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'suplements'</span></em><a class="headerlink" href="#grader.models.Submission.SUPLEMENT_DIR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Submission.assignment">
+<span class="sig-name descname"><span class="pre">assignment</span></span><a class="headerlink" href="#grader.models.Submission.assignment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Submission.assignment_id">
+<span class="sig-name descname"><span class="pre">assignment_id</span></span><a class="headerlink" href="#grader.models.Submission.assignment_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Submission.autograderresult">
+<span class="sig-name descname"><span class="pre">autograderresult</span></span><a class="headerlink" href="#grader.models.Submission.autograderresult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Submission.get_autograde_output_log">
+<span class="sig-name descname"><span class="pre">get_autograde_output_log</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Submission.get_autograde_output_log" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Submission.get_directory">
+<span class="sig-name descname"><span class="pre">get_directory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subdir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Submission.get_directory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Builds the path to the directory where this submission is stored
+Will be “&lt;SUBMISSION_DIR&gt;/&lt;self.assignment.id&gt;/&lt;self.id&gt;”, 
+where SUBMISSION_DIR is defined in settings.py</p>
+<p>Also allows for optional subdirectory (such as ‘report’ or ‘suplement’)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Submission.get_filename">
+<span class="sig-name descname"><span class="pre">get_filename</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Submission.get_filename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the filename of the submission. Use get_directory() to get the path to this file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Submission.get_next_by_sub_date">
+<span class="sig-name descname"><span class="pre">get_next_by_sub_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">*</span></em>, <em class="sig-param"><span class="pre">field=&lt;django.db.models.fields.DateTimeField:</span> <span class="pre">sub_date&gt;</span></em>, <em class="sig-param"><span class="pre">is_next=True</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Submission.get_next_by_sub_date" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Submission.get_previous_by_sub_date">
+<span class="sig-name descname"><span class="pre">get_previous_by_sub_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">*</span></em>, <em class="sig-param"><span class="pre">field=&lt;django.db.models.fields.DateTimeField:</span> <span class="pre">sub_date&gt;</span></em>, <em class="sig-param"><span class="pre">is_next=False</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Submission.get_previous_by_sub_date" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Submission.get_report_dir">
+<span class="sig-name descname"><span class="pre">get_report_dir</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Submission.get_report_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Submission.get_report_files">
+<span class="sig-name descname"><span class="pre">get_report_files</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Submission.get_report_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns list of files and associated information in “&lt;SUBMISSION_DIR&gt;/&lt;self.id&gt;/report”
+Each file is in the form (filename, size, date created)
+These are files created by the autograder</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Submission.get_status_display">
+<span class="sig-name descname"><span class="pre">get_status_display</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">*</span></em>, <em class="sig-param"><span class="pre">field=&lt;django.db.models.fields.IntegerField:</span> <span class="pre">status&gt;</span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Submission.get_status_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Submission.get_status_instructor">
+<span class="sig-name descname"><span class="pre">get_status_instructor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Submission.get_status_instructor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns submission status as instructors/TAs should see it
+Provides different value for every possible status, including if autograder result is released</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Submission.get_status_student">
+<span class="sig-name descname"><span class="pre">get_status_student</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Submission.get_status_student" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns submission status as students should see it
+Hides some information (no seperate statuses for autograding-related things)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Submission.get_suplement_files">
+<span class="sig-name descname"><span class="pre">get_suplement_files</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Submission.get_suplement_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns list of files and associated information in “&lt;SUBMISSION_DIR&gt;/&lt;self.id&gt;/suplements”
+Each file is in the form (filename, size, date created)
+These are files uploaded by an instructor or TA about the submission</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Submission.grade">
+<span class="sig-name descname"><span class="pre">grade</span></span><a class="headerlink" href="#grader.models.Submission.grade" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Submission.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#grader.models.Submission.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Submission.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"> <span class="pre">=</span> <span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#grader.models.Submission.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="grader.models.Submission.set_recent">
+<span class="sig-name descname"><span class="pre">set_recent</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.Submission.set_recent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Marks all other submissions from this student as previous</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Submission.status">
+<span class="sig-name descname"><span class="pre">status</span></span><a class="headerlink" href="#grader.models.Submission.status" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Submission.student">
+<span class="sig-name descname"><span class="pre">student</span></span><a class="headerlink" href="#grader.models.Submission.student" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Submission.student_id">
+<span class="sig-name descname"><span class="pre">student_id</span></span><a class="headerlink" href="#grader.models.Submission.student_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="grader.models.Submission.sub_date">
+<span class="sig-name descname"><span class="pre">sub_date</span></span><a class="headerlink" href="#grader.models.Submission.sub_date" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="grader.models.create_user_email">
+<span class="sig-prename descclassname"><span class="pre">grader.models.</span></span><span class="sig-name descname"><span class="pre">create_user_email</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.create_user_email" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates user email based on username
+Should be run every time a user logs in</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="grader.models.load_user_groups">
+<span class="sig-prename descclassname"><span class="pre">grader.models.</span></span><span class="sig-name descname"><span class="pre">load_user_groups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.models.load_user_groups" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stores attributes “is_faculty” and “is_student” within user based on groups
+Groups currently must be set via admin site</p>
+<p>Returns False if user is not logged in, true otherwise</p>
+</dd></dl>
+
+<span class="target" id="module-grader.tasks"></span><dl class="py function">
+<dt class="sig sig-object py" id="grader.tasks.autograde_complete">
+<span class="sig-prename descclassname"><span class="pre">grader.tasks.</span></span><span class="sig-name descname"><span class="pre">autograde_complete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.tasks.autograde_complete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="grader.tasks.autograde_submission">
+<span class="sig-prename descclassname"><span class="pre">grader.tasks.</span></span><span class="sig-name descname"><span class="pre">autograde_submission</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sub</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subzip</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.tasks.autograde_submission" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<span class="target" id="module-grader.tests"></span><span class="target" id="module-grader.urls"></span><span class="target" id="module-grader.views"></span><dl class="py function">
+<dt class="sig sig-object py" id="grader.views.assignment">
+<span class="sig-prename descclassname"><span class="pre">grader.views.</span></span><span class="sig-name descname"><span class="pre">assignment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">assgnid</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.views.assignment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders assignment page
+Shows what course it’s part of, descriptions, submission for, and submissions so far</p>
+<p>In the future it should only show submit form for students,
+only show submissions so far for instructors/TAs.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="grader.views.course">
+<span class="sig-prename descclassname"><span class="pre">grader.views.</span></span><span class="sig-name descname"><span class="pre">course</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">courseid</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.views.course" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders course page
+Shows course description, assignments, students, instructors, and TA</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="grader.views.edit_assgn">
+<span class="sig-prename descclassname"><span class="pre">grader.views.</span></span><span class="sig-name descname"><span class="pre">edit_assgn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">courseid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">assgnid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.views.edit_assgn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders a page for editting an assignment
+If no assignment ID provided, will generate empty form to create a new assignment</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="grader.views.edit_course">
+<span class="sig-prename descclassname"><span class="pre">grader.views.</span></span><span class="sig-name descname"><span class="pre">edit_course</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">courseid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.views.edit_course" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders a page for editing a course
+If no course ID provided, will generate empty form to create a new course</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="grader.views.home">
+<span class="sig-prename descclassname"><span class="pre">grader.views.</span></span><span class="sig-name descname"><span class="pre">home</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.views.home" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders home page
+For now simply shows all courses</p>
+<p>In the future it should show user’s enrolled courses or courses they teach, depending on roll</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="grader.views.login">
+<span class="sig-prename descclassname"><span class="pre">grader.views.</span></span><span class="sig-name descname"><span class="pre">login</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.views.login" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides user with the login page</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="grader.views.login_redirect">
+<span class="sig-prename descclassname"><span class="pre">grader.views.</span></span><span class="sig-name descname"><span class="pre">login_redirect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.views.login_redirect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a redirect response to the login page</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="grader.views.logout">
+<span class="sig-prename descclassname"><span class="pre">grader.views.</span></span><span class="sig-name descname"><span class="pre">logout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.views.logout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logs the user out and redirects to the login page</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="grader.views.submissions">
+<span class="sig-prename descclassname"><span class="pre">grader.views.</span></span><span class="sig-name descname"><span class="pre">submissions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">assgnid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">userid</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#grader.views.submissions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders a page for a student to view their submission</p>
+</dd></dl>
+
+</section>
+<section id="module-grader">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-grader" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Athena</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Isaac K.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/grader.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
