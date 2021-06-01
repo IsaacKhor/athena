@@ -1,13 +1,15 @@
 # Athena Homework Submission System
 
+Dev and user documentation in `/docs`
+
 ## Requirements
 
 - Django 3.0 or above
 - Python 3.8 or above
-- Running PostgreSQL server
-- Running Redis server
-- Ability to access the LDAP server on zeus
-- Sphinx for documentation
+- PostgreSQL
+- Redis
+- Ability to access the OpenLDAP server
+- Sphinx
 
 ## Setup dev environment
 
@@ -24,9 +26,13 @@ Confirmed to work on Ubuntu 20.04
   this by setting up an OpenLDAP server on your machine, the scope of which
   is beyond this guide
 
-## Dev setup
+## Running dev environment
 
-- Run `./mange.py runserver`
+- `./manage.py ldap_sync_users` to synchronise LDAP entries
+- `./manage.py ldap_promote <user>` on a user you have access to
+- Make sure postgresql and redis servers are running
+- `./manage.py qcluster` to start up a job running cluster
+- `./mange.py runserver` to start the dev server
 - Any changes you make will be picked up live and the server will
   reload with these new changes
 
